@@ -92,7 +92,7 @@ namespace ZeqkTools.WindowsForms.Maps
             // get zoom  
             trackBar1.Minimum = MainMap.MinZoom;
             trackBar1.Maximum = MainMap.MaxZoom;
-            trackBar1.Value = MainMap.Zoom;
+            trackBar1.Value = Convert.ToInt32(MainMap.Zoom);
 
             // map center
             //center = new GMapMarkerCross(MainMap.CurrentPosition);
@@ -232,7 +232,7 @@ namespace ZeqkTools.WindowsForms.Maps
 
         private void MainMap_OnMapZoomChanged()
         {
-            trackBar1.Value = MainMap.Zoom;
+            trackBar1.Value = Convert.ToInt32(MainMap.Zoom);
         }
 
         private void txtAddress_KeyDown(object sender, KeyEventArgs e)
