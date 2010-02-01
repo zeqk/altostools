@@ -29,7 +29,7 @@ namespace ZeqkTools.WindowsForms.Maps
 
          numericUpDown1.Maximum = MainMap.MaxZoom;
          numericUpDown1.Minimum = MainMap.MinZoom;
-         numericUpDown1.Value = MainMap.Zoom;
+         numericUpDown1.Value = Convert.ToInt32(MainMap.Zoom);
 
          bg.WorkerReportsProgress = true;
          bg.WorkerSupportsCancellation = true;
