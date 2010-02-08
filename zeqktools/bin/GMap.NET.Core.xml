@@ -526,12 +526,6 @@
             updates map bounds
             </summary>
         </member>
-        <member name="M:GMap.NET.Internals.Core.EnqueueLoadTask(GMap.NET.Internals.LoadTask)">
-            <summary>
-            enqueueens tile to load
-            </summary>
-            <param name="task"></param>
-        </member>
         <member name="M:GMap.NET.Internals.Core.FindTilesAround(System.Collections.Generic.List{GMap.NET.Point}@)">
             <summary>
             find tiles around to fill screen
@@ -684,6 +678,21 @@
             <summary>
             the rect of coordinates
             </summary>
+        </member>
+        <member name="T:GMap.NET.Projections.PlateCarreeProjectionPergo">
+            <summary>
+            Plate Carrée (literally, “plane square”) projection
+            PROJCS["WGS 84 / World Equidistant Cylindrical",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],UNIT["Meter",1]]
+            </summary>
+        </member>
+        <member name="M:GMap.NET.Projections.PlateCarreeProjectionPergo.Clip(System.Double,System.Double,System.Double)">
+            <summary>
+            Clips a number to the specified minimum and maximum values.
+            </summary>
+            <param name="n">The number to clip.</param>
+            <param name="minValue">Minimum allowable value.</param>
+            <param name="maxValue">Maximum allowable value.</param>
+            <returns>The clipped value.</returns>
         </member>
         <member name="T:GMap.NET.GMaps">
             <summary>

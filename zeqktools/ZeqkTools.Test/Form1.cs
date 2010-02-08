@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using GMap.NET;
 
 namespace ZeqkTools.Test
 {
@@ -18,7 +19,7 @@ namespace ZeqkTools.Test
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            checkedListComboBox1.DisplayMember = "Name";
+            //checkedListComboBox1.DisplayMember = "Name";
             
 
 
@@ -38,7 +39,7 @@ namespace ZeqkTools.Test
              {
                  list.Add(new Item(i, i.ToString()));
              }
-             checkedListComboBox1.DataSource = list;
+             //checkedListComboBox1.DataSource = list;
         }
 
         private void checkedListComboBox1_TextUpdate(object sender, EventArgs e)
@@ -58,27 +59,35 @@ namespace ZeqkTools.Test
 
         private void button2_Click(object sender, EventArgs e)
         {
-            checkedListComboBox1.CheckAllItems();
+            //checkedListComboBox1.CheckAllItems();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            checkedListComboBox1.UncheckAllItems();
+            //checkedListComboBox1.UncheckAllItems();
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            using (ZeqkTools.WindowsForms.Maps.frmGeoPoint myForm = new ZeqkTools.WindowsForms.Maps.frmGeoPoint())
-            {
-                myForm.Address = "Claypole";
-                myForm.ShowDialog();
-            }
+            //using (ZeqkTools.WindowsForms.Maps.frmGeoPoint myForm = new ZeqkTools.WindowsForms.Maps.frmGeoPoint())
+            //{
+            //    myForm.Address = "Claypole";
+            //    myForm.ShowDialog();
+            //}
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             using (ZeqkTools.WindowsForms.Maps.frmGeoArea myForm = new ZeqkTools.WindowsForms.Maps.frmGeoArea())
             {
+                List<PointLatLng> points = new List<PointLatLng>();
+                PointLatLng point1 = new PointLatLng(-34.71317,-58.59649);
+                points.Add(point1);
+                PointLatLng point2 = new PointLatLng(-34.81696, -58.36578);
+                points.Add(point2);
+                PointLatLng point3 = new PointLatLng(-34.57759,-58.34381);
+                points.Add(point3);
+                myForm.Area = points;
                 myForm.ShowDialog();
             }
         }
