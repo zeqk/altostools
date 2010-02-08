@@ -88,7 +88,7 @@
         </member>
         <member name="F:System.Windows.Forms.GMapControl.CenterPositionOnMouseWheel">
             <summary>
-            center mouse OnMouseWheel
+            center mouse pointer OnMouseWheel
             </summary>
         </member>
         <member name="F:System.Windows.Forms.GMapControl.MapScaleInfoEnabled">
@@ -109,6 +109,12 @@
         <member name="F:System.Windows.Forms.GMapControl.BoundsOfMap">
             <summary>
             map boundaries
+            </summary>
+        </member>
+        <member name="F:System.Windows.Forms.GMapControl.ForceDoubleBuffer">
+            <summary>
+            enables integrated DoubleBuffer for best performance
+            if using a lot objets on map or running on windows mobile
             </summary>
         </member>
         <member name="M:System.Windows.Forms.GMapControl.#ctor">
@@ -325,6 +331,11 @@
         <member name="P:System.Windows.Forms.GMapControl.RenderMode">
             <summary>
             map render mode
+            </summary>
+        </member>
+        <member name="P:System.Windows.Forms.GMapControl.Manager">
+            <summary>
+            gets map manager
             </summary>
         </member>
         <member name="E:System.Windows.Forms.GMapControl.OnCurrentPositionChanged">

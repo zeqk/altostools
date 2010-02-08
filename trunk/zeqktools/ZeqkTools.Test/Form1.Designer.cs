@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.checkedListComboBox1 = new ZeqkTools.WindowsForms.Controls.CheckedListComboBox(this.components);
+            //this.checkedListComboBox1 = new ZeqkTools.WindowsForms.Controls.CheckedListComboBox(this.components);
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
@@ -55,20 +55,20 @@
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown1.TabIndex = 4;
-            // 
-            // checkedListComboBox1
-            // 
-            this.checkedListComboBox1.ConcatChar = ", ";
-            this.checkedListComboBox1.DisplayMember = null;
-            this.checkedListComboBox1.FormattingEnabled = true;
-            this.checkedListComboBox1.Location = new System.Drawing.Point(109, 93);
-            this.checkedListComboBox1.Name = "checkedListComboBox1";
-            this.checkedListComboBox1.Size = new System.Drawing.Size(260, 21);
-            this.checkedListComboBox1.TabIndex = 1;
-            this.checkedListComboBox1.ValueMember = null;
-            this.checkedListComboBox1.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListComboBox1_ItemCheck);
-            this.checkedListComboBox1.TextUpdate += new System.EventHandler(this.checkedListComboBox1_TextUpdate);
-            this.checkedListComboBox1.TextChanged += new System.EventHandler(this.checkedListComboBox1_TextChanged);
+            //// 
+            //// checkedListComboBox1
+            //// 
+            //this.checkedListComboBox1.ConcatChar = ", ";
+            //this.checkedListComboBox1.DisplayMember = null;
+            //this.checkedListComboBox1.FormattingEnabled = true;
+            //this.checkedListComboBox1.Location = new System.Drawing.Point(109, 93);
+            //this.checkedListComboBox1.Name = "checkedListComboBox1";
+            //this.checkedListComboBox1.Size = new System.Drawing.Size(260, 21);
+            //this.checkedListComboBox1.TabIndex = 1;
+            //this.checkedListComboBox1.ValueMember = null;
+            //this.checkedListComboBox1.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListComboBox1_ItemCheck);
+            //this.checkedListComboBox1.TextUpdate += new System.EventHandler(this.checkedListComboBox1_TextUpdate);
+            //this.checkedListComboBox1.TextChanged += new System.EventHandler(this.checkedListComboBox1_TextChanged);
             // 
             // button2
             // 
@@ -121,7 +121,7 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.checkedListComboBox1);
+            //this.Controls.Add(this.checkedListComboBox1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -132,7 +132,7 @@
 
         #endregion
 
-        private ZeqkTools.WindowsForms.Controls.CheckedListComboBox checkedListComboBox1;
+        //private ZeqkTools.WindowsForms.Controls.CheckedListComboBox checkedListComboBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Button button2;

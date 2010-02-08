@@ -17,16 +17,18 @@ namespace GMap.NET.WindowsForms.Markers
          Pen = new Pen(Brushes.Blue, 3);
          
           GeoPoints = points;
-          _localPoints = new List<Point>();
-         foreach (var item in points)
-         {
-             Position = item;
-             _localPoints.Add(LocalPosition);
-         }
+          
       }
 
       public override void OnRender(Graphics g)
       {
+          _localPoints = new List<Point>();
+          foreach (var item in GeoPoints)
+          {
+              Position = item;
+              _localPoints.Add(LocalPosition);
+          }
+
           g.DrawPolygon(Pen, _localPoints.ToArray());
       }
    }
