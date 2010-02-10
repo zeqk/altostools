@@ -11,11 +11,12 @@ namespace ZeqkTools.WindowsForms.Controls
 {
     public partial class CheckedListComboBox : PopupComboBox
     {
+        private const string ALLITEMSSTRING = "(All)";        
+
         #region Fields
         private string _concatChar;
         private string _displayMember;
-        private string _valueMember;   
-	
+        private string _valueMember;   	
         #endregion
 
         #region Properties
@@ -26,9 +27,11 @@ namespace ZeqkTools.WindowsForms.Controls
             set 
             {
                 UncheckAllItems();
-                int h = 22 * value.Count;
+                int h = 22 * (value.Count + 1);
 
                 ResizeCheckedListBox(this.Width, h);
+
+                checkedListBox.Items.Add(ALLITEMSSTRING);
 
                 foreach (var item in value)
                     checkedListBox.Items.Add(item);
@@ -151,16 +154,32 @@ namespace ZeqkTools.WindowsForms.Controls
         {
             for (int i = 0; i < checkedListBox.Items.Count; i++)
             {
-                checkedListBox.SetItemChecked(i, true);
+                if (checkedListBox.Items[i].ToString() != ALLITEMSSTRING)
+                {
+                    checkedListBox.SetItemChecked(i, true);
+                }
             }
+            //if (checkedListBox.Items.Contains(ALLITEMSSTRING))
+            //{
+            //    int index = checkedListBox.Items.IndexOf(ALLITEMSSTRING);
+            //    checkedListBox.SetItemChecked(index, true);
+            //}
         }
 
         public void UncheckAllItems()
         {
             for (int i = 0; i < checkedListBox.Items.Count; i++)
             {
-                checkedListBox.SetItemCheckState(i, CheckState.Unchecked);
+                if (checkedListBox.Items[i].ToString() != ALLITEMSSTRING)
+                {
+                    checkedListBox.SetItemCheckState(i, CheckState.Unchecked);
+                }
             }
+            //if (checkedListBox.Items.Contains(ALLITEMSSTRING))
+            //{
+            //    int index = checkedListBox.Items.IndexOf(ALLITEMSSTRING);
+            //    checkedListBox.SetItemChecked(index, false);
+            //}
         }
 
         #endregion
@@ -196,35 +215,45 @@ namespace ZeqkTools.WindowsForms.Controls
         private void checkedListBox_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             var item = checkedListBox.Items[e.Index];
-            string checkedStr = item.GetType().GetProperty(checkedListBox.DisplayMember).GetValue(item, null).ToString();
 
-            if (e.NewValue == CheckState.Checked)
+            if (item.ToString() == ALLITEMSSTRING)
             {
-                if (this.Text != "")
-                    checkedStr = _concatChar + checkedStr;
-                this.Text += checkedStr;   
+                if (e.NewValue == CheckState.Checked)
+                    CheckAllItems();
+                else
+                    UncheckAllItems();
             }
-
-            if (e.NewValue == CheckState.Unchecked)
+            else
             {
-                int index = -1;
+                string checkedStr = item.GetType().GetProperty(checkedListBox.DisplayMember).GetValue(item, null).ToString();
 
-                string textToRemove = _concatChar + checkedStr;
-                index = this.Text.IndexOf(textToRemove);
-
-                if (index < 0)
+                if (e.NewValue == CheckState.Checked)
                 {
-                    textToRemove = checkedStr + _concatChar;
+                    if (this.Text != "")
+                        checkedStr = _concatChar + checkedStr;
+                    this.Text += checkedStr;
+                }
+
+                if (e.NewValue == CheckState.Unchecked)
+                {
+                    int index = -1;
+
+                    string textToRemove = _concatChar + checkedStr;
                     index = this.Text.IndexOf(textToRemove);
-                }
-                if (index < 0)
-                {
-                    textToRemove = checkedStr;
-                    index = this.Text.IndexOf(checkedStr);
-                }
-                this.Text = this.Text.Remove(index, textToRemove.Length);
-            }           
 
+                    if (index < 0)
+                    {
+                        textToRemove = checkedStr + _concatChar;
+                        index = this.Text.IndexOf(textToRemove);
+                    }
+                    if (index < 0)
+                    {
+                        textToRemove = checkedStr;
+                        index = this.Text.IndexOf(checkedStr);
+                    }
+                    this.Text = this.Text.Remove(index, textToRemove.Length);
+                }
+            }
             this.OnItemCheck(e);
         }
 

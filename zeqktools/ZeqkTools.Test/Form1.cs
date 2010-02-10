@@ -19,7 +19,7 @@ namespace ZeqkTools.Test
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //checkedListComboBox1.DisplayMember = "Name";
+            checkedListComboBox1.DisplayMember = "Name";
             
 
 
@@ -39,7 +39,7 @@ namespace ZeqkTools.Test
              {
                  list.Add(new Item(i, i.ToString()));
              }
-             //checkedListComboBox1.DataSource = list;
+             checkedListComboBox1.DataSource = list;
         }
 
         private void checkedListComboBox1_TextUpdate(object sender, EventArgs e)
@@ -59,12 +59,12 @@ namespace ZeqkTools.Test
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //checkedListComboBox1.CheckAllItems();
+            checkedListComboBox1.CheckAllItems();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            //checkedListComboBox1.UncheckAllItems();
+            checkedListComboBox1.UncheckAllItems();
         }
 
         private void button5_Click(object sender, EventArgs e)
