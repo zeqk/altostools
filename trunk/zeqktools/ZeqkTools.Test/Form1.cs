@@ -69,25 +69,25 @@ namespace ZeqkTools.Test
 
         private void button5_Click(object sender, EventArgs e)
         {
-            //using (ZeqkTools.WindowsForms.Maps.frmGeoPoint myForm = new ZeqkTools.WindowsForms.Maps.frmGeoPoint())
-            //{
-            //    myForm.Address = "Claypole";
-            //    myForm.ShowDialog();
-            //}
+            using (ZeqkTools.WindowsForms.Maps.frmGeoPoint myForm = new ZeqkTools.WindowsForms.Maps.frmGeoPoint())
+            {
+                myForm.Address = "Claypole";
+                myForm.ShowDialog();
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             using (ZeqkTools.WindowsForms.Maps.frmGeoArea myForm = new ZeqkTools.WindowsForms.Maps.frmGeoArea())
             {
-                List<PointLatLng> points = new List<PointLatLng>();
-                PointLatLng point1 = new PointLatLng(-34.71317,-58.59649);
-                points.Add(point1);
-                PointLatLng point2 = new PointLatLng(-34.81696, -58.36578);
-                points.Add(point2);
-                PointLatLng point3 = new PointLatLng(-34.57759,-58.34381);
-                points.Add(point3);
-                myForm.Area = points;
+                //List<PointLatLng> points = new List<PointLatLng>();
+                //PointLatLng point1 = new PointLatLng(-34.71317,-58.59649);
+                //points.Add(point1);
+                //PointLatLng point2 = new PointLatLng(-34.81696, -58.36578);
+                //points.Add(point2);
+                //PointLatLng point3 = new PointLatLng(-34.57759,-58.34381);
+                //points.Add(point3);
+                //myForm.Area = points;
                 myForm.ShowDialog();
             }
         }

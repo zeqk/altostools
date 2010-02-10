@@ -122,6 +122,7 @@
     </Compile>
     <Compile Include="Maps\CustomMarkers\GMapMarkerCustom.cs" />
     <Compile Include="Maps\CustomMarkers\GMapMarkerPolygon.cs" />
+    <Compile Include="Maps\CustomMarkers\GMapMarkerLine.cs" />
     <Compile Include="Maps\frmGeoArea.cs">
       <SubType>Form</SubType>
     </Compile>
