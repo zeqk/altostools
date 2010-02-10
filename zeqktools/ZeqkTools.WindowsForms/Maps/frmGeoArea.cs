@@ -19,17 +19,39 @@ namespace ZeqkTools.WindowsForms.Maps
 
         public List<PointLatLng> Area;
         public List<GMapMarker> Points;
+        private List<GMapMarker> _auxPoints;
 
         // marker
         GMapMarker center;
 
         // layers
         GMapOverlay top;
+        GMapOverlay auxiliar;
+
+        bool isMouseDown;
+        
+        GMapMarker selectedVertice;         
+
+        public List<GMapMarker> Vertices
+        {
+            get
+            {
+                List<GMapMarker> list = top.Markers.Where(p => p.GetType() == typeof(GMapMarkerGoogleGreen)).ToList<GMapMarker>();
+                return list;
+            }            
+        }
+	
+	
+
+        
+
+
 
         public frmGeoArea()
         {
             Area = new List<PointLatLng>();
             Points = new List<GMapMarker>();
+            _auxPoints = new List<GMapMarker>();
             InitializeComponent();
         }
 
@@ -101,8 +123,8 @@ namespace ZeqkTools.WindowsForms.Maps
             //MainMap.OnEmptyTileError += new EmptyTileError(MainMap_OnEmptyTileError);
             //MainMap.OnMapTypeChanged += new MapTypeChanged(MainMap_OnMapTypeChanged);
             //MainMap.MouseMove += new MouseEventHandler(MainMap_MouseMove);
-            //MainMap.MouseDown += new MouseEventHandler(MainMap_MouseDown);
-            //MainMap.MouseUp += new MouseEventHandler(MainMap_MouseUp);
+            MainMap.MouseDown += new MouseEventHandler(MainMap_MouseDown);
+            MainMap.MouseUp += new MouseEventHandler(MainMap_MouseUp);
 
 
             // map center
@@ -121,6 +143,8 @@ namespace ZeqkTools.WindowsForms.Maps
 
                 top = new GMapOverlay(MainMap, "top");                
                 MainMap.Overlays.Add(top);
+                auxiliar = new GMapOverlay(MainMap, "auxiliar");
+                MainMap.Overlays.Add(auxiliar);
             }
 
             MainMap.ZoomAndCenterMarkers(null);
@@ -132,7 +156,33 @@ namespace ZeqkTools.WindowsForms.Maps
             center.Position = point;
         }
 
-        
+        void MainMap_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (selectedVertice == null)
+                {
+                    isMouseDown = true;
+                    GMapMarkerGoogleGreen marker = new GMapMarkerGoogleGreen(MainMap.FromLocalToLatLng(e.X, e.Y));
+                    marker.Size = new System.Drawing.Size(8, 8);
+                    top.Markers.Add(marker);
+                    if (this.Vertices.Count > 1)
+                    {
+                        int verticeIndex = this.Vertices.IndexOf(marker);
+                        GMapMarkerLine auxLine = new GMapMarkerLine(marker.Position, this.Vertices[verticeIndex - 1].Position);
+                        auxiliar.Markers.Add(auxLine);
+                    }
+                }
+            }
+        }
+
+        void MainMap_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                isMouseDown = false;
+            }
+        }
 
         
 
@@ -239,6 +289,30 @@ namespace ZeqkTools.WindowsForms.Maps
         private void cboMapType_SelectedValueChanged(object sender, EventArgs e)
         {
             MainMap.MapType = (MapType)cboMapType.SelectedValue;
+        }
+
+        private void MainMap_OnMarkerClick(GMapMarker item)
+        {
+            
+            if (this.Vertices.First() == this.selectedVertice)
+            {
+                PointLatLng center = CalculateMiddlePoint(this.Vertices);
+                top.Markers.Add(this.selectedVertice);
+                GMapMarkerPolygon polygon = new GMapMarkerPolygon(center, Vertices.Select(m => m.Position).ToList());
+                top.Markers.Add(polygon);
+                auxiliar.Markers.Clear();
+            }
+        }
+
+        private void MainMap_OnMarkerEnter(GMapMarker item)
+        {            
+            selectedVertice = item;
+            
+        }
+
+        private void MainMap_OnMarkerLeave(GMapMarker item)
+        {            
+            selectedVertice = null;
         }
     }
 }

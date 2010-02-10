@@ -55,9 +55,9 @@
             // MainMap
             // 
             this.MainMap.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MainMap.CacheLocation = "C:\\Users\\zeqk\\AppData\\Roaming\\GMap.NET\\";
             this.MainMap.CanDragMap = true;
             this.MainMap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainMap.GrayScaleMode = false;
             this.MainMap.Location = new System.Drawing.Point(3, 3);
             this.MainMap.MapType = GMap.NET.MapType.GoogleMap;
             this.MainMap.MarkersEnabled = true;
@@ -67,7 +67,10 @@
             this.MainMap.Size = new System.Drawing.Size(651, 491);
             this.MainMap.TabIndex = 10;
             this.MainMap.Zoom = 2;
-            this.MainMap.OnMapZoomChanged += new GMap.NET.MapZoomChanged(this.MainMap_OnMapZoomChanged);
+            this.MainMap.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.MainMap_OnMarkerClick);
+            this.MainMap.OnMarkerEnter += new GMap.NET.WindowsForms.MarkerEnter(this.MainMap_OnMarkerEnter);            
+            this.MainMap.OnMarkerLeave += new GMap.NET.WindowsForms.MarkerLeave(this.MainMap_OnMarkerLeave);
+            this.MainMap.OnMapZoomChanged += new GMap.NET.MapZoomChanged(this.MainMap_OnMapZoomChanged);            
             // 
             // trackBar1
             // 
