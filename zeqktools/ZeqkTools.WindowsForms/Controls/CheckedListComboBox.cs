@@ -16,7 +16,8 @@ namespace ZeqkTools.WindowsForms.Controls
         #region Fields
         private string _concatChar;
         private string _displayMember;
-        private string _valueMember;   	
+        private string _valueMember;
+        private bool _autocheking = false;
         #endregion
 
         #region Properties
@@ -159,11 +160,12 @@ namespace ZeqkTools.WindowsForms.Controls
                     checkedListBox.SetItemChecked(i, true);
                 }
             }
-            //if (checkedListBox.Items.Contains(ALLITEMSSTRING))
-            //{
-            //    int index = checkedListBox.Items.IndexOf(ALLITEMSSTRING);
-            //    checkedListBox.SetItemChecked(index, true);
-            //}
+            if(!_autocheking)
+                if (checkedListBox.Items.Contains(ALLITEMSSTRING))
+                {
+                    int index = checkedListBox.Items.IndexOf(ALLITEMSSTRING);
+                    checkedListBox.SetItemChecked(index, true);
+                }
         }
 
         public void UncheckAllItems()
@@ -175,11 +177,12 @@ namespace ZeqkTools.WindowsForms.Controls
                     checkedListBox.SetItemCheckState(i, CheckState.Unchecked);
                 }
             }
-            //if (checkedListBox.Items.Contains(ALLITEMSSTRING))
-            //{
-            //    int index = checkedListBox.Items.IndexOf(ALLITEMSSTRING);
-            //    checkedListBox.SetItemChecked(index, false);
-            //}
+            if(!_autocheking)
+                if (checkedListBox.Items.Contains(ALLITEMSSTRING))
+                {
+                    int index = checkedListBox.Items.IndexOf(ALLITEMSSTRING);
+                    checkedListBox.SetItemChecked(index, false);
+                }
         }
 
         #endregion
@@ -218,10 +221,12 @@ namespace ZeqkTools.WindowsForms.Controls
 
             if (item.ToString() == ALLITEMSSTRING)
             {
+                _autocheking = true;
                 if (e.NewValue == CheckState.Checked)
                     CheckAllItems();
                 else
                     UncheckAllItems();
+                _autocheking = false;
             }
             else
             {

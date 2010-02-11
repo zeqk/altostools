@@ -29,6 +29,8 @@ namespace ZeqkTools.WindowsForms.Maps
         GMapOverlay auxiliar;
 
         bool isMouseDown;
+        bool polygonIsComplete = false;
+        bool isDraggingVertice = false;
         
         GMapMarker selectedVertice;         
 
@@ -40,11 +42,6 @@ namespace ZeqkTools.WindowsForms.Maps
                 return list;
             }            
         }
-	
-	
-
-        
-
 
 
         public frmGeoArea()
@@ -154,37 +151,48 @@ namespace ZeqkTools.WindowsForms.Maps
         void MainMap_OnCurrentPositionChanged(PointLatLng point)
         {
             center.Position = point;
-        }
-
-        void MainMap_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                if (selectedVertice == null)
-                {
-                    isMouseDown = true;
-                    GMapMarkerGoogleGreen marker = new GMapMarkerGoogleGreen(MainMap.FromLocalToLatLng(e.X, e.Y));
-                    marker.Size = new System.Drawing.Size(8, 8);
-                    top.Markers.Add(marker);
-                    if (this.Vertices.Count > 1)
-                    {
-                        int verticeIndex = this.Vertices.IndexOf(marker);
-                        GMapMarkerLine auxLine = new GMapMarkerLine(marker.Position, this.Vertices[verticeIndex - 1].Position);
-                        auxiliar.Markers.Add(auxLine);
-                    }
-                }
-            }
-        }
+        }       
 
         void MainMap_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                isMouseDown = false;
+                isMouseDown = false; //se suelta el botón izquierda
+
+                //OnDrop
+                //si hay algún marcador seleccionado, se deselecciona
+                if (selectedVertice != null)
+                {
+                    selectedVertice = null;
+                    if (isDraggingVertice)
+                    {
+                        isDraggingVertice = false;
+
+                        var center = CalculateMiddlePoint(this.Vertices);
+                        var polygon = (GMapMarkerPolygon)this.top.Markers.Where(m => m.GetType() == typeof(GMapMarkerPolygon)).First();
+                        top.Markers.Remove(polygon);
+                        polygon = new GMapMarkerPolygon(center, this.Vertices.Select(m => m.Position).ToList());
+                        top.Markers.Add(polygon);
+                        var vertices = this.Vertices;
+                        for (int i = 0; i < vertices.Count; i++)
+                        {
+                            if (i != vertices.Count -1)
+                            {
+                                List<GMapMarker> twoVertices = new List<GMapMarker>();
+                                twoVertices.Add(vertices[i]);
+                                twoVertices.Add(vertices[i + 1]);
+                                PointLatLng middle = CalculateMiddlePoint(twoVertices);
+                                GMapMarkerGoogleRed auxMark = new GMapMarkerGoogleRed(middle);
+                                auxiliar.Markers.Add(auxMark);
+                            }
+                        }
+                    }
+                    
+                }
             }
         }
 
-        
+        #region Auxiliar functions
 
         private PointLatLng CalculateMiddlePoint(List<GMapMarker> marks)
         {
@@ -227,6 +235,16 @@ namespace ZeqkTools.WindowsForms.Maps
             return rect;
         }
 
+        private RectLatLng AddMargin(RectLatLng rect)
+        {
+            rect.LocationTopLeft = new PointLatLng(rect.LocationTopLeft.Lat + 0.0009, rect.LocationTopLeft.Lng - 0.002);
+            rect.HeightLat = rect.HeightLat + 0.0018;
+            rect.WidthLng = rect.WidthLng + 0.004;
+
+            return rect;
+        }
+        #endregion
+
         private void btnCancel_Click_1(object sender, EventArgs e)
         {
             this.Close();
@@ -267,14 +285,7 @@ namespace ZeqkTools.WindowsForms.Maps
             }
         }
 
-        private RectLatLng AddMargin(RectLatLng rect)
-        {
-            rect.LocationTopLeft = new PointLatLng(rect.LocationTopLeft.Lat + 0.0009, rect.LocationTopLeft.Lng - 0.002);
-            rect.HeightLat = rect.HeightLat + 0.0018;            
-            rect.WidthLng = rect.WidthLng + 0.004;
 
-            return rect;
-        }
 
         private void trackBar1_ValueChanged(object sender, EventArgs e)
         {
@@ -291,28 +302,78 @@ namespace ZeqkTools.WindowsForms.Maps
             MainMap.MapType = (MapType)cboMapType.SelectedValue;
         }
 
+        void MainMap_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                isMouseDown = true;
+
+                //sólo se crear nuevos marcadores con el click, si el polígono está incompleto
+                if (!polygonIsComplete)
+                    if (selectedVertice == null)
+                    {
+                        GMapMarkerGoogleGreen marker = new GMapMarkerGoogleGreen(MainMap.FromLocalToLatLng(e.X, e.Y));
+                        marker.Size = new System.Drawing.Size(8, 8);
+                        top.Markers.Add(marker);
+                        this.selectedVertice = marker;
+
+                        //hasta que el polígono esté completo, creo lineas auxiliares que unan los vertices
+                        if (this.Vertices.Count > 1)
+                        {
+                            int verticeIndex = this.Vertices.IndexOf(marker);
+                            GMapMarkerLine auxLine = new GMapMarkerLine(marker.Position, this.Vertices[verticeIndex - 1].Position);
+                            auxiliar.Markers.Add(auxLine);
+                        }
+                    }
+            }
+        }
+
         private void MainMap_OnMarkerClick(GMapMarker item)
         {
-            
-            if (this.Vertices.First() == this.selectedVertice)
+            //solo puedo crear el polígono si el polígon está incompleto
+            if (!polygonIsComplete)
             {
-                PointLatLng center = CalculateMiddlePoint(this.Vertices);
-                top.Markers.Add(this.selectedVertice);
-                GMapMarkerPolygon polygon = new GMapMarkerPolygon(center, Vertices.Select(m => m.Position).ToList());
-                top.Markers.Add(polygon);
-                auxiliar.Markers.Clear();
+                //sólo puedo cerrar el polígono si selecciono el primero vertice
+                if (this.Vertices.First() == this.selectedVertice)
+                {
+                    PointLatLng center = CalculateMiddlePoint(this.Vertices);
+                    top.Markers.Add(this.selectedVertice);
+                    //creo el polígono
+                    GMapMarkerPolygon polygon = new GMapMarkerPolygon(center, Vertices.Select(m => m.Position).ToList());
+                    polygonIsComplete = true;
+                    top.Markers.Add(polygon);
+                    auxiliar.Markers.Clear();
+                }
             }
+                 
         }
 
         private void MainMap_OnMarkerEnter(GMapMarker item)
         {            
-            selectedVertice = item;
+            //se selecciona el marcador en el que se hizo click
+            this.selectedVertice = item;
             
         }
 
         private void MainMap_OnMarkerLeave(GMapMarker item)
         {            
-            selectedVertice = null;
+            //si el marcador está siendo arrastrado no se deselecciona
+            if(!isDraggingVertice)
+                selectedVertice = null;
+        }
+
+        private void MainMap_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && isMouseDown)
+            {
+                //si hay un marcador seleccionado
+                if (this.selectedVertice != null)
+                {
+                    //se arrastra el marcador seleccionado
+                    this.selectedVertice.Position = MainMap.FromLocalToLatLng(e.X, e.Y);
+                    isDraggingVertice = true; 
+                }
+            }
         }
     }
 }
