@@ -153,44 +153,7 @@ namespace ZeqkTools.WindowsForms.Maps
             center.Position = point;
         }       
 
-        void MainMap_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                isMouseDown = false; //se suelta el botón izquierda
-
-                //OnDrop
-                //si hay algún marcador seleccionado, se deselecciona
-                if (selectedVertice != null)
-                {
-                    selectedVertice = null;
-                    if (isDraggingVertice)
-                    {
-                        isDraggingVertice = false;
-
-                        var center = CalculateMiddlePoint(this.Vertices);
-                        var polygon = (GMapMarkerPolygon)this.top.Markers.Where(m => m.GetType() == typeof(GMapMarkerPolygon)).First();
-                        top.Markers.Remove(polygon);
-                        polygon = new GMapMarkerPolygon(center, this.Vertices.Select(m => m.Position).ToList());
-                        top.Markers.Add(polygon);
-                        var vertices = this.Vertices;
-                        for (int i = 0; i < vertices.Count; i++)
-                        {
-                            if (i != vertices.Count -1)
-                            {
-                                List<GMapMarker> twoVertices = new List<GMapMarker>();
-                                twoVertices.Add(vertices[i]);
-                                twoVertices.Add(vertices[i + 1]);
-                                PointLatLng middle = CalculateMiddlePoint(twoVertices);
-                                GMapMarkerGoogleRed auxMark = new GMapMarkerGoogleRed(middle);
-                                auxiliar.Markers.Add(auxMark);
-                            }
-                        }
-                    }
-                    
-                }
-            }
-        }
+        
 
         #region Auxiliar functions
 
@@ -302,6 +265,51 @@ namespace ZeqkTools.WindowsForms.Maps
             MainMap.MapType = (MapType)cboMapType.SelectedValue;
         }
 
+        void MainMap_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                isMouseDown = false; //se suelta el botón izquierda
+
+                //OnDrop
+                //si hay algún marcador seleccionado, se deselecciona
+                if (selectedVertice != null)
+                {
+
+                    //hasta que el polígono esté completo, creo lineas auxiliares que unan los vertices
+                    if (!polygonIsComplete && this.Vertices.Count > 1)
+                    {
+                        int verticeIndex = this.Vertices.IndexOf(selectedVertice);
+                        GMapMarkerLine auxLine = new GMapMarkerLine(selectedVertice.Position, this.Vertices[verticeIndex - 1].Position);
+                        auxiliar.Markers.Add(auxLine);
+                    }
+
+
+                    if (isDraggingVertice)
+                    {
+                        isDraggingVertice = false;
+
+                        if (polygonIsComplete)
+                        {
+                            var vertices = this.Vertices;
+                            var center = CalculateMiddlePoint(vertices);
+                            var polygon = (GMapMarkerPolygon)this.top.Markers.Where(m => m.GetType() == typeof(GMapMarkerPolygon)).First();
+                            top.Markers.Remove(polygon);
+                            polygon = new GMapMarkerPolygon(center, vertices.Select(m => m.Position).ToList());
+                            top.Markers.Add(polygon);
+                            int selectedIndex = vertices.IndexOf(selectedVertice);
+                            //marcador anterior                           
+
+
+                        }
+                    }
+
+                    selectedVertice = null;
+
+                }
+            }
+        }
+
         void MainMap_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -316,14 +324,7 @@ namespace ZeqkTools.WindowsForms.Maps
                         marker.Size = new System.Drawing.Size(8, 8);
                         top.Markers.Add(marker);
                         this.selectedVertice = marker;
-
-                        //hasta que el polígono esté completo, creo lineas auxiliares que unan los vertices
-                        if (this.Vertices.Count > 1)
-                        {
-                            int verticeIndex = this.Vertices.IndexOf(marker);
-                            GMapMarkerLine auxLine = new GMapMarkerLine(marker.Position, this.Vertices[verticeIndex - 1].Position);
-                            auxiliar.Markers.Add(auxLine);
-                        }
+                        
                     }
             }
         }
@@ -333,8 +334,9 @@ namespace ZeqkTools.WindowsForms.Maps
             //solo puedo crear el polígono si el polígon está incompleto
             if (!polygonIsComplete)
             {
-                //sólo puedo cerrar el polígono si selecciono el primero vertice
-                if (this.Vertices.First() == this.selectedVertice)
+
+                //sólo puedo cerrar el polígono si selecciono el primero vertice, y no sea la primera vez
+                if (this.Vertices.First() == this.selectedVertice && this.Vertices.Count > 1)
                 {
                     PointLatLng center = CalculateMiddlePoint(this.Vertices);
                     top.Markers.Add(this.selectedVertice);
@@ -343,6 +345,21 @@ namespace ZeqkTools.WindowsForms.Maps
                     polygonIsComplete = true;
                     top.Markers.Add(polygon);
                     auxiliar.Markers.Clear();
+                    //genero  marcadores intermedios entre los vertices
+                    var vertices = this.Vertices;
+                    for (int i = 0; i < vertices.Count; i++)
+                    {
+                        if (i != vertices.Count - 1)
+                        {
+                            List<GMapMarker> twoVertices = new List<GMapMarker>();
+                            twoVertices.Add(vertices[i]);
+                            twoVertices.Add(vertices[i + 1]);
+                            PointLatLng middle = CalculateMiddlePoint(twoVertices);
+                            GMapMarkerGoogleRed auxMark = new GMapMarkerGoogleRed(middle);
+                            auxiliar.Markers.Add(auxMark);
+                        }
+                    }
+
                 }
             }
                  
@@ -358,7 +375,7 @@ namespace ZeqkTools.WindowsForms.Maps
         private void MainMap_OnMarkerLeave(GMapMarker item)
         {            
             //si el marcador está siendo arrastrado no se deselecciona
-            if(!isDraggingVertice)
+            if (!isDraggingVertice)
                 selectedVertice = null;
         }
 
