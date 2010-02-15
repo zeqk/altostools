@@ -15,7 +15,8 @@ namespace ZeqkTools.WindowsForms.Maps
 {
     public partial class frmGeoPolygon : Form
     {
-        public MapType _mapType;
+        private MapType _mapType;
+        private int _mapZoom;
 
         private List<GMapMarker> _secondaryMarkers;
         private List<GMapMarker> _intermediatePoints;
@@ -77,6 +78,12 @@ namespace ZeqkTools.WindowsForms.Maps
             get { return _mapType; }
             set { _mapType = value; }
         }
+
+        public int MapZoom
+        {
+            get { return _mapZoom; }
+            set { _mapZoom = value; }
+        }
 	
 	
         #endregion        
@@ -88,6 +95,7 @@ namespace ZeqkTools.WindowsForms.Maps
             _secondaryMarkers = new List<GMapMarker>();
             _intermediatePoints = new List<GMapMarker>();
             _mapType = MapType.GoogleMap;
+            _mapZoom = 15;
             InitializeComponent();
         }
 
@@ -168,7 +176,7 @@ namespace ZeqkTools.WindowsForms.Maps
             MainMap.MapType = _mapType;
             MainMap.MaxZoom = 20;
             MainMap.MinZoom = 5;
-            MainMap.Zoom = 16;
+            MainMap.Zoom = _mapZoom;
 
             MainMap.CurrentPosition = new PointLatLng();
 
