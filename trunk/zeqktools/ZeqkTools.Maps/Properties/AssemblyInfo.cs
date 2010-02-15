@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ZeqkTools")]
-[assembly: AssemblyDescription("ZeqkTools")]
+[assembly: AssemblyTitle("ZeqkTools.Maps")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Zeqk")]
-[assembly: AssemblyProduct("ZeqkTools")]
+[assembly: AssemblyProduct("ZeqkTools.Maps")]
 [assembly: AssemblyCopyright("GNU GPL 2010  Zeqk")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("dd5cca24-ba9d-41bc-b4d5-db32acf9f672")]
+[assembly: Guid("dfe8d56c-d1d0-4a46-a857-00d199667dee")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,5 +29,8 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.10.2.7")]
-[assembly: AssemblyFileVersion("1.10.2.7")]
+// You can specify all the values or you can default the Build and Revision Numbers 
+// by using the '*' as shown below:
+// [assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

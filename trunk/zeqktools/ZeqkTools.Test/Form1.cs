@@ -79,7 +79,7 @@ namespace ZeqkTools.Test
 
         private void button4_Click(object sender, EventArgs e)
         {
-            using (ZeqkTools.WindowsForms.Maps.frmGeoArea myForm = new ZeqkTools.WindowsForms.Maps.frmGeoArea())
+            using (ZeqkTools.WindowsForms.Maps.frmGeoPolygon myForm = new ZeqkTools.WindowsForms.Maps.frmGeoPolygon())
             {
                 List<PointLatLng> points = new List<PointLatLng>();
                 //PointLatLng point1 = new PointLatLng(-34.71317, -58.59649);
@@ -91,7 +91,7 @@ namespace ZeqkTools.Test
                 //PointLatLng point4 = new PointLatLng(-34.71317, -58.59649);
                 //points.Add(point4);
                 //myForm.Polygon = points;
-                myForm.Address = "Buenos Aires, Argentina";
+                myForm.Address = "Claypole, Buenos Aires, Argentina";
                 myForm.ShowDialog();
                 //GMap.NET.WindowsForms.Markers.GMapMarkerPolygon hola = myForm.Polygon;
             }
