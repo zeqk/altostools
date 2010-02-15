@@ -16,7 +16,6 @@ namespace GMap.NET.WindowsForms.Markers
        public GMapMarkerCustom(PointLatLng p)
            : base(p)
       {
-         
       }
 
        public GMapMarkerCustom(PointLatLng p, Bitmap icon)
@@ -27,9 +26,7 @@ namespace GMap.NET.WindowsForms.Markers
 
       public override void OnRender(Graphics g)
       {  
-        //g.DrawImageUnscaled(Resources.shadow50, LocalPosition.X-10, LocalPosition.Y-40);
-        g.DrawImageUnscaled(_icon, LocalPosition.X, LocalPosition.Y);
-        //g.DrawImageUnscaled(Resources.drag_cross_67_16, LocalPosition.X-8, LocalPosition.Y-8);
+          g.DrawImageUnscaled(_icon, LocalPosition.X - (_icon.Size.Width / 2), LocalPosition.Y - (_icon.Size.Height / 2));        
       }
    }
 }

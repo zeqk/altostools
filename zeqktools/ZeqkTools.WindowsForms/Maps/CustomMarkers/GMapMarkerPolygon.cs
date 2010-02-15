@@ -11,6 +11,15 @@ namespace GMap.NET.WindowsForms.Markers
       public List<PointLatLng> GeoPoints;
       private List<Point> _localPoints;
 
+      public GMapMarkerPolygon(PointLatLng p, List<PointLatLng> points, Pen pen)
+          : base(p)
+      {
+          Pen = pen;
+
+          GeoPoints = points;
+
+      }
+
       public GMapMarkerPolygon(PointLatLng p,List<PointLatLng> points)
           : base(p)
       {
