@@ -120,6 +120,8 @@
     <Compile Include="Controls\PopupControl\PopupComboBox.Designer.cs">
       <DependentUpon>PopupComboBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Maps\CustomMarkers\GMapMarkerGraySquare.cs" />
+    <Compile Include="Maps\CustomMarkers\GMapMarkerWitheSquare.cs" />
     <Compile Include="Maps\CustomMarkers\GMapMarkerCustom.cs" />
     <Compile Include="Maps\CustomMarkers\GMapMarkerPolygon.cs" />
     <Compile Include="Maps\CustomMarkers\GMapMarkerLine.cs" />
@@ -186,6 +188,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Search.resx">
       <DependentUpon>Search.cs</DependentUpon>
@@ -200,6 +203,15 @@
       <Project>{CFC9DC5B-B9FD-4B73-B3C5-8159EC8ADFC7}</Project>
       <Name>ZeqkTools</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\square.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\transparentsquare.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Image1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

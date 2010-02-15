@@ -83,7 +83,7 @@ namespace ZeqkTools.WindowsForms.Maps
             //MainMap.OnTileLoadComplete += new TileLoadComplete(MainMap_OnTileLoadComplete);
             MainMap.OnMarkerClick += new MarkerClick(MainMap_OnMarkerClick);
             //MainMap.OnEmptyTileError += new EmptyTileError(MainMap_OnEmptyTileError);
-            //MainMap.OnMapZoomChanged += new MapZoomChanged(MainMap_OnMapZoomChanged);
+            MainMap.OnMapZoomChanged += new MapZoomChanged(MainMap_OnMapZoomChanged);
             //MainMap.OnMapTypeChanged += new MapTypeChanged(MainMap_OnMapTypeChanged);
             MainMap.MouseMove += new MouseEventHandler(MainMap_MouseMove);
             MainMap.MouseDown += new MouseEventHandler(MainMap_MouseDown);

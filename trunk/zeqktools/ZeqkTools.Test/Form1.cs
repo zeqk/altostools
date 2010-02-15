@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using GMap.NET;
 
+
 namespace ZeqkTools.Test
 {
     public partial class Form1 : Form
@@ -80,15 +81,19 @@ namespace ZeqkTools.Test
         {
             using (ZeqkTools.WindowsForms.Maps.frmGeoArea myForm = new ZeqkTools.WindowsForms.Maps.frmGeoArea())
             {
-                //List<PointLatLng> points = new List<PointLatLng>();
-                //PointLatLng point1 = new PointLatLng(-34.71317,-58.59649);
+                List<PointLatLng> points = new List<PointLatLng>();
+                //PointLatLng point1 = new PointLatLng(-34.71317, -58.59649);
                 //points.Add(point1);
                 //PointLatLng point2 = new PointLatLng(-34.81696, -58.36578);
                 //points.Add(point2);
-                //PointLatLng point3 = new PointLatLng(-34.57759,-58.34381);
+                //PointLatLng point3 = new PointLatLng(-34.57759, -58.34381);
                 //points.Add(point3);
-                //myForm.Area = points;
+                //PointLatLng point4 = new PointLatLng(-34.71317, -58.59649);
+                //points.Add(point4);
+                //myForm.Polygon = points;
+                myForm.Address = "Buenos Aires, Argentina";
                 myForm.ShowDialog();
+                //GMap.NET.WindowsForms.Markers.GMapMarkerPolygon hola = myForm.Polygon;
             }
         }
 

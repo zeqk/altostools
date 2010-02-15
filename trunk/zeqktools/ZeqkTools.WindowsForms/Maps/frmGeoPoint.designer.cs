@@ -77,7 +77,7 @@
             this.tableTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.tableTop.Controls.Add(this.btnGo, 1, 0);
             this.tableTop.Controls.Add(this.txtAddress, 0, 0);
-            this.tableTop.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableTop.Location = new System.Drawing.Point(3, 3);
             this.tableTop.Name = "tableTop";
             this.tableTop.RowCount = 1;
@@ -125,9 +125,9 @@
             // MainMap
             // 
             this.MainMap.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MainMap.CacheLocation = "C:\\Users\\zeqk\\AppData\\Roaming\\GMap.NET\\";
             this.MainMap.CanDragMap = true;
             this.MainMap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainMap.GrayScaleMode = false;
             this.MainMap.Location = new System.Drawing.Point(3, 3);
             this.MainMap.MapType = GMap.NET.MapType.GoogleMap;
             this.MainMap.MarkersEnabled = true;
@@ -137,7 +137,6 @@
             this.MainMap.Size = new System.Drawing.Size(697, 433);
             this.MainMap.TabIndex = 31;
             this.MainMap.Zoom = 2;
-            this.MainMap.OnMapZoomChanged += new GMap.NET.MapZoomChanged(this.MainMap_OnMapZoomChanged);
             // 
             // trackBar1
             // 
