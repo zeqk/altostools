@@ -16,10 +16,10 @@ namespace ZeqkTools.WindowsForms.Maps
 {
    public partial class StaticImage : Form
    {
-
       GMapControl MainMap;
       BackgroundWorker bg = new BackgroundWorker();
       readonly List<GMap.NET.Point> tileArea = new List<GMap.NET.Point>();
+	
 
       public StaticImage(GMapControl main)
       {
@@ -181,19 +181,29 @@ namespace ZeqkTools.WindowsForms.Maps
                        {
                            foreach (var marker in info.Markers)
                            {
-                               if (marker.GetType() == typeof(GMapMarkerCustom))
-                               {
-                                   GMapMarkerCustom customMark = (GMapMarkerCustom)marker;                                   
-                                   IntPtr iconHandle1 = ZeqkTools.Maps.Properties.Resources.legendIcon.GetHicon();
-                                   Icon icon1 = Icon.FromHandle(iconHandle1);
-                                   
+                               if (marker.GetType() != typeof(GMapMarkerPolygon) && 
+                                   marker.GetType() != typeof(GMapMarkerLine))
+                               {   
                                    int x, y = 0;
-                                   FromLatLngToLocal(info, rect.Height, rect.Width, customMark.Position.Lat, customMark.Position.Lng, out x, out y);
+                                   FromLatLngToLocal(info, rect.Height, rect.Width, marker.Position.Lat, marker.Position.Lng, out x, out y);
+
+                                   IntPtr iconHandle1 = ZeqkTools.Maps.Properties.Resources.legendIcon.GetHicon();
+                                   if (marker.GetType().GetProperty("Icon") != null)
+                                   {
+                                       Bitmap bitmap = (Bitmap)marker.GetType().GetProperty("Icon", typeof(Bitmap)).GetValue(marker, null);
+                                       iconHandle1 = bitmap.GetHicon();
+                                   }
+
+                                   Icon icon1 = Icon.FromHandle(iconHandle1);
 
                                    gfx.DrawIcon(icon1, x, y);
-                                   Font font = new Font(FontFamily.GenericSansSerif, 15);                                 
-                                   
-                                   gfx.DrawString(marker.Tag.ToString(), font, Brushes.Red, x + 10, y - 10);
+                                   Font font = new Font(FontFamily.GenericSansSerif, 15);
+
+                                   string infoTag = "";
+                                   if (marker.Tag != null)
+                                       infoTag = marker.Tag.ToString();
+
+                                   gfx.DrawString(infoTag, font, Brushes.Red, x + 10, y - 10);
                                }
 
                                if (marker.GetType() == typeof(GMapMarkerPolygon))
@@ -239,10 +249,8 @@ namespace ZeqkTools.WindowsForms.Maps
                numericUpDown1.Enabled = false;
                progressBar1.Value = 0;
                button1.Enabled = false;
-               if(MainMap.Overlays.Count > 3)
-                   bg.RunWorkerAsync(new MapInfo(MainMap.Projection, area, (int)numericUpDown1.Value, MainMap.MapType, MainMap.Overlays[0].Markers, MainMap.Overlays[3].Markers));
-               else
-                   bg.RunWorkerAsync(new MapInfo(MainMap.Projection, area, (int)numericUpDown1.Value, MainMap.MapType, MainMap.Overlays[0].Markers));
+               bg.RunWorkerAsync(new MapInfo(MainMap.Projection, area, (int)numericUpDown1.Value, MainMap.MapType, MainMap.Overlays[0].Markers));
+               
             }
          }
          else
@@ -289,25 +297,6 @@ namespace ZeqkTools.WindowsForms.Maps
          this.Zoom = Zoom;
          this.Type = Type;
          this.Markers = markers;
-      }
-
-      public MapInfo(PureProjection Projection, RectLatLng Area, int Zoom, MapType Type, params ObservableCollectionThreadSafe<GMapMarker>[] markers)
-      {
-          this.Projection = Projection;
-          this.Area = Area;
-          this.Zoom = Zoom;
-          this.Type = Type;
-
-          List<GMapMarker> markersList = new List<GMapMarker>();
-          for (int i = 0; i < markers.Length; i++)
-          {
-              markersList.AddRange(markers[i]);
-          }
-          this.Markers = new ObservableCollectionThreadSafe<GMapMarker>();
-          foreach (var item in markersList)
-          {
-              this.Markers.Add(item);
-          }
       }
    }
 }

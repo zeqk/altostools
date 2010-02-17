@@ -17,10 +17,13 @@ namespace ZeqkTools.WindowsForms.Maps
     {
         private MapType _mapType;
         private int _mapZoom;
+        private bool _alowDrawPolygon;
 
         private List<GMapMarker> _secondaryMarkers;
         private List<GMapMarker> _intermediatePoints;
-        private List<PointLatLng> _polygon;        
+        private List<PointLatLng> _polygon;
+
+        private List<Type> markerTypes;
 
         // markers
         GMapMarker center;
@@ -31,7 +34,6 @@ namespace ZeqkTools.WindowsForms.Maps
         GMapOverlay top;
         GMapOverlay vertices;
         GMapOverlay auxiliar;
-        GMapOverlay secondaryLayer;
 
         bool isMouseDown;
         bool polygonIsComplete = false;
@@ -60,7 +62,7 @@ namespace ZeqkTools.WindowsForms.Maps
         /// </summary>
         public List<GMapMarker> SecondaryMarkers
         {
-            get { return secondaryLayer.Markers.ToList(); }
+            get { return _secondaryMarkers; }
             set { _secondaryMarkers = value; }
         }
 
@@ -84,6 +86,12 @@ namespace ZeqkTools.WindowsForms.Maps
             get { return _mapZoom; }
             set { _mapZoom = value; }
         }
+
+        public bool AlowDrawPolygon
+        {
+            get { return _alowDrawPolygon; }
+            set { _alowDrawPolygon = value; }
+        }
 	
 	
         #endregion        
@@ -94,8 +102,12 @@ namespace ZeqkTools.WindowsForms.Maps
             _polygon = new List<PointLatLng>();
             _secondaryMarkers = new List<GMapMarker>();
             _intermediatePoints = new List<GMapMarker>();
+
+            markerTypes = new List<Type>();
+
             _mapType = MapType.GoogleMap;
             _mapZoom = 15;
+            _alowDrawPolygon = true;
             InitializeComponent();
         }
 
@@ -155,9 +167,13 @@ namespace ZeqkTools.WindowsForms.Maps
                 }
             }
 
-            //add the secondary markers in the secondary layer
+            //add the secondary markers in the top layer
             foreach (var mark in _secondaryMarkers)
-                secondaryLayer.Markers.Add(mark);
+            {
+                top.Markers.Add(mark);
+                if(!markerTypes.Contains(mark.GetType()))
+                    markerTypes.Add(mark.GetType());
+            }
 
             if (center == null)
                 GoToAddress(Address);            
@@ -208,8 +224,6 @@ namespace ZeqkTools.WindowsForms.Maps
                 MainMap.Overlays.Add(auxiliar);
                 vertices = new GMapOverlay(MainMap, "vertices");
                 MainMap.Overlays.Add(vertices);
-                secondaryLayer = new GMapOverlay(MainMap, "secondaryLayer");
-                MainMap.Overlays.Add(secondaryLayer);
 
             }
 
@@ -344,6 +358,7 @@ namespace ZeqkTools.WindowsForms.Maps
                 MainMap.SelectedArea = CalculateRectangle(_secondaryMarkers);
 
             MainMap.SelectedArea = AddMargin(MainMap.SelectedArea);
+            
 
             if (!MainMap.SelectedArea.IsEmpty)
             {
@@ -380,76 +395,80 @@ namespace ZeqkTools.WindowsForms.Maps
             {
                 isMouseDown = false;
 
-                //OnDrop
-                if (selectedVertice != null)
+                if (_alowDrawPolygon)
                 {
-
-                    //until the poligon is complete, make auxiliary lines joining the vertices
-                    if (!polygonIsComplete && vertices.Markers.Count > 1)
+                    //OnDrop
+                    if (selectedVertice != null)
                     {
-                        int verticeIndex = vertices.Markers.IndexOf(selectedVertice);
-                        Pen pen = new Pen(Brushes.DarkGray, 3);
-                        GMapMarkerLine auxLine = new GMapMarkerLine(selectedVertice.Position, vertices.Markers[verticeIndex - 1].Position, pen);
-                        auxiliar.Markers.Add(auxLine);
+
+                        //until the poligon is complete, make auxiliary lines joining the vertices
+                        if (!polygonIsComplete && vertices.Markers.Count > 1)
+                        {
+                            int verticeIndex = vertices.Markers.IndexOf(selectedVertice);
+                            Pen pen = new Pen(Brushes.DarkGray, 3);
+                            GMapMarkerLine auxLine = new GMapMarkerLine(selectedVertice.Position, vertices.Markers[verticeIndex - 1].Position, pen);
+                            auxiliar.Markers.Add(auxLine);
+                        }
+
+
+                        if (isDraggingVertice)
+                        {
+                            isDraggingVertice = false;
+
+                            if (polygonIsComplete)
+                            {
+                                DrawPloygon(vertices.Markers.ToList());
+
+                                //rearrangement intermediate points
+                                int selectedIndex = vertices.Markers.IndexOf(selectedVertice);
+                                //previous point
+                                if (selectedIndex == 0)
+                                {
+                                    GMapMarker intermediatePoint = auxiliar.Markers.Last();
+                                    intermediatePoint.Position = CalculateMiddlePoint(vertices.Markers[vertices.Markers.Count - 2], vertices.Markers[selectedIndex]);
+                                }
+                                else
+                                    auxiliar.Markers[selectedIndex - 1].Position = CalculateMiddlePoint(vertices.Markers[selectedIndex - 1], vertices.Markers[selectedIndex]);
+                                //next point
+                                auxiliar.Markers[selectedIndex].Position = CalculateMiddlePoint(vertices.Markers[selectedIndex], vertices.Markers[selectedIndex + 1]);
+                            }
+                        }
+
+                        selectedVertice = null;
                     }
 
-
-                    if (isDraggingVertice)
+                    //if dragging intermediate point dragging is finish
+                    if (selectedIntermediatePoint != null)
                     {
-                        isDraggingVertice = false;
-
-                        if (polygonIsComplete)
+                        if (isDraggingIntermediatePoint)
                         {
+                            isDraggingIntermediatePoint = false;
+                            //make a new vertice
+                            GMapMarkerWitheSquare newVertice = new GMapMarkerWitheSquare(selectedIntermediatePoint.Position);
+                            //remove the old intermediate point
+                            int selectedIndex = auxiliar.Markers.IndexOf(selectedIntermediatePoint);
+                            auxiliar.Markers.Remove(selectedIntermediatePoint);
+
+                            //add the new vertice, in the correct position of the vertices collection
+                            int newVerticeIndex = selectedIndex + 1;
+
+                            vertices.Markers.Insert(newVerticeIndex, newVertice);
                             DrawPloygon(vertices.Markers.ToList());
 
-                            //rearrangement intermediate points
-                            int selectedIndex = vertices.Markers.IndexOf(selectedVertice);
-                            //previous point
-                            if (selectedIndex == 0)
-                            {
-                                GMapMarker intermediatePoint = auxiliar.Markers.Last();
-                                intermediatePoint.Position = CalculateMiddlePoint(vertices.Markers[vertices.Markers.Count - 2], vertices.Markers[selectedIndex]);
-                            }
-                            else
-                                auxiliar.Markers[selectedIndex - 1].Position = CalculateMiddlePoint(vertices.Markers[selectedIndex - 1], vertices.Markers[selectedIndex]);
-                            //next point
-                            auxiliar.Markers[selectedIndex].Position = CalculateMiddlePoint(vertices.Markers[selectedIndex], vertices.Markers[selectedIndex + 1]);                                                  }
+                            //make and add new intermediate points
+                            PointLatLng intermediatePosition1 = CalculateMiddlePoint(vertices.Markers[newVerticeIndex - 1], vertices.Markers[newVerticeIndex]);
+                            GMapMarkerGraySquare intermediatePoint1 = new GMapMarkerGraySquare(intermediatePosition1);
+
+                            PointLatLng intermediatePosition2 = CalculateMiddlePoint(vertices.Markers[newVerticeIndex], vertices.Markers[newVerticeIndex + 1]);
+                            GMapMarkerGraySquare intermediatePoint2 = new GMapMarkerGraySquare(intermediatePosition2);
+
+                            auxiliar.Markers.Insert(selectedIndex, intermediatePoint1);
+                            auxiliar.Markers.Insert(selectedIndex + 1, intermediatePoint2);
+
+                        }
+
+                        selectedIntermediatePoint = null;
                     }
-
-                    selectedVertice = null;
-                }
-
-                //if dragging intermediate point dragging is finish
-                if (selectedIntermediatePoint != null)
-                {
-                    if (isDraggingIntermediatePoint)
-                    {
-                        isDraggingIntermediatePoint = false;
-                        //make a new vertice
-                        GMapMarkerWitheSquare newVertice = new GMapMarkerWitheSquare(selectedIntermediatePoint.Position);
-                        //remove the old intermediate point
-                        int selectedIndex = auxiliar.Markers.IndexOf(selectedIntermediatePoint);
-                        auxiliar.Markers.Remove(selectedIntermediatePoint);
-
-                        //add the new vertice, in the correct position of the vertices collection
-                        int newVerticeIndex = selectedIndex + 1;
-
-                        vertices.Markers.Insert(newVerticeIndex, newVertice);
-                        DrawPloygon(vertices.Markers.ToList());
-
-                        //make and add new intermediate points
-                        PointLatLng intermediatePosition1 = CalculateMiddlePoint(vertices.Markers[newVerticeIndex - 1], vertices.Markers[newVerticeIndex]);
-                        GMapMarkerGraySquare intermediatePoint1 = new GMapMarkerGraySquare(intermediatePosition1);
-
-                        PointLatLng intermediatePosition2 = CalculateMiddlePoint(vertices.Markers[newVerticeIndex], vertices.Markers[newVerticeIndex + 1]);
-                        GMapMarkerGraySquare intermediatePoint2 = new GMapMarkerGraySquare(intermediatePosition2);                        
-
-                        auxiliar.Markers.Insert(selectedIndex, intermediatePoint1);
-                        auxiliar.Markers.Insert(selectedIndex + 1, intermediatePoint2);
-
-                    }
-
-                    selectedIntermediatePoint = null;
                 }
             }
         }
@@ -460,54 +479,63 @@ namespace ZeqkTools.WindowsForms.Maps
             {
                 isMouseDown = true;
 
-                //if the polygon is incomplete, click will be create new vertices
-                if (!polygonIsComplete)
-                    if (selectedVertice == null)
-                    {
-                        GMapMarkerWitheSquare marker = new GMapMarkerWitheSquare(MainMap.FromLocalToLatLng(e.X, e.Y));                        
-                        vertices.Markers.Add(marker);
-                        this.selectedVertice = marker;
-                        
-                    }
+                if (_alowDrawPolygon)
+                {
+                    //if the polygon is incomplete, click will be create new vertices
+                    if (!polygonIsComplete)
+                        if (selectedVertice == null)
+                        {
+                            GMapMarkerWitheSquare marker = new GMapMarkerWitheSquare(MainMap.FromLocalToLatLng(e.X, e.Y));
+                            vertices.Markers.Add(marker);
+                            this.selectedVertice = marker;
+
+                        }
+                }
             }
         }
 
         private void MainMap_OnMarkerClick(GMapMarker item)
         {
-            //only can create the polygon if the polygon is incomplete
-            if (!polygonIsComplete)
+            if (_alowDrawPolygon)
             {
-                //the polygon only be closed if the click is on the first vertice, and is not the first time
-                if (vertices.Markers.First() == this.selectedVertice && vertices.Markers.Count > 1)
-                {                    
-                    this.vertices.Markers.Add(this.selectedVertice);
-                    //make the polygon
-                    DrawPloygon(vertices.Markers.ToList());                    
-                    polygonIsComplete = true;                    
-                    auxiliar.Markers.Clear();
-                    //add new intermediate points between the vertices
-                    for (int i = 0; i < vertices.Markers.Count; i++)
+                //only can create the polygon if the polygon is incomplete
+                if (!polygonIsComplete)
+                {
+                    //the polygon only be closed if the click is on the first vertice, and is not the first time
+                    if (vertices.Markers.First() == this.selectedVertice && vertices.Markers.Count > 1)
                     {
-                        if (i != vertices.Markers.Count - 1)
+                        this.vertices.Markers.Add(this.selectedVertice);
+                        //make the polygon
+                        DrawPloygon(vertices.Markers.ToList());
+                        polygonIsComplete = true;
+                        auxiliar.Markers.Clear();
+                        //add new intermediate points between the vertices
+                        for (int i = 0; i < vertices.Markers.Count; i++)
                         {
-                            PointLatLng middle = CalculateMiddlePoint(vertices.Markers[i], vertices.Markers[i + 1]);
-                            GMapMarkerGraySquare intermediatePoint = new GMapMarkerGraySquare(middle);
-                            auxiliar.Markers.Add(intermediatePoint);
+                            if (i != vertices.Markers.Count - 1)
+                            {
+                                PointLatLng middle = CalculateMiddlePoint(vertices.Markers[i], vertices.Markers[i + 1]);
+                                GMapMarkerGraySquare intermediatePoint = new GMapMarkerGraySquare(middle);
+                                auxiliar.Markers.Add(intermediatePoint);
+                            }
                         }
                     }
                 }
-            }                 
+            }
+                
         }
 
         private void MainMap_OnMarkerEnter(GMapMarker item)
         {
-            //select the marker that was clicked
-            if (vertices.Markers.Contains(item))
-                this.selectedVertice = item;
-            
-            if(auxiliar.Markers.Contains(item))
-                this.selectedIntermediatePoint = item;
-            
+            if (_alowDrawPolygon)
+            {
+                //select the marker that was clicked
+                if (vertices.Markers.Contains(item))
+                    this.selectedVertice = item;
+
+                if (auxiliar.Markers.Contains(item))
+                    this.selectedIntermediatePoint = item;
+            }
         }
 
         private void MainMap_OnMarkerLeave(GMapMarker item)
@@ -524,20 +552,23 @@ namespace ZeqkTools.WindowsForms.Maps
         {
             if (e.Button == MouseButtons.Left && isMouseDown)
             {
-                //if there is a selected vertice
-                if (this.selectedVertice != null)
+                if (_alowDrawPolygon)
                 {
-                    //drag the selected vertice
-                    this.selectedVertice.Position = MainMap.FromLocalToLatLng(e.X, e.Y);
-                    isDraggingVertice = true;
-                }
-                else
-                {
-                    //else, if there is a selected intermediate point, be dragg
-                    if (this.selectedIntermediatePoint != null)
+                    //if there is a selected vertice
+                    if (this.selectedVertice != null)
                     {
-                        this.selectedIntermediatePoint.Position = MainMap.FromLocalToLatLng(e.X, e.Y);
-                        isDraggingIntermediatePoint = true;
+                        //drag the selected vertice
+                        this.selectedVertice.Position = MainMap.FromLocalToLatLng(e.X, e.Y);
+                        isDraggingVertice = true;
+                    }
+                    else
+                    {
+                        //else, if there is a selected intermediate point, be dragg
+                        if (this.selectedIntermediatePoint != null)
+                        {
+                            this.selectedIntermediatePoint.Position = MainMap.FromLocalToLatLng(e.X, e.Y);
+                            isDraggingIntermediatePoint = true;
+                        }
                     }
                 }
             }
@@ -568,7 +599,13 @@ namespace ZeqkTools.WindowsForms.Maps
         {
             auxiliar.Markers.Clear();
             vertices.Markers.Clear();
-            top.Markers.Clear();
+
+            if (top.Markers.OfType<GMapMarkerPolygon>().Count() > 0)
+            {
+                GMapMarkerPolygon polygon = top.Markers.OfType<GMapMarkerPolygon>().First();
+                top.Markers.Remove(polygon);                
+            }
+
             polygonIsComplete = false;
         }
     }
