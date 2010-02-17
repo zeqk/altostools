@@ -25,7 +25,7 @@ namespace ZeqkTools.MapsTest
             {
                 List<PointLatLng> points = new List<PointLatLng>();
                 myForm.Address = "Claypole, Buenos Aires, Argentina";
-                myForm.ShowDialog();                
+                myForm.ShowDialog();
             }
         }
 
@@ -47,14 +47,26 @@ namespace ZeqkTools.MapsTest
                 myForm.Polygon = polygon;
 
                 List<GMapMarker> myMarks = new List<GMapMarker>();
-                GMapMarkerGoogleRed myMark1 = new GMapMarkerGoogleRed(new PointLatLng(-34.788151, - 58.345299));
-                GMapMarkerGoogleRed myMark2 = new GMapMarkerGoogleRed(new PointLatLng(-34.799286, - 58.334827));
+                GMapMarkerGoogleRed myMark1 = new GMapMarkerGoogleRed(new PointLatLng(-34.788151, -58.345299));
+                GMapMarkerGoogleRed myMark2 = new GMapMarkerGoogleRed(new PointLatLng(-34.799286, -58.334827));
                 myMarks.Add(myMark1);
                 myMarks.Add(myMark2);
                 myForm.SecondaryMarkers = myMarks;
                 myForm.Address = "Claypole, Buenos Aires, Argentina";
                 myForm.MapZoom = 12;
                 myForm.ShowDialog();
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            using (ZeqkTools.WindowsForms.Maps.frmGeoPoint myForm = new ZeqkTools.WindowsForms.Maps.frmGeoPoint())
+            {
+                myForm.Address = "Claypole, Buenos Aires, Argentina";
+                if (myForm.ShowDialog() == DialogResult.OK)
+                {
+                    MessageBox.Show("Result is ok");
+                }
             }
         }
     }

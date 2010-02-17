@@ -191,6 +191,7 @@
             this.btnOk.TabIndex = 14;
             this.btnOk.Text = "Ok";
             this.btnOk.UseVisualStyleBackColor = true;
+            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
             // tableProperties
             // 

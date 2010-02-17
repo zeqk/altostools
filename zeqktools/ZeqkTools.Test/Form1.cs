@@ -21,6 +21,14 @@ namespace ZeqkTools.Test
         private void Form1_Load(object sender, EventArgs e)
         {
             checkedListComboBox1.DisplayMember = "Name";
+            checkedListComboBox1.ValueMember = "Id";
+
+            List<Item> list = new List<Item>();
+            for (int i = 0; i < 6; i++)
+            {
+                list.Add(new Item(i, i.ToString()));
+            }
+            checkedListComboBox1.DataSource = list;
             
 
 
@@ -35,12 +43,7 @@ namespace ZeqkTools.Test
         {
              int total = (int) numericUpDown1.Value;
 
-             List<Item> list = new List<Item>();
-             for (int i = 0; i < total; i++)
-             {
-                 list.Add(new Item(i, i.ToString()));
-             }
-             checkedListComboBox1.DataSource = list;
+             
         }
 
         private void checkedListComboBox1_TextUpdate(object sender, EventArgs e)
@@ -68,33 +71,10 @@ namespace ZeqkTools.Test
             checkedListComboBox1.UncheckAllItems();
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void button6_Click(object sender, EventArgs e)
         {
-            using (ZeqkTools.WindowsForms.Maps.frmGeoPoint myForm = new ZeqkTools.WindowsForms.Maps.frmGeoPoint())
-            {
-                myForm.Address = "Claypole";
-                myForm.ShowDialog();
-            }
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            using (ZeqkTools.WindowsForms.Maps.frmGeoPolygon myForm = new ZeqkTools.WindowsForms.Maps.frmGeoPolygon())
-            {
-                List<PointLatLng> points = new List<PointLatLng>();
-                //PointLatLng point1 = new PointLatLng(-34.71317, -58.59649);
-                //points.Add(point1);
-                //PointLatLng point2 = new PointLatLng(-34.81696, -58.36578);
-                //points.Add(point2);
-                //PointLatLng point3 = new PointLatLng(-34.57759, -58.34381);
-                //points.Add(point3);
-                //PointLatLng point4 = new PointLatLng(-34.71317, -58.59649);
-                //points.Add(point4);
-                //myForm.Polygon = points;
-                myForm.Address = "Claypole, Buenos Aires, Argentina";
-                myForm.ShowDialog();
-                //GMap.NET.WindowsForms.Markers.GMapMarkerPolygon hola = myForm.Polygon;
-            }
+            var hola1 = checkedListComboBox1.CheckedItems;
+            var hola2 = checkedListComboBox1.CheckedItemsValues;
         }
 
 
