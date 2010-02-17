@@ -25,6 +25,7 @@ namespace ZeqkTools.MapsTest
             {
                 List<PointLatLng> points = new List<PointLatLng>();
                 myForm.Address = "Claypole, Buenos Aires, Argentina";
+                //myForm.AlowDrawPolygon = false;
                 myForm.ShowDialog();
             }
         }
@@ -52,6 +53,7 @@ namespace ZeqkTools.MapsTest
                 myMarks.Add(myMark1);
                 myMarks.Add(myMark2);
                 myForm.SecondaryMarkers = myMarks;
+                //myForm.AlowDrawPolygon = true;
                 myForm.Address = "Claypole, Buenos Aires, Argentina";
                 myForm.MapZoom = 12;
                 myForm.ShowDialog();

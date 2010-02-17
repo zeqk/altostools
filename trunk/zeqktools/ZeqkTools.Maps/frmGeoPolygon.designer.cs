@@ -235,6 +235,7 @@
             this.btnToStaticMap.TabIndex = 14;
             this.btnToStaticMap.Text = "To image";
             this.btnToStaticMap.UseVisualStyleBackColor = true;
+            this.btnToStaticMap.Click += new System.EventHandler(this.btnGenImage_Click);
             // 
             // tableMapType
             // 
