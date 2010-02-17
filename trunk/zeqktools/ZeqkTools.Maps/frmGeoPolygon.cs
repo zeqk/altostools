@@ -563,5 +563,13 @@ namespace ZeqkTools.WindowsForms.Maps
             txtLat.Text = MainMap.CurrentPosition.Lat.ToString(CultureInfo.CurrentCulture);
             txtLng.Text = MainMap.CurrentPosition.Lng.ToString(CultureInfo.CurrentCulture);
         }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            auxiliar.Markers.Clear();
+            vertices.Markers.Clear();
+            top.Markers.Clear();
+            polygonIsComplete = false;
+        }
     }
 }

@@ -32,7 +32,6 @@
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.lblMapType = new System.Windows.Forms.Label();
             this.cboMapType = new System.Windows.Forms.ComboBox();
-            this.btnToStaticMap = new System.Windows.Forms.Button();
             this.btnGenImage = new System.Windows.Forms.Button();
             this.sfdSaveScreen = new System.Windows.Forms.SaveFileDialog();
             this.tableBase = new System.Windows.Forms.TableLayoutPanel();
@@ -41,7 +40,9 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnToStaticMap = new System.Windows.Forms.Button();
             this.tableMapType = new System.Windows.Forms.TableLayoutPanel();
+            this.btnClear = new System.Windows.Forms.Button();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.tableTop = new System.Windows.Forms.TableLayoutPanel();
             this.txtAddress = new System.Windows.Forms.TextBox();
@@ -126,17 +127,6 @@
             this.cboMapType.TabIndex = 13;
             this.cboMapType.SelectedValueChanged += new System.EventHandler(this.cboMapType_SelectedValueChanged);
             // 
-            // btnToStaticMap
-            // 
-            this.btnToStaticMap.Dock = System.Windows.Forms.DockStyle.Left;
-            this.btnToStaticMap.Location = new System.Drawing.Point(13, 3);
-            this.btnToStaticMap.Name = "btnToStaticMap";
-            this.btnToStaticMap.Size = new System.Drawing.Size(89, 40);
-            this.btnToStaticMap.TabIndex = 12;
-            this.btnToStaticMap.Text = "To image";
-            this.btnToStaticMap.UseVisualStyleBackColor = true;
-            this.btnToStaticMap.Click += new System.EventHandler(this.btnGenImage_Click);
-            // 
             // btnGenImage
             // 
             this.btnGenImage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -156,6 +146,7 @@
             this.tableBase.Controls.Add(this.tableBottom, 0, 2);
             this.tableBase.Controls.Add(this.tableLayoutPanel5, 0, 1);
             this.tableBase.Controls.Add(this.tableTop, 0, 0);
+            this.tableBase.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableBase.Location = new System.Drawing.Point(0, 0);
             this.tableBase.Name = "tableBase";
             this.tableBase.RowCount = 3;
@@ -220,12 +211,13 @@
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 4;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 125F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 234F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tableLayoutPanel3.Controls.Add(this.btnToStaticMap, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.tableMapType, 2, 0);
-            this.tableLayoutPanel3.Controls.Add(this.btnToStaticMap, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.btnClear, 1, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -233,6 +225,16 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(551, 46);
             this.tableLayoutPanel3.TabIndex = 1;
+            // 
+            // btnToStaticMap
+            // 
+            this.btnToStaticMap.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnToStaticMap.Location = new System.Drawing.Point(3, 3);
+            this.btnToStaticMap.Name = "btnToStaticMap";
+            this.btnToStaticMap.Size = new System.Drawing.Size(89, 40);
+            this.btnToStaticMap.TabIndex = 14;
+            this.btnToStaticMap.Text = "To image";
+            this.btnToStaticMap.UseVisualStyleBackColor = true;
             // 
             // tableMapType
             // 
@@ -248,6 +250,17 @@
             this.tableMapType.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70.33456F));
             this.tableMapType.Size = new System.Drawing.Size(228, 40);
             this.tableMapType.TabIndex = 13;
+            // 
+            // btnClear
+            // 
+            this.btnClear.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnClear.Location = new System.Drawing.Point(171, 10);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(89, 25);
+            this.btnClear.TabIndex = 15;
+            this.btnClear.Text = "Clear polygon";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // tableLayoutPanel5
             // 
@@ -471,7 +484,7 @@
             this.label1.TabIndex = 21;
             this.label1.Text = "Map type";
             // 
-            // frmGeoArea
+            // frmGeoPolygon
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -479,7 +492,7 @@
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(703, 561);
             this.Controls.Add(this.tableBase);
-            this.Name = "frmGeoArea";
+            this.Name = "frmGeoPolygon";
             this.Text = "Area";
             this.Load += new System.EventHandler(this.frmGeoArea_Load);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
@@ -504,7 +517,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btnToStaticMap;
         private System.Windows.Forms.Button btnGenImage;
         private System.Windows.Forms.SaveFileDialog sfdSaveScreen;
         private System.Windows.Forms.GMapControl MainMap;
@@ -536,6 +548,8 @@
         private System.Windows.Forms.TableLayoutPanel tableTop;
         private System.Windows.Forms.Button btnGo;
         private System.Windows.Forms.TextBox txtAddress;
+        private System.Windows.Forms.Button btnToStaticMap;
+        private System.Windows.Forms.Button btnClear;
 
     }
 }

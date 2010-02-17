@@ -217,9 +217,10 @@ namespace ZeqkTools.WindowsForms.Maps
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
 
-            this.GeoPosition = currentMarker.Position;            
+
+            this.GeoPosition = currentMarker.Position;  
+            this.DialogResult = DialogResult.OK;          
 
             this.Close();
         }

@@ -71,9 +71,12 @@ namespace ZeqkTools.WindowsForms.Controls
                 {
                     foreach (var item in checkedListBox.CheckedItems)
                     {
-                        object value;
-                        value = item.GetType().GetProperty(_valueMember).GetValue(item, null);
-                        rv.Add(value);
+                        if (item != ALLITEMSSTRING)
+                        {
+                            object value;
+                            value = item.GetType().GetProperty(_valueMember).GetValue(item, null);
+                            rv.Add(value);
+                        }
                     }
                 }
                 return rv; 
@@ -89,9 +92,12 @@ namespace ZeqkTools.WindowsForms.Controls
                 {
                     foreach (var item in checkedListBox.Items)
                     {
-                        object value;
-                        value = item.GetType().GetProperty(_valueMember).GetValue(item, null);
-                        rv.Add(value);
+                        if (item != ALLITEMSSTRING)
+                        {
+                            object value;
+                            value = item.GetType().GetProperty(_valueMember).GetValue(item, null);
+                            rv.Add(value);
+                        }
                     }
                 }
                 return rv;
