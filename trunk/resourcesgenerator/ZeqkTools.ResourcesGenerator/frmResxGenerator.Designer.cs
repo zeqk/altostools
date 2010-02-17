@@ -30,7 +30,7 @@
         {
             this.fbdDestiny = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabGenerate = new System.Windows.Forms.TabPage();
             this.lblFiles = new System.Windows.Forms.Label();
             this.lblSource = new System.Windows.Forms.Label();
             this.chklstFiles = new System.Windows.Forms.CheckedListBox();
@@ -47,7 +47,6 @@
             this.txtCultureTag = new System.Windows.Forms.TextBox();
             this.btnGenerate = new System.Windows.Forms.Button();
             this.tabMerge = new System.Windows.Forms.TabPage();
-            this.btnMerge = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.chkLstResxFiles = new System.Windows.Forms.CheckedListBox();
@@ -56,15 +55,16 @@
             this.label5 = new System.Windows.Forms.Label();
             this.btnSelectMergedResx = new System.Windows.Forms.Button();
             this.txtMergedResxFile = new System.Windows.Forms.TextBox();
+            this.btnMerge = new System.Windows.Forms.Button();
             this.sfdMergedResx = new System.Windows.Forms.SaveFileDialog();
             this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
+            this.tabGenerate.SuspendLayout();
             this.tabMerge.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabGenerate);
             this.tabControl1.Controls.Add(this.tabMerge);
             this.tabControl1.Location = new System.Drawing.Point(10, 7);
             this.tabControl1.Name = "tabControl1";
@@ -72,30 +72,30 @@
             this.tabControl1.Size = new System.Drawing.Size(399, 422);
             this.tabControl1.TabIndex = 1;
             // 
-            // tabPage1
+            // tabGenerate
             // 
-            this.tabPage1.Controls.Add(this.lblFiles);
-            this.tabPage1.Controls.Add(this.lblSource);
-            this.tabPage1.Controls.Add(this.chklstFiles);
-            this.tabPage1.Controls.Add(this.btnSelectSource);
-            this.tabPage1.Controls.Add(this.txtSource);
-            this.tabPage1.Controls.Add(this.lblResources);
-            this.tabPage1.Controls.Add(this.btnSelectDestiny);
-            this.tabPage1.Controls.Add(this.txtDestiny);
-            this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.txtTo);
-            this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Controls.Add(this.txtFrom);
-            this.tabPage1.Controls.Add(this.lblCultureTag);
-            this.tabPage1.Controls.Add(this.txtCultureTag);
-            this.tabPage1.Controls.Add(this.btnGenerate);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(391, 396);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabGenerate.Controls.Add(this.lblFiles);
+            this.tabGenerate.Controls.Add(this.lblSource);
+            this.tabGenerate.Controls.Add(this.chklstFiles);
+            this.tabGenerate.Controls.Add(this.btnSelectSource);
+            this.tabGenerate.Controls.Add(this.txtSource);
+            this.tabGenerate.Controls.Add(this.lblResources);
+            this.tabGenerate.Controls.Add(this.btnSelectDestiny);
+            this.tabGenerate.Controls.Add(this.txtDestiny);
+            this.tabGenerate.Controls.Add(this.label2);
+            this.tabGenerate.Controls.Add(this.txtTo);
+            this.tabGenerate.Controls.Add(this.label1);
+            this.tabGenerate.Controls.Add(this.txtFrom);
+            this.tabGenerate.Controls.Add(this.lblCultureTag);
+            this.tabGenerate.Controls.Add(this.txtCultureTag);
+            this.tabGenerate.Controls.Add(this.btnGenerate);
+            this.tabGenerate.Location = new System.Drawing.Point(4, 22);
+            this.tabGenerate.Name = "tabGenerate";
+            this.tabGenerate.Padding = new System.Windows.Forms.Padding(3);
+            this.tabGenerate.Size = new System.Drawing.Size(391, 396);
+            this.tabGenerate.TabIndex = 0;
+            this.tabGenerate.Text = "Generate";
+            this.tabGenerate.UseVisualStyleBackColor = true;
             // 
             // lblFiles
             // 
@@ -132,6 +132,7 @@
             this.btnSelectSource.TabIndex = 33;
             this.btnSelectSource.Text = "...";
             this.btnSelectSource.UseVisualStyleBackColor = true;
+            this.btnSelectSource.Click += new System.EventHandler(this.btnSelectSource_Click);
             // 
             // txtSource
             // 
@@ -158,6 +159,7 @@
             this.btnSelectDestiny.TabIndex = 30;
             this.btnSelectDestiny.Text = "...";
             this.btnSelectDestiny.UseVisualStyleBackColor = true;
+            this.btnSelectDestiny.Click += new System.EventHandler(this.btnSelectDestiny_Click);
             // 
             // txtDestiny
             // 
@@ -225,6 +227,7 @@
             this.btnGenerate.TabIndex = 20;
             this.btnGenerate.Text = "Generate";
             this.btnGenerate.UseVisualStyleBackColor = true;
+            this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
             // tabMerge
             // 
@@ -242,18 +245,8 @@
             this.tabMerge.Padding = new System.Windows.Forms.Padding(3);
             this.tabMerge.Size = new System.Drawing.Size(391, 396);
             this.tabMerge.TabIndex = 1;
-            this.tabMerge.Text = "tabPage2";
+            this.tabMerge.Text = "Merge";
             this.tabMerge.UseVisualStyleBackColor = true;
-            // 
-            // btnMerge
-            // 
-            this.btnMerge.Location = new System.Drawing.Point(96, 298);
-            this.btnMerge.Name = "btnMerge";
-            this.btnMerge.Size = new System.Drawing.Size(158, 40);
-            this.btnMerge.TabIndex = 21;
-            this.btnMerge.Text = "Merge";
-            this.btnMerge.UseVisualStyleBackColor = true;
-            this.btnMerge.Click += new System.EventHandler(this.btnMerge_Click);
             // 
             // label3
             // 
@@ -326,6 +319,16 @@
             this.txtMergedResxFile.Size = new System.Drawing.Size(322, 20);
             this.txtMergedResxFile.TabIndex = 37;
             // 
+            // btnMerge
+            // 
+            this.btnMerge.Location = new System.Drawing.Point(96, 298);
+            this.btnMerge.Name = "btnMerge";
+            this.btnMerge.Size = new System.Drawing.Size(158, 40);
+            this.btnMerge.TabIndex = 21;
+            this.btnMerge.Text = "Merge";
+            this.btnMerge.UseVisualStyleBackColor = true;
+            this.btnMerge.Click += new System.EventHandler(this.btnMerge_Click);
+            // 
             // frmResxGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -335,8 +338,8 @@
             this.Name = "frmResxGenerator";
             this.Text = "Resx generator";
             this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
+            this.tabGenerate.ResumeLayout(false);
+            this.tabGenerate.PerformLayout();
             this.tabMerge.ResumeLayout(false);
             this.tabMerge.PerformLayout();
             this.ResumeLayout(false);
@@ -347,7 +350,7 @@
 
         private System.Windows.Forms.FolderBrowserDialog fbdDestiny;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabGenerate;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtTo;
         private System.Windows.Forms.Label label1;

@@ -43,7 +43,9 @@ namespace ZeqkTools.ResourcesGenerator
 
                     try
                     {
-                        GenerateResx(file, resxFile, txtFrom.Text, txtTo.Text);
+                        bool successfullyGenerated = GenerateResx(file, resxFile, txtFrom.Text, txtTo.Text);
+                        if (successfullyGenerated)
+                            MessageBox.Show("Resource file were generated successfully.");
                     }
                     catch (Exception ex)
                     {
@@ -56,8 +58,11 @@ namespace ZeqkTools.ResourcesGenerator
                  
         }
 
-        private void GenerateResx(string file, string resxFile, string fromStr, string toStr)
+        private bool GenerateResx(string file, string resxFile, string fromStr, string toStr)
         {
+
+            bool rv = false;
+
             Dictionary<object, object> existingEntries = new Dictionary<object, object>();
 
             try
@@ -96,6 +101,7 @@ namespace ZeqkTools.ResourcesGenerator
                         }
 
                         rxrw.Close();
+                        rv = true;
                     }
                 }     
             }
@@ -108,6 +114,7 @@ namespace ZeqkTools.ResourcesGenerator
                 else
                     throw ex;
             }
+            return rv;
               
         }
 
@@ -180,7 +187,9 @@ namespace ZeqkTools.ResourcesGenerator
 
                     try
                     {
-                        Merge(file, resxFile);
+                        bool successfullyMerged = Merge(file, resxFile);
+                        if (successfullyMerged)
+                            MessageBox.Show("Files were merged successfully.");
                     }
                     catch (Exception ex)
                     {
