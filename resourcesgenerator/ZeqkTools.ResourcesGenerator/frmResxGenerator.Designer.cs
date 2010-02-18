@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmResxGenerator));
             this.fbdDestiny = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabGenerate = new System.Windows.Forms.TabPage();
@@ -57,19 +58,23 @@
             this.txtMergedResxFile = new System.Windows.Forms.TextBox();
             this.btnMerge = new System.Windows.Forms.Button();
             this.sfdMergedResx = new System.Windows.Forms.SaveFileDialog();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.menuHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabGenerate.SuspendLayout();
             this.tabMerge.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabGenerate);
             this.tabControl1.Controls.Add(this.tabMerge);
-            this.tabControl1.Location = new System.Drawing.Point(10, 7);
+            this.tabControl1.Location = new System.Drawing.Point(8, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(399, 422);
+            this.tabControl1.Size = new System.Drawing.Size(399, 434);
             this.tabControl1.TabIndex = 1;
             // 
             // tabGenerate
@@ -92,7 +97,7 @@
             this.tabGenerate.Location = new System.Drawing.Point(4, 22);
             this.tabGenerate.Name = "tabGenerate";
             this.tabGenerate.Padding = new System.Windows.Forms.Padding(3);
-            this.tabGenerate.Size = new System.Drawing.Size(391, 396);
+            this.tabGenerate.Size = new System.Drawing.Size(391, 408);
             this.tabGenerate.TabIndex = 0;
             this.tabGenerate.Text = "Generate";
             this.tabGenerate.UseVisualStyleBackColor = true;
@@ -329,12 +334,44 @@
             this.btnMerge.UseVisualStyleBackColor = true;
             this.btnMerge.Click += new System.EventHandler(this.btnMerge_Click);
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuHelp});
+            this.menuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(419, 24);
+            this.menuStrip1.TabIndex = 2;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // menuHelp
+            // 
+            this.menuHelp.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.menuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuAbout});
+            this.menuHelp.Name = "menuHelp";
+            this.menuHelp.Size = new System.Drawing.Size(40, 20);
+            this.menuHelp.Text = "Help";
+            // 
+            // menuAbout
+            // 
+            this.menuAbout.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.menuAbout.Name = "menuAbout";
+            this.menuAbout.Size = new System.Drawing.Size(152, 22);
+            this.menuAbout.Text = "About";
+            this.menuAbout.Click += new System.EventHandler(this.menuAbout_Click);
+            // 
             // frmResxGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(419, 441);
+            this.ClientSize = new System.Drawing.Size(419, 473);
             this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "frmResxGenerator";
             this.Text = "Resx generator";
             this.tabControl1.ResumeLayout(false);
@@ -342,7 +379,10 @@
             this.tabGenerate.PerformLayout();
             this.tabMerge.ResumeLayout(false);
             this.tabMerge.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -377,6 +417,9 @@
         private System.Windows.Forms.Button btnSelectMergedResx;
         private System.Windows.Forms.TextBox txtMergedResxFile;
         private System.Windows.Forms.SaveFileDialog sfdMergedResx;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem menuHelp;
+        private System.Windows.Forms.ToolStripMenuItem menuAbout;
 
     }
 }
