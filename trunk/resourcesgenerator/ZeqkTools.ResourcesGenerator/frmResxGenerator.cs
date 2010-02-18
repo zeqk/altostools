@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Resources;
 using System.Collections;
+using ZeqkTools.WindowsForms;
 
 namespace ZeqkTools.ResourcesGenerator
 {
@@ -280,6 +281,32 @@ namespace ZeqkTools.ResourcesGenerator
         }
 
         #endregion
+
+        private void menuAbout_Click(object sender, EventArgs e)
+        {
+            AboutBox ab = new AboutBox();
+            ab.Text = "About " + Application.ProductName + " " + Application.ProductVersion;
+            ab.AppTitle = Application.ProductName;
+            ab.AppDescription = "A program for extract string from text file to resource file";
+            ab.AppVersion = Application.ProductVersion;
+            ab.AppCopyright = "GNU GPL 2010  Zeqk";
+            ab.AppMoreInfo = "Web site: http://zeqk.wordpress.com \n\n";
+            ab.AppMoreInfo += "This program is free software: you can redistribute it and/or modify ";
+            ab.AppMoreInfo += "it under the terms of the GNU General Public License as published by ";
+            ab.AppMoreInfo += "the Free Software Foundation, either version 3 of the License, or ";
+            ab.AppMoreInfo += "(at your option) any later version.\n\n";
+
+            ab.AppMoreInfo += "This program is distributed in the hope that it will be useful, ";
+            ab.AppMoreInfo += "but WITHOUT ANY WARRANTY; without even the implied warranty of ";
+            ab.AppMoreInfo += "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the ";
+            ab.AppMoreInfo += "GNU General Public License for more details.\n\n";
+
+            ab.AppMoreInfo += "You should have received a copy of the GNU General Public License ";
+            ab.AppMoreInfo += "along with this program.  If not, see <http://www.gnu.org/licenses/>.";
+
+            ab.AppDetailsButton = false;
+            ab.ShowDialog(this);
+        }
 
         
     }

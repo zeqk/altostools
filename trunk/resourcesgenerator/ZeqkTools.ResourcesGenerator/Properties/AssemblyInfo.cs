@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ResourcesGenerator")]
+[assembly: AssemblyTitle("Resources Generator")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Zeqk")]
-[assembly: AssemblyProduct("ResourcesGenerator")]
+[assembly: AssemblyProduct("Resources Generator")]
 [assembly: AssemblyCopyright("GNU GPL 2010  Zeqk")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
