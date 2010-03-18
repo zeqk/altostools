@@ -28,15 +28,18 @@ namespace ZeqkTools.WindowsForms.Controls
             set 
             {
                 UncheckAllItems();
-                int h = 22 * (value.Count + 1);
+                if (value != null)
+                {
+                    int h = 22 * (value.Count + 1);
 
-                ResizeCheckedListBox(this.Width, h);
+                    ResizeCheckedListBox(this.Width, h);
 
-                checkedListBox.Items.Add(ALLITEMSSTRING);
+                    checkedListBox.Items.Add(ALLITEMSSTRING);
 
-                foreach (var item in value)
-                    checkedListBox.Items.Add(item);
-                int aux = checkedListBox.ItemHeight;
+                    foreach (var item in value)
+                        checkedListBox.Items.Add(item);
+                    int aux = checkedListBox.ItemHeight;
+                }
             }
         }
 
