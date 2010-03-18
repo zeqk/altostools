@@ -18,15 +18,14 @@ namespace ZeqkTools.WindowsForms.Maps
         #region Fields
         private MapType _mapType;
         private int _mapZoom;
-        private bool _allowDrawPolygon;
+        private bool _allowDrawPolygon;        
         
         private List<GMapMarker> _secondaryMarkers;
-        private List<GMapMarker> _intermediatePoints;
         private List<PointLatLng> _polygon;
         #endregion
 
         #region Internal variables
-        private List<Type> markerTypes;
+        private List<Type> markerTypes;        
 
         // markers
         GMapMarker center;
@@ -105,8 +104,7 @@ namespace ZeqkTools.WindowsForms.Maps
         {
             //contruct fields
             _polygon = new List<PointLatLng>();
-            _secondaryMarkers = new List<GMapMarker>();
-            _intermediatePoints = new List<GMapMarker>();
+            _secondaryMarkers = new List<GMapMarker>();            
             _mapType = MapType.GoogleMap;
             _mapZoom = 15;
             _allowDrawPolygon = true;

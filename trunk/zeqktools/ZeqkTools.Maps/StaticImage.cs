@@ -182,7 +182,8 @@ namespace ZeqkTools.WindowsForms.Maps
                            foreach (var marker in info.Markers)
                            {
                                if (marker.GetType() != typeof(GMapMarkerPolygon) && 
-                                   marker.GetType() != typeof(GMapMarkerLine))
+                                   marker.GetType() != typeof(GMapMarkerLine) &&
+                                   marker.GetType() != typeof(GMapMarkerCross))
                                {   
                                    int x, y = 0;
                                    FromLatLngToLocal(info, rect.Height, rect.Width, marker.Position.Lat, marker.Position.Lng, out x, out y);
@@ -197,7 +198,7 @@ namespace ZeqkTools.WindowsForms.Maps
                                    Icon icon1 = Icon.FromHandle(iconHandle1);
 
                                    gfx.DrawIcon(icon1, x, y);
-                                   Font font = new Font(FontFamily.GenericSansSerif, 15);
+                                   Font font = new Font(FontFamily.GenericSansSerif, 12);
 
                                    string infoTag = "";
                                    if (marker.Tag != null)
