@@ -15,14 +15,17 @@ namespace ZeqkTools.WindowsForms.Maps
 {
     public partial class frmGeoPolygon : Form
     {
+        #region Fields
         private MapType _mapType;
         private int _mapZoom;
-        private bool _alowDrawPolygon;
-
+        private bool _allowDrawPolygon;
+        
         private List<GMapMarker> _secondaryMarkers;
         private List<GMapMarker> _intermediatePoints;
         private List<PointLatLng> _polygon;
+        #endregion
 
+        #region Internal variables
         private List<Type> markerTypes;
 
         // markers
@@ -39,6 +42,7 @@ namespace ZeqkTools.WindowsForms.Maps
         bool polygonIsComplete = false;
         bool isDraggingVertice = false;
         bool isDraggingIntermediatePoint = false;
+        #endregion
 
         #region Public properties
 
@@ -87,36 +91,42 @@ namespace ZeqkTools.WindowsForms.Maps
             set { _mapZoom = value; }
         }
 
-        public bool AlowDrawPolygon
+        public bool AllowDrawPolygon
         {
-            get { return _alowDrawPolygon; }
-            set { _alowDrawPolygon = value; }
+            get { return _allowDrawPolygon; }
+            set { _allowDrawPolygon = value; }
         }
 	
 	
         #endregion        
 
-
+        #region Constructors
         public frmGeoPolygon()
         {
+            //contruct fields
             _polygon = new List<PointLatLng>();
             _secondaryMarkers = new List<GMapMarker>();
             _intermediatePoints = new List<GMapMarker>();
-
-            markerTypes = new List<Type>();
-
             _mapType = MapType.GoogleMap;
             _mapZoom = 15;
-            _alowDrawPolygon = true;
+            _allowDrawPolygon = true;
+
+            //contruct internal variables
+            markerTypes = new List<Type>();
+            
             InitializeComponent();
         }
-
+        #endregion
         private void frmGeoArea_Load(object sender, EventArgs e)
         {
-
+            //Load comboboxes
             cboMapType.DataSource = Enum.GetValues(_mapType.GetType());
 
+            //Config map
             ConfigMap();
+
+            //Set the data to show on map
+
             //get the center of the markers
             PointLatLng? middle = null;
             if (_polygon.Count > 0)
@@ -230,163 +240,33 @@ namespace ZeqkTools.WindowsForms.Maps
             MainMap.ZoomAndCenterMarkers(null);
         }
 
-        // current point changed
-        void MainMap_OnCurrentPositionChanged(PointLatLng point)
+        private void GoToAddress(string keywordToSearch)
         {
-            center.Position = point;
-        }       
 
-        
-
-        #region Auxiliar functions
-
-        private PointLatLng CalculateMiddlePoint(params GMapMarker[] marks)
-        {
-            return CalculateMiddlePoint(marks.ToList());
-        }
-
-        private PointLatLng CalculateMiddlePoint(List<GMapMarker> marks)
-        {
-            var points = marks.Select(m => new GeoPoint(m.Position.Lat,m.Position.Lng));
-
-            var aux = Functions.CalculateMiddlePoint(points.ToList());
-            PointLatLng point = new PointLatLng(aux.Lat, aux.Lng);
-            
-            return point;
-
-        }
-
-        private PointLatLng CalculateMiddlePoint(List<PointLatLng> marks)
-        {
-            var points = marks.Select(m => new GeoPoint(m.Lat, m.Lng));
-
-            var aux = Functions.CalculateMiddlePoint(points.ToList());
-            PointLatLng point = new PointLatLng(aux.Lat, aux.Lng);
-
-            return point;
-        }
-
-        private RectLatLng CalculateRectangle(IList<GMapMarker> marks)
-        {
-            RectLatLng rect = new RectLatLng();
-
-            if (marks.Count > 1)
+            GeoCoderStatusCode status = MainMap.SetCurrentPositionByKeywords(keywordToSearch);
+            if (status != GeoCoderStatusCode.G_GEO_SUCCESS)
             {
-                double maxLat = marks.Max(m => m.Position.Lat);
-                double minLat = marks.Min(m => m.Position.Lat);
-
-                double maxLng = marks.Max(m => m.Position.Lng);
-                double minLng = marks.Min(m => m.Position.Lng);
-
-                double widthLat = maxLat - minLat;
-                double heightLng = maxLng - minLng;
-
-                rect = new RectLatLng(maxLat, minLng, heightLng, widthLat);
+                MessageBox.Show("Google Maps Geocoder can't find: '" + txtAddress.Text + "', reason: " + status.ToString(), "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-            else
-            {
-                if (marks.Count > 0)
-                {
-                    SizeLatLng size = new SizeLatLng(0.005, 0.009);
-                    PointLatLng point = new PointLatLng(marks[0].Position.Lat + 0.0025, marks[0].Position.Lng - 0.0045);
-                    rect = new RectLatLng(point, size);
-                    
-                }
-            }
-            return rect;
+
+            center = new GMapMarkerCross(MainMap.CurrentPosition);
+            top.Markers.Add(center);
+
+            txtLat.Text = MainMap.CurrentPosition.Lat.ToString(CultureInfo.CurrentCulture);
+            txtLng.Text = MainMap.CurrentPosition.Lng.ToString(CultureInfo.CurrentCulture);
         }
 
-        private RectLatLng AddMargin(RectLatLng rect)
-        {
-            rect.LocationTopLeft = new PointLatLng(rect.LocationTopLeft.Lat + 0.0009, rect.LocationTopLeft.Lng - 0.002);
-            rect.HeightLat = rect.HeightLat + 0.0018;
-            rect.WidthLng = rect.WidthLng + 0.004;
-
-            return rect;
-        }
-        private void DrawPloygon(List<GMapMarker> vertices)
-        {
-            var center = CalculateMiddlePoint(vertices);
-            GMapMarkerPolygon polygon = null;
-            //si ya hay un poligono, lo remuevo
-            if (this.top.Markers.OfType<GMapMarkerPolygon>().Count() > 0)
-            {
-                polygon = (GMapMarkerPolygon)this.top.Markers.Where(m => m.GetType() == typeof(GMapMarkerPolygon)).First();
-                top.Markers.Remove(polygon);
-            }
-            Pen pen = new Pen(Brushes.Blue, 3);
-
-            polygon = new GMapMarkerPolygon(center, vertices.Select(m => m.Position).ToList(),pen);
-            top.Markers.Add(polygon);
-        }
-
-
-        #endregion
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.Cancel;
-            this.Close();            
-        }
-
-        private void btnOk_Click(object sender, EventArgs e)
-        {
-            if (polygonIsComplete)
-            {
-                this.DialogResult = DialogResult.OK;
-                this.Close();
-            }
-            else
-                MessageBox.Show("Polygon is incomplete");
-        }
-
-        private void btnGenImage_Click(object sender, EventArgs e)
-        {
-            //calculate the area to print
-            if (top.Markers[1].GetType() == typeof(GMapMarkerPolygon))
-            {
-                GMapMarkerPolygon polygon = (GMapMarkerPolygon)top.Markers[1];
-                double maxLat = polygon.GeoPoints.Max(p => p.Lat);
-                double minLat = polygon.GeoPoints.Min(p => p.Lat);
-
-                double maxLng = polygon.GeoPoints.Max(p => p.Lng);
-                double minLng = polygon.GeoPoints.Min(p => p.Lng);
-                RectLatLng area = new RectLatLng(maxLat, minLng, maxLng - minLng, maxLat - minLat);
-                MainMap.SelectedArea = area;
-            }
-            else
-                MainMap.SelectedArea = CalculateRectangle(_secondaryMarkers);
-
-            MainMap.SelectedArea = AddMargin(MainMap.SelectedArea);
-            
-
-            if (!MainMap.SelectedArea.IsEmpty)
-            {
-                StaticImage st = new StaticImage(MainMap);
-                st.Owner = this;
-                st.Show();
-            }
-            else
-            {
-                MessageBox.Show("Select map area holding ALT", "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-        }
-
-
-
-        private void trackBar1_ValueChanged(object sender, EventArgs e)
-        {
-            MainMap.Zoom = trackBar1.Value;
-        }
+        #region Map event methods
 
         private void MainMap_OnMapZoomChanged()
         {
             trackBar1.Value = Convert.ToInt32(MainMap.Zoom);
         }
 
-        private void cboMapType_SelectedValueChanged(object sender, EventArgs e)
+        // current point changed
+        void MainMap_OnCurrentPositionChanged(PointLatLng point)
         {
-            MainMap.MapType = (MapType)cboMapType.SelectedValue;
+            center.Position = point;
         }
 
         void MainMap_MouseUp(object sender, MouseEventArgs e)
@@ -395,7 +275,7 @@ namespace ZeqkTools.WindowsForms.Maps
             {
                 isMouseDown = false;
 
-                if (_alowDrawPolygon)
+                if (_allowDrawPolygon)
                 {
                     //OnDrop
                     if (selectedVertice != null)
@@ -479,7 +359,7 @@ namespace ZeqkTools.WindowsForms.Maps
             {
                 isMouseDown = true;
 
-                if (_alowDrawPolygon)
+                if (_allowDrawPolygon)
                 {
                     //if the polygon is incomplete, click will be create new vertices
                     if (!polygonIsComplete)
@@ -496,7 +376,7 @@ namespace ZeqkTools.WindowsForms.Maps
 
         private void MainMap_OnMarkerClick(GMapMarker item)
         {
-            if (_alowDrawPolygon)
+            if (_allowDrawPolygon)
             {
                 //only can create the polygon if the polygon is incomplete
                 if (!polygonIsComplete)
@@ -527,7 +407,7 @@ namespace ZeqkTools.WindowsForms.Maps
 
         private void MainMap_OnMarkerEnter(GMapMarker item)
         {
-            if (_alowDrawPolygon)
+            if (_allowDrawPolygon)
             {
                 //select the marker that was clicked
                 if (vertices.Markers.Contains(item))
@@ -552,7 +432,7 @@ namespace ZeqkTools.WindowsForms.Maps
         {
             if (e.Button == MouseButtons.Left && isMouseDown)
             {
-                if (_alowDrawPolygon)
+                if (_allowDrawPolygon)
                 {
                     //if there is a selected vertice
                     if (this.selectedVertice != null)
@@ -573,26 +453,67 @@ namespace ZeqkTools.WindowsForms.Maps
                 }
             }
         }
+    #endregion        
+
+        #region Controls events methods
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
+        }
+
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+            if (polygonIsComplete)
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            else
+                MessageBox.Show("Polygon is incomplete");
+        }
+
+        private void btnGenImage_Click(object sender, EventArgs e)
+        {
+            //calculate the area to print
+            if (top.Markers[1].GetType() == typeof(GMapMarkerPolygon))
+            {
+                GMapMarkerPolygon polygon = (GMapMarkerPolygon)top.Markers[1];
+                double maxLat = polygon.GeoPoints.Max(p => p.Lat);
+                double minLat = polygon.GeoPoints.Min(p => p.Lat);
+
+                double maxLng = polygon.GeoPoints.Max(p => p.Lng);
+                double minLng = polygon.GeoPoints.Min(p => p.Lng);
+                RectLatLng area = new RectLatLng(maxLat, minLng, maxLng - minLng, maxLat - minLat);
+                MainMap.SelectedArea = area;
+            }
+            else
+                MainMap.SelectedArea = CalculateRectangle(_secondaryMarkers);
+
+            MainMap.SelectedArea = AddMargin(MainMap.SelectedArea);
+
+
+            if (!MainMap.SelectedArea.IsEmpty)
+            {
+                StaticImage st = new StaticImage(MainMap);
+                st.Owner = this;
+                st.Show();
+            }
+            else
+            {
+                MessageBox.Show("Select map area holding ALT", "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
+        private void cboMapType_SelectedValueChanged(object sender, EventArgs e)
+        {
+            MainMap.MapType = (MapType)cboMapType.SelectedValue;
+        }
 
         private void btnGo_Click(object sender, EventArgs e)
         {
             GoToAddress(txtAddress.Text);
-        }
-
-        private void GoToAddress(string keywordToSearch)
-        {
-
-            GeoCoderStatusCode status = MainMap.SetCurrentPositionByKeywords(keywordToSearch);
-            if (status != GeoCoderStatusCode.G_GEO_SUCCESS)
-            {
-                MessageBox.Show("Google Maps Geocoder can't find: '" + txtAddress.Text + "', reason: " + status.ToString(), "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-
-            center = new GMapMarkerCross(MainMap.CurrentPosition);
-            top.Markers.Add(center);
-
-            txtLat.Text = MainMap.CurrentPosition.Lat.ToString(CultureInfo.CurrentCulture);
-            txtLng.Text = MainMap.CurrentPosition.Lng.ToString(CultureInfo.CurrentCulture);
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -608,5 +529,101 @@ namespace ZeqkTools.WindowsForms.Maps
 
             polygonIsComplete = false;
         }
+
+        private void trackBar1_ValueChanged(object sender, EventArgs e)
+        {
+            MainMap.Zoom = trackBar1.Value;
+        }
+
+        #endregion
+
+        #region Auxiliar functions
+
+        private PointLatLng CalculateMiddlePoint(params GMapMarker[] marks)
+        {
+            return CalculateMiddlePoint(marks.ToList());
+        }
+
+        private PointLatLng CalculateMiddlePoint(List<GMapMarker> marks)
+        {
+            var points = marks.Select(m => new GeoPoint(m.Position.Lat, m.Position.Lng));
+
+            var aux = Functions.CalculateMiddlePoint(points.ToList());
+            PointLatLng point = new PointLatLng(aux.Lat, aux.Lng);
+
+            return point;
+
+        }
+
+        private PointLatLng CalculateMiddlePoint(List<PointLatLng> marks)
+        {
+            var points = marks.Select(m => new GeoPoint(m.Lat, m.Lng));
+
+            var aux = Functions.CalculateMiddlePoint(points.ToList());
+            PointLatLng point = new PointLatLng(aux.Lat, aux.Lng);
+
+            return point;
+        }
+
+        private RectLatLng CalculateRectangle(IList<GMapMarker> marks)
+        {
+            RectLatLng rect = new RectLatLng();
+
+            if (marks.Count > 1)
+            {
+                double maxLat = marks.Max(m => m.Position.Lat);
+                double minLat = marks.Min(m => m.Position.Lat);
+
+                double maxLng = marks.Max(m => m.Position.Lng);
+                double minLng = marks.Min(m => m.Position.Lng);
+
+                double widthLat = maxLat - minLat;
+                double heightLng = maxLng - minLng;
+
+                rect = new RectLatLng(maxLat, minLng, heightLng, widthLat);
+            }
+            else
+            {
+                if (marks.Count > 0)
+                {
+                    SizeLatLng size = new SizeLatLng(0.005, 0.009);
+                    PointLatLng point = new PointLatLng(marks[0].Position.Lat + 0.0025, marks[0].Position.Lng - 0.0045);
+                    rect = new RectLatLng(point, size);
+
+                }
+            }
+            return rect;
+        }
+
+        private RectLatLng AddMargin(RectLatLng rect)
+        {
+            rect.LocationTopLeft = new PointLatLng(rect.LocationTopLeft.Lat + 0.0009, rect.LocationTopLeft.Lng - 0.002);
+            rect.HeightLat = rect.HeightLat + 0.0018;
+            rect.WidthLng = rect.WidthLng + 0.004;
+
+            return rect;
+        }
+        private void DrawPloygon(List<GMapMarker> vertices)
+        {
+            var center = CalculateMiddlePoint(vertices);
+            GMapMarkerPolygon polygon = null;
+            //si ya hay un poligono, lo remuevo
+            if (this.top.Markers.OfType<GMapMarkerPolygon>().Count() > 0)
+            {
+                polygon = (GMapMarkerPolygon)this.top.Markers.Where(m => m.GetType() == typeof(GMapMarkerPolygon)).First();
+                top.Markers.Remove(polygon);
+            }
+            Pen pen = new Pen(Brushes.Blue, 3);
+            
+            polygon = new GMapMarkerPolygon(center, vertices.Select(m => m.Position).ToList(), pen);
+            polygon.Size = new System.Drawing.Size(20,20);
+            polygon.TooltipMode = MarkerTooltipMode.OnMouseOver;
+            polygon.ToolTipText = "Toooltip";
+            
+            top.Markers.Add(polygon);
+        }
+
+
+        #endregion
     }
 }
