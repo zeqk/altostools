@@ -463,7 +463,7 @@ namespace ZeqkTools.WindowsForms.Maps
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            if (polygonIsComplete)
+            if (polygonIsComplete || !_allowDrawPolygon)
             {
                 this.DialogResult = DialogResult.OK;
                 this.Close();
