@@ -20,6 +20,8 @@ namespace ZeqkTools.WindowsForms.Controls
         private bool _autocheking = false;
         #endregion
 
+        List<object> items;
+
         #region Properties
 
         public ICollection DataSource
@@ -33,12 +35,21 @@ namespace ZeqkTools.WindowsForms.Controls
                     int h = 22 * (value.Count + 1);
 
                     ResizeCheckedListBox(this.Width, h);
+                    items = new List<object>();
 
                     checkedListBox.Items.Add(ALLITEMSSTRING);
 
                     foreach (var item in value)
+                    {
                         checkedListBox.Items.Add(item);
+                        items.Add(item);
+                    }
                     int aux = checkedListBox.ItemHeight;
+                }
+                else
+                {
+                    checkedListBox = new CheckedListBox();
+                    items = new List<object>();
                 }
             }
         }
@@ -159,6 +170,28 @@ namespace ZeqkTools.WindowsForms.Controls
 
 
         #region Public methods
+
+        public void Check(object value, string member)
+        {
+            if (items.Select(i => i.GetType().GetProperty(member)) != null)
+            {
+                object myObject = null;
+
+                foreach (var item in items)
+                {
+                    object propValue = item.GetType().GetProperty(member).GetValue(item, null);
+                    if (propValue.ToString() == value.ToString())
+                    {
+                        myObject = item;
+                        break;
+                    }
+                }
+                int index = checkedListBox.Items.IndexOf(myObject);
+                checkedListBox.SetItemChecked(index, true);
+            }
+            
+        }
+
 
         public void CheckAllItems()
         {

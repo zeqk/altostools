@@ -42,7 +42,7 @@
     <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GMap.NET.Core, Version=1.4.9.3, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=x86">
+    <Reference Include="GMap.NET.Core, Version=1.4.9.4, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\GMap.NET.Core.dll</HintPath>
     </Reference>
@@ -84,6 +84,7 @@
     <Compile Include="frmGeoPolygon.designer.cs">
       <DependentUpon>frmGeoPolygon.cs</DependentUpon>
     </Compile>
+    <Compile Include="Functions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmGeoPoint.resx">
       <DependentUpon>frmGeoPoint.cs</DependentUpon>

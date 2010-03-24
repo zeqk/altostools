@@ -45,15 +45,22 @@ namespace ZeqkTools.MapsTest
                 polygon.Add(point4);
                 PointLatLng point5 = new PointLatLng(-34.802387, -58.372250);
                 polygon.Add(point5);
-                myForm.Polygon = polygon;
+                //myForm.Polygon = polygon;
 
                 List<GMapMarker> myMarks = new List<GMapMarker>();
                 GMapMarkerGoogleRed myMark1 = new GMapMarkerGoogleRed(new PointLatLng(-34.788151, -58.345299));
                 GMapMarkerGoogleRed myMark2 = new GMapMarkerGoogleRed(new PointLatLng(-34.799286, -58.334827));
+                PointLatLng middlePoint = Functions.CalculateMiddlePoint(polygon);
+                Pen pen = new Pen(Brushes.Aqua, 3);
+                pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+                GMapMarkerPolygon myPolygonMark = new GMapMarkerPolygon(middlePoint, polygon, pen);
+
                 myMarks.Add(myMark1);
                 myMarks.Add(myMark2);
+                myMarks.Add(myPolygonMark);
+
                 myForm.SecondaryMarkers = myMarks;
-                //myForm.AlowDrawPolygon = true;
+                myForm.AllowDrawPolygon = true;
                 myForm.Address = "Claypole, Buenos Aires, Argentina";
                 myForm.MapZoom = 12;
                 myForm.ShowDialog();

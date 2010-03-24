@@ -4,31 +4,49 @@
         <name>GMap.NET.Core</name>
     </assembly>
     <members>
-        <member name="T:GMap.NET.Placemark">
+        <member name="T:GMap.NET.RenderMode">
             <summary>
-            represents place info
+            types of map rendering
             </summary>
         </member>
-        <member name="M:GMap.NET.Placemark.ParseAddress">
+        <member name="F:GMap.NET.RenderMode.GDI_PLUS">
             <summary>
-            parse address
+            gdi+ should work anywhere on Windows Forms
             </summary>
+        </member>
+        <member name="F:GMap.NET.RenderMode.WPF">
+            <summary>
+            only on Windows Presentation Foundation
+            </summary>
+        </member>
+        <member name="T:GMap.NET.PureImageCache">
+            <summary>
+            pure abstraction for image cache
+            </summary>
+        </member>
+        <member name="M:GMap.NET.PureImageCache.PutImageToCache(System.IO.MemoryStream,GMap.NET.MapType,GMap.NET.Point,System.Int32)">
+            <summary>
+            puts image to db
+            </summary>
+            <param name="tile"></param>
+            <param name="type"></param>
+            <param name="pos"></param>
+            <param name="zoom"></param>
             <returns></returns>
         </member>
-        <member name="P:GMap.NET.Placemark.Address">
+        <member name="M:GMap.NET.PureImageCache.GetImageFromCache(GMap.NET.MapType,GMap.NET.Point,System.Int32)">
             <summary>
-            the address
+            gets image from db
             </summary>
+            <param name="type"></param>
+            <param name="pos"></param>
+            <param name="zoom"></param>
+            <returns></returns>
         </member>
-        <member name="P:GMap.NET.Placemark.Accuracy">
+        <member name="T:GMap.NET.Projections.MercatorProjection">
             <summary>
-            the accuracy of address
-            </summary>
-        </member>
-        <member name="T:GMap.NET.Projections.LKS94Projection">
-            <summary>
-            GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4326\"]]
-            PROJCS[\"Lietuvos Koordinoei Sistema 1994\",GEOGCS[\"LKS94 (ETRS89)\",DATUM[\"Lithuania_1994_ETRS89\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY[\"EPSG\",\"6126\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9108\"]],AUTHORITY[\"EPSG\",\"4126\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",24],PARAMETER[\"scale_factor\",0.9998],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AUTHORITY[\"EPSG\",\"2600\"]]
+            The Mercator projection
+            PROJCS["World_Mercator",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],PROJECTION["Mercator"],PARAMETER["False_Easting",0],PARAMETER["False_Northing",0],PARAMETER["Central_Meridian",0],PARAMETER["standard_parallel_1",0],UNIT["Meter",1]]
             </summary>
         </member>
         <member name="T:GMap.NET.PureProjection">
@@ -235,6 +253,21 @@
             Flattening of ellipsoid
             </summary>
         </member>
+        <member name="M:GMap.NET.Projections.MercatorProjection.Clip(System.Double,System.Double,System.Double)">
+            <summary>
+            Clips a number to the specified minimum and maximum values.
+            </summary>
+            <param name="n">The number to clip.</param>
+            <param name="minValue">Minimum allowable value.</param>
+            <param name="maxValue">Maximum allowable value.</param>
+            <returns>The clipped value.</returns>
+        </member>
+        <member name="T:GMap.NET.Projections.LKS94Projection">
+            <summary>
+            GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4326\"]]
+            PROJCS[\"Lietuvos Koordinoei Sistema 1994\",GEOGCS[\"LKS94 (ETRS89)\",DATUM[\"Lithuania_1994_ETRS89\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY[\"EPSG\",\"6126\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9108\"]],AUTHORITY[\"EPSG\",\"4126\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",24],PARAMETER[\"scale_factor\",0.9998],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AUTHORITY[\"EPSG\",\"2600\"]]
+            </summary>
+        </member>
         <member name="M:GMap.NET.Projections.LKS94Projection.Clip(System.Double,System.Double,System.Double)">
             <summary>
             Clips a number to the specified minimum and maximum values.
@@ -244,14 +277,35 @@
             <param name="maxValue">Maximum allowable value.</param>
             <returns>The clipped value.</returns>
         </member>
-        <member name="T:GMap.NET.Size">
+        <member name="T:GMap.NET.PointLatLng">
             <summary>
-            the size
+            the point of coordinates
             </summary>
         </member>
-        <member name="T:GMap.NET.Internals.TileMatrix">
+        <member name="T:GMap.NET.Placemark">
             <summary>
-            matrix for tiles
+            represents place info
+            </summary>
+        </member>
+        <member name="M:GMap.NET.Placemark.ParseAddress">
+            <summary>
+            parse address
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:GMap.NET.Placemark.Address">
+            <summary>
+            the address
+            </summary>
+        </member>
+        <member name="P:GMap.NET.Placemark.Accuracy">
+            <summary>
+            the accuracy of address
+            </summary>
+        </member>
+        <member name="T:GMap.NET.Internals.Stuff">
+            <summary>
+            etc functions...
             </summary>
         </member>
         <member name="T:GMap.NET.AccessMode">
@@ -274,29 +328,29 @@
             access only cache
             </summary>
         </member>
-        <member name="T:GMap.NET.Internals.Tile">
-            <summary>
-            represent tile
-            </summary>
-        </member>
         <member name="T:GMap.NET.MapType">
             <summary>
             types of great maps
             </summary>
         </member>
-        <member name="T:GMap.NET.Internals.RawTile">
+        <member name="T:GMap.NET.Projections.PlateCarreeProjection">
             <summary>
-            struct for raw tile
+            Plate Carrée (literally, “plane square”) projection
+            PROJCS["WGS 84 / World Equidistant Cylindrical",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],UNIT["Meter",1]]
             </summary>
         </member>
-        <member name="T:GMap.NET.PureImageProxy">
+        <member name="M:GMap.NET.Projections.PlateCarreeProjection.Clip(System.Double,System.Double,System.Double)">
             <summary>
-            image abstraction proxy
+            Clips a number to the specified minimum and maximum values.
             </summary>
+            <param name="n">The number to clip.</param>
+            <param name="minValue">Minimum allowable value.</param>
+            <param name="maxValue">Maximum allowable value.</param>
+            <returns>The clipped value.</returns>
         </member>
-        <member name="T:GMap.NET.PureImage">
+        <member name="T:GMap.NET.Size">
             <summary>
-            image abstraction
+            the size
             </summary>
         </member>
         <member name="T:GMap.NET.SizeLatLng">
@@ -304,9 +358,9 @@
             the size of coordinates
             </summary>
         </member>
-        <member name="T:GMap.NET.Internals.Cache">
+        <member name="T:GMap.NET.GMaps">
             <summary>
-            cache system for tiles, geocoding, etc...
+            maps manager
             </summary>
         </member>
         <member name="T:GMap.NET.Singleton`1">
@@ -314,390 +368,6 @@
             generic for singletons
             </summary>
             <typeparam name="T"></typeparam>
-        </member>
-        <member name="F:GMap.NET.Internals.Cache.ImageCache">
-            <summary>
-            abstract image cache
-            </summary>
-        </member>
-        <member name="F:GMap.NET.Internals.Cache.ImageCacheSecond">
-            <summary>
-            second level abstract image cache
-            </summary>
-        </member>
-        <member name="P:GMap.NET.Internals.Cache.CacheLocation">
-            <summary>
-            local cache location
-            </summary>
-        </member>
-        <member name="T:GMap.NET.Properties.Resources">
-            <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
-            </summary>
-        </member>
-        <member name="P:GMap.NET.Properties.Resources.ResourceManager">
-            <summary>
-              Returns the cached ResourceManager instance used by this class.
-            </summary>
-        </member>
-        <member name="P:GMap.NET.Properties.Resources.Culture">
-            <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
-            </summary>
-        </member>
-        <member name="P:GMap.NET.Properties.Resources.CreateTileDb">
-             <summary>
-               Looks up a localized string similar to CREATE TABLE IF NOT EXISTS Tiles (id INTEGER NOT NULL PRIMARY KEY, X INTEGER NOT NULL, Y INTEGER NOT NULL, Zoom INTEGER NOT NULL, Type INTEGER NOT NULL);
-            CREATE INDEX IF NOT EXISTS IndexOfTiles ON Tiles (X, Y, Zoom, Type);
-            
-            CREATE TABLE IF NOT EXISTS TilesData (id INTEGER NOT NULL PRIMARY KEY CONSTRAINT fk_Tiles_id REFERENCES Tiles(id) ON DELETE CASCADE, Tile BLOB NULL);
-            
-            -- Foreign Key Preventing insert
-            CREATE TRIGGER fki_TilesData_id_Tiles_id
-            BEFORE INSERT ON [TilesData]
-            FOR EACH ROW BEGIN
-              SELE [rest of string was truncated]&quot;;.
-             </summary>
-        </member>
-        <member name="T:GMap.NET.Rectangle">
-            <summary>
-            the rect
-            </summary>
-        </member>
-        <member name="T:GMap.NET.MapRoute">
-            <summary>
-            represents route of map
-            </summary>
-        </member>
-        <member name="F:GMap.NET.MapRoute.Points">
-            <summary>
-            points of route
-            </summary>
-        </member>
-        <member name="F:GMap.NET.MapRoute.Name">
-            <summary>
-            route info
-            </summary>
-        </member>
-        <member name="F:GMap.NET.MapRoute.Tag">
-            <summary>
-            custom object
-            </summary>
-        </member>
-        <member name="P:GMap.NET.MapRoute.From">
-            <summary>
-            route start point
-            </summary>
-        </member>
-        <member name="P:GMap.NET.MapRoute.To">
-            <summary>
-            route end point
-            </summary>
-        </member>
-        <member name="P:GMap.NET.MapRoute.Distance">
-            <summary>
-            route distance (in km)
-            </summary>
-        </member>
-        <member name="T:GMap.NET.Projections.MercatorProjection">
-            <summary>
-            The Mercator projection
-            PROJCS["World_Mercator",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],PROJECTION["Mercator"],PARAMETER["False_Easting",0],PARAMETER["False_Northing",0],PARAMETER["Central_Meridian",0],PARAMETER["standard_parallel_1",0],UNIT["Meter",1]]
-            </summary>
-        </member>
-        <member name="M:GMap.NET.Projections.MercatorProjection.Clip(System.Double,System.Double,System.Double)">
-            <summary>
-            Clips a number to the specified minimum and maximum values.
-            </summary>
-            <param name="n">The number to clip.</param>
-            <param name="minValue">Minimum allowable value.</param>
-            <param name="maxValue">Maximum allowable value.</param>
-            <returns>The clipped value.</returns>
-        </member>
-        <member name="T:GMap.NET.Internals.Core">
-            <summary>
-            internal map control core
-            </summary>
-        </member>
-        <member name="F:GMap.NET.Internals.Core.IsDragging">
-            <summary>
-            is user dragging map
-            </summary>
-        </member>
-        <member name="F:GMap.NET.Internals.Core.TooltipTextPadding">
-            <summary>
-            for tooltip text padding
-            </summary>
-        </member>
-        <member name="F:GMap.NET.Internals.Core.RoutesEnabled">
-            <summary>
-            is routes enabled
-            </summary>
-        </member>
-        <member name="F:GMap.NET.Internals.Core.MarkersEnabled">
-            <summary>
-            is markers enabled
-            </summary>
-        </member>
-        <member name="F:GMap.NET.Internals.Core.CanDragMap">
-            <summary>
-            can user drag map
-            </summary>
-        </member>
-        <member name="F:GMap.NET.Internals.Core.RenderMode">
-            <summary>
-            map render mode
-            </summary>
-        </member>
-        <member name="M:GMap.NET.Internals.Core.StartSystem">
-            <summary>
-            starts core system
-            </summary>
-        </member>
-        <member name="M:GMap.NET.Internals.Core.SetCurrentPositionByKeywords(System.String)">
-            <summary>
-            sets current position by geocoding
-            </summary>
-            <param name="keys"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GMap.NET.Internals.Core.FromLocalToLatLng(System.Int32,System.Int32)">
-            <summary>
-            gets lat/lng from local control coordinates
-            </summary>
-            <param name="x"></param>
-            <param name="y"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GMap.NET.Internals.Core.FromLatLngToLocal(GMap.NET.PointLatLng)">
-            <summary>
-            return local coordinates from lat/lng
-            </summary>
-            <param name="latlng"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GMap.NET.Internals.Core.GetMaxZoomToFitRect(GMap.NET.RectLatLng)">
-            <summary>
-            gets max zoom level to fit rectangle
-            </summary>
-            <param name="rect"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GMap.NET.Internals.Core.BeginDrag(GMap.NET.Point)">
-            <summary>
-            initiates map dragging
-            </summary>
-            <param name="pt"></param>
-        </member>
-        <member name="M:GMap.NET.Internals.Core.EndDrag">
-            <summary>
-            ends map dragging
-            </summary>
-        </member>
-        <member name="M:GMap.NET.Internals.Core.ReloadMap">
-            <summary>
-            reloads map
-            </summary>
-        </member>
-        <member name="M:GMap.NET.Internals.Core.GoToCurrentPosition">
-            <summary>
-            moves current position into map center
-            </summary>
-        </member>
-        <member name="M:GMap.NET.Internals.Core.GoToCurrentPositionOnZoom">
-            <summary>
-            moves current position into map center
-            </summary>
-        </member>
-        <member name="M:GMap.NET.Internals.Core.Drag(GMap.NET.Point)">
-            <summary>
-            drag map
-            </summary>
-            <param name="pt"></param>
-        </member>
-        <member name="M:GMap.NET.Internals.Core.CancelAsyncTasks">
-            <summary>
-            cancels tile loaders and bounds checker
-            </summary>
-        </member>
-        <member name="M:GMap.NET.Internals.Core.UpdateBaunds">
-            <summary>
-            updates map bounds
-            </summary>
-        </member>
-        <member name="M:GMap.NET.Internals.Core.FindTilesAround(System.Collections.Generic.List{GMap.NET.Point}@)">
-            <summary>
-            find tiles around to fill screen
-            </summary>
-            <param name="list"></param>
-        </member>
-        <member name="M:GMap.NET.Internals.Core.UpdateGroundResolution">
-            <summary>
-            updates ground resolution info
-            </summary>
-        </member>
-        <member name="P:GMap.NET.Internals.Core.Projection">
-            <summary>
-            current peojection
-            </summary>
-        </member>
-        <member name="P:GMap.NET.Internals.Core.Zoom">
-            <summary>
-            map zoom
-            </summary>
-        </member>
-        <member name="P:GMap.NET.Internals.Core.CurrentPositionGPixel">
-            <summary>
-            current marker position in pixel coordinates
-            </summary>
-        </member>
-        <member name="P:GMap.NET.Internals.Core.CurrentPosition">
-            <summary>
-            current marker position
-            </summary>
-        </member>
-        <member name="E:GMap.NET.Internals.Core.OnCurrentPositionChanged">
-            <summary>
-            occurs when current position is changed
-            </summary>
-        </member>
-        <member name="E:GMap.NET.Internals.Core.OnTileLoadComplete">
-            <summary>
-            occurs when tile set load is complete
-            </summary>
-        </member>
-        <member name="E:GMap.NET.Internals.Core.OnTileLoadStart">
-            <summary>
-            occurs when tile set is starting to load
-            </summary>
-        </member>
-        <member name="E:GMap.NET.Internals.Core.OnNeedInvalidation">
-            <summary>
-            occurs on tile loaded
-            </summary>
-        </member>
-        <member name="E:GMap.NET.Internals.Core.OnMapDrag">
-            <summary>
-            occurs on map drag
-            </summary>
-        </member>
-        <member name="E:GMap.NET.Internals.Core.OnMapZoomChanged">
-            <summary>
-            occurs on map zoom changed
-            </summary>
-        </member>
-        <member name="E:GMap.NET.Internals.Core.OnMapTypeChanged">
-            <summary>
-            occurs on map type changed
-            </summary>
-        </member>
-        <member name="P:GMap.NET.Internals.Core.CurrentViewArea">
-            <summary>
-            gets current map view top/left coordinate, width in Lng, height in Lat
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:GMap.NET.Point">
-            <summary>
-            the point ;}
-            </summary>
-        </member>
-        <member name="T:GMap.NET.Internals.Stuff">
-            <summary>
-            etc functions...
-            </summary>
-        </member>
-        <member name="T:GMap.NET.CacheProviders.MsSQLPureImageCache">
-            <summary>
-            image cache for ms sql server
-            optimized by mmurfinsimmons@gmail.com
-            </summary>
-        </member>
-        <member name="T:GMap.NET.PureImageCache">
-            <summary>
-            pure abstraction for image cache
-            </summary>
-        </member>
-        <member name="M:GMap.NET.PureImageCache.PutImageToCache(System.IO.MemoryStream,GMap.NET.MapType,GMap.NET.Point,System.Int32)">
-            <summary>
-            puts image to db
-            </summary>
-            <param name="tile"></param>
-            <param name="type"></param>
-            <param name="pos"></param>
-            <param name="zoom"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GMap.NET.PureImageCache.GetImageFromCache(GMap.NET.MapType,GMap.NET.Point,System.Int32)">
-            <summary>
-            gets image from db
-            </summary>
-            <param name="type"></param>
-            <param name="pos"></param>
-            <param name="zoom"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GMap.NET.CacheProviders.MsSQLPureImageCache.Initialize">
-            <summary>
-            inits connection to server
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:GMap.NET.CacheProviders.MsSQLPureImageCache.Initialized">
-            <summary>
-            is cache initialized
-            </summary>
-        </member>
-        <member name="T:GMap.NET.MouseWheelZoomType">
-            <summary>
-            map zooming type
-            </summary>
-        </member>
-        <member name="F:GMap.NET.MouseWheelZoomType.MousePosition">
-            <summary>
-            zooms map to current mouse position
-            </summary>
-        </member>
-        <member name="F:GMap.NET.MouseWheelZoomType.ViewCenter">
-            <summary>
-            zooms map to current view center
-            </summary>
-        </member>
-        <member name="T:GMap.NET.CacheProviders.SQLitePureImageCache">
-            <summary>
-            ultra fast cache system for tiles
-            </summary>
-        </member>
-        <member name="P:GMap.NET.CacheProviders.SQLitePureImageCache.CacheLocation">
-            <summary>
-            local cache location
-            </summary>
-        </member>
-        <member name="T:GMap.NET.RectLatLng">
-            <summary>
-            the rect of coordinates
-            </summary>
-        </member>
-        <member name="T:GMap.NET.Projections.PlateCarreeProjectionPergo">
-            <summary>
-            Plate Carrée (literally, “plane square”) projection
-            PROJCS["WGS 84 / World Equidistant Cylindrical",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],UNIT["Meter",1]]
-            </summary>
-        </member>
-        <member name="M:GMap.NET.Projections.PlateCarreeProjectionPergo.Clip(System.Double,System.Double,System.Double)">
-            <summary>
-            Clips a number to the specified minimum and maximum values.
-            </summary>
-            <param name="n">The number to clip.</param>
-            <param name="minValue">Minimum allowable value.</param>
-            <param name="maxValue">Maximum allowable value.</param>
-            <returns>The clipped value.</returns>
-        </member>
-        <member name="T:GMap.NET.GMaps">
-            <summary>
-            maps manager
-            </summary>
         </member>
         <member name="F:GMap.NET.GMaps.GoogleMapsAPIKey">
             <summary>
@@ -1112,7 +782,341 @@
             true if google versions was corrected
             </summary>
         </member>
+        <member name="T:GMap.NET.Rectangle">
+            <summary>
+            the rect
+            </summary>
+        </member>
+        <member name="T:GMap.NET.Internals.CacheItemQueue">
+            <summary>
+            cache queue item
+            </summary>
+        </member>
+        <member name="T:GMap.NET.MouseWheelZoomType">
+            <summary>
+            map zooming type
+            </summary>
+        </member>
+        <member name="F:GMap.NET.MouseWheelZoomType.MousePositionAndCenter">
+            <summary>
+            zooms map to current mouse position and makes it map center
+            </summary>
+        </member>
+        <member name="F:GMap.NET.MouseWheelZoomType.MousePositionWithoutCenter">
+            <summary>
+            zooms to current mouse position, but doesn't make it map center,
+            google/bing style ;}
+            </summary>
+        </member>
+        <member name="F:GMap.NET.MouseWheelZoomType.ViewCenter">
+            <summary>
+            zooms map to current view center
+            </summary>
+        </member>
         <!-- Badly formed XML comment ignored for member "T:GMap.NET.LanguageType" -->
+        <member name="T:GMap.NET.Projections.PlateCarreeProjectionPergo">
+            <summary>
+            Plate Carrée (literally, “plane square”) projection
+            PROJCS["WGS 84 / World Equidistant Cylindrical",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],UNIT["Meter",1]]
+            </summary>
+        </member>
+        <member name="M:GMap.NET.Projections.PlateCarreeProjectionPergo.Clip(System.Double,System.Double,System.Double)">
+            <summary>
+            Clips a number to the specified minimum and maximum values.
+            </summary>
+            <param name="n">The number to clip.</param>
+            <param name="minValue">Minimum allowable value.</param>
+            <param name="maxValue">Maximum allowable value.</param>
+            <returns>The clipped value.</returns>
+        </member>
+        <member name="T:GMap.NET.Internals.Tile">
+            <summary>
+            represent tile
+            </summary>
+        </member>
+        <member name="T:GMap.NET.MapRoute">
+            <summary>
+            represents route of map
+            </summary>
+        </member>
+        <member name="F:GMap.NET.MapRoute.Points">
+            <summary>
+            points of route
+            </summary>
+        </member>
+        <member name="F:GMap.NET.MapRoute.Name">
+            <summary>
+            route info
+            </summary>
+        </member>
+        <member name="F:GMap.NET.MapRoute.Tag">
+            <summary>
+            custom object
+            </summary>
+        </member>
+        <member name="P:GMap.NET.MapRoute.From">
+            <summary>
+            route start point
+            </summary>
+        </member>
+        <member name="P:GMap.NET.MapRoute.To">
+            <summary>
+            route end point
+            </summary>
+        </member>
+        <member name="P:GMap.NET.MapRoute.Distance">
+            <summary>
+            route distance (in km)
+            </summary>
+        </member>
+        <member name="T:GMap.NET.Internals.KiberTileCache">
+            <summary>
+            kiber speed memory cache for tiles with history support ;}
+            </summary>
+        </member>
+        <member name="F:GMap.NET.Internals.KiberTileCache.MemoryCacheCapacity">
+            <summary>
+            the amount of tiles in MB to keep in memmory, default: 22MB, if each ~100Kb it's ~222 tiles
+            </summary>
+        </member>
+        <member name="P:GMap.NET.Internals.KiberTileCache.MemoryCacheSize">
+            <summary>
+            current memmory cache size in MB
+            </summary>
+        </member>
+        <member name="T:GMap.NET.Internals.TileMatrix">
+            <summary>
+            matrix for tiles
+            </summary>
+        </member>
+        <member name="T:GMap.NET.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:GMap.NET.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:GMap.NET.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:GMap.NET.Properties.Resources.CreateTileDb">
+             <summary>
+               Looks up a localized string similar to CREATE TABLE IF NOT EXISTS Tiles (id INTEGER NOT NULL PRIMARY KEY, X INTEGER NOT NULL, Y INTEGER NOT NULL, Zoom INTEGER NOT NULL, Type INTEGER NOT NULL);
+            CREATE INDEX IF NOT EXISTS IndexOfTiles ON Tiles (X, Y, Zoom, Type);
+            
+            CREATE TABLE IF NOT EXISTS TilesData (id INTEGER NOT NULL PRIMARY KEY CONSTRAINT fk_Tiles_id REFERENCES Tiles(id) ON DELETE CASCADE, Tile BLOB NULL);
+            
+            -- Foreign Key Preventing insert
+            CREATE TRIGGER fki_TilesData_id_Tiles_id
+            BEFORE INSERT ON [TilesData]
+            FOR EACH ROW BEGIN
+              SELE [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="T:GMap.NET.PureImageProxy">
+            <summary>
+            image abstraction proxy
+            </summary>
+        </member>
+        <member name="T:GMap.NET.PureImage">
+            <summary>
+            image abstraction
+            </summary>
+        </member>
+        <member name="T:GMap.NET.RectLatLng">
+            <summary>
+            the rect of coordinates
+            </summary>
+        </member>
+        <member name="T:GMap.NET.Internals.Core">
+            <summary>
+            internal map control core
+            </summary>
+        </member>
+        <member name="F:GMap.NET.Internals.Core.IsDragging">
+            <summary>
+            is user dragging map
+            </summary>
+        </member>
+        <member name="F:GMap.NET.Internals.Core.TooltipTextPadding">
+            <summary>
+            for tooltip text padding
+            </summary>
+        </member>
+        <member name="F:GMap.NET.Internals.Core.RoutesEnabled">
+            <summary>
+            is routes enabled
+            </summary>
+        </member>
+        <member name="F:GMap.NET.Internals.Core.MarkersEnabled">
+            <summary>
+            is markers enabled
+            </summary>
+        </member>
+        <member name="F:GMap.NET.Internals.Core.CanDragMap">
+            <summary>
+            can user drag map
+            </summary>
+        </member>
+        <member name="F:GMap.NET.Internals.Core.RenderMode">
+            <summary>
+            map render mode
+            </summary>
+        </member>
+        <member name="M:GMap.NET.Internals.Core.StartSystem">
+            <summary>
+            starts core system
+            </summary>
+        </member>
+        <member name="M:GMap.NET.Internals.Core.SetCurrentPositionByKeywords(System.String)">
+            <summary>
+            sets current position by geocoding
+            </summary>
+            <param name="keys"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GMap.NET.Internals.Core.FromLocalToLatLng(System.Int32,System.Int32)">
+            <summary>
+            gets lat/lng from local control coordinates
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GMap.NET.Internals.Core.FromLatLngToLocal(GMap.NET.PointLatLng)">
+            <summary>
+            return local coordinates from lat/lng
+            </summary>
+            <param name="latlng"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GMap.NET.Internals.Core.GetMaxZoomToFitRect(GMap.NET.RectLatLng)">
+            <summary>
+            gets max zoom level to fit rectangle
+            </summary>
+            <param name="rect"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GMap.NET.Internals.Core.BeginDrag(GMap.NET.Point)">
+            <summary>
+            initiates map dragging
+            </summary>
+            <param name="pt"></param>
+        </member>
+        <member name="M:GMap.NET.Internals.Core.EndDrag">
+            <summary>
+            ends map dragging
+            </summary>
+        </member>
+        <member name="M:GMap.NET.Internals.Core.ReloadMap">
+            <summary>
+            reloads map
+            </summary>
+        </member>
+        <member name="M:GMap.NET.Internals.Core.GoToCurrentPosition">
+            <summary>
+            moves current position into map center
+            </summary>
+        </member>
+        <member name="M:GMap.NET.Internals.Core.GoToCurrentPositionOnZoom">
+            <summary>
+            moves current position into map center
+            </summary>
+        </member>
+        <member name="M:GMap.NET.Internals.Core.Drag(GMap.NET.Point)">
+            <summary>
+            drag map
+            </summary>
+            <param name="pt"></param>
+        </member>
+        <member name="M:GMap.NET.Internals.Core.CancelAsyncTasks">
+            <summary>
+            cancels tile loaders and bounds checker
+            </summary>
+        </member>
+        <member name="M:GMap.NET.Internals.Core.UpdateBaunds">
+            <summary>
+            updates map bounds
+            </summary>
+        </member>
+        <member name="M:GMap.NET.Internals.Core.FindTilesAround(System.Collections.Generic.List{GMap.NET.Point}@)">
+            <summary>
+            find tiles around to fill screen
+            </summary>
+            <param name="list"></param>
+        </member>
+        <member name="M:GMap.NET.Internals.Core.UpdateGroundResolution">
+            <summary>
+            updates ground resolution info
+            </summary>
+        </member>
+        <member name="P:GMap.NET.Internals.Core.Projection">
+            <summary>
+            current peojection
+            </summary>
+        </member>
+        <member name="P:GMap.NET.Internals.Core.Zoom">
+            <summary>
+            map zoom
+            </summary>
+        </member>
+        <member name="P:GMap.NET.Internals.Core.CurrentPositionGPixel">
+            <summary>
+            current marker position in pixel coordinates
+            </summary>
+        </member>
+        <member name="P:GMap.NET.Internals.Core.CurrentPosition">
+            <summary>
+            current marker position
+            </summary>
+        </member>
+        <member name="E:GMap.NET.Internals.Core.OnCurrentPositionChanged">
+            <summary>
+            occurs when current position is changed
+            </summary>
+        </member>
+        <member name="E:GMap.NET.Internals.Core.OnTileLoadComplete">
+            <summary>
+            occurs when tile set load is complete
+            </summary>
+        </member>
+        <member name="E:GMap.NET.Internals.Core.OnTileLoadStart">
+            <summary>
+            occurs when tile set is starting to load
+            </summary>
+        </member>
+        <member name="E:GMap.NET.Internals.Core.OnNeedInvalidation">
+            <summary>
+            occurs on tile loaded
+            </summary>
+        </member>
+        <member name="E:GMap.NET.Internals.Core.OnMapDrag">
+            <summary>
+            occurs on map drag
+            </summary>
+        </member>
+        <member name="E:GMap.NET.Internals.Core.OnMapZoomChanged">
+            <summary>
+            occurs on map zoom changed
+            </summary>
+        </member>
+        <member name="E:GMap.NET.Internals.Core.OnMapTypeChanged">
+            <summary>
+            occurs on map type changed
+            </summary>
+        </member>
+        <member name="P:GMap.NET.Internals.Core.CurrentViewArea">
+            <summary>
+            gets current map view top/left coordinate, width in Lng, height in Lat
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:GMap.NET.GeoCoderStatusCode">
             <summary>
             GeoCoder StatusCode
@@ -1178,44 +1182,36 @@
             If you're sending multiple requests in parallel or in a tight loop, use a timer or pause in your code to make sure you don't send the requests too quickly.
             </summary>
         </member>
-        <member name="T:GMap.NET.Projections.PlateCarreeProjection">
+        <member name="T:GMap.NET.Internals.RawTile">
             <summary>
-            Plate Carrée (literally, “plane square”) projection
-            PROJCS["WGS 84 / World Equidistant Cylindrical",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],UNIT["Meter",1]]
+            struct for raw tile
             </summary>
         </member>
-        <member name="M:GMap.NET.Projections.PlateCarreeProjection.Clip(System.Double,System.Double,System.Double)">
+        <member name="T:GMap.NET.CacheProviders.SQLitePureImageCache">
             <summary>
-            Clips a number to the specified minimum and maximum values.
-            </summary>
-            <param name="n">The number to clip.</param>
-            <param name="minValue">Minimum allowable value.</param>
-            <param name="maxValue">Maximum allowable value.</param>
-            <returns>The clipped value.</returns>
-        </member>
-        <member name="T:GMap.NET.Internals.CacheItemQueue">
-            <summary>
-            cache queue item
+            ultra fast cache system for tiles
             </summary>
         </member>
-        <member name="T:GMap.NET.RenderMode">
+        <member name="P:GMap.NET.CacheProviders.SQLitePureImageCache.CacheLocation">
             <summary>
-            types of map rendering
+            local cache location
             </summary>
         </member>
-        <member name="F:GMap.NET.RenderMode.GDI_PLUS">
+        <member name="T:GMap.NET.CacheProviders.MsSQLPureImageCache">
             <summary>
-            gdi+ should work anywhere on Windows Forms
+            image cache for ms sql server
+            optimized by mmurfinsimmons@gmail.com
             </summary>
         </member>
-        <member name="F:GMap.NET.RenderMode.WPF">
+        <member name="M:GMap.NET.CacheProviders.MsSQLPureImageCache.Initialize">
             <summary>
-            only on Windows Presentation Foundation
+            inits connection to server
             </summary>
+            <returns></returns>
         </member>
-        <member name="T:GMap.NET.PointLatLng">
+        <member name="P:GMap.NET.CacheProviders.MsSQLPureImageCache.Initialized">
             <summary>
-            the point of coordinates
+            is cache initialized
             </summary>
         </member>
         <member name="T:GMap.NET.Internals.LoadTask">
@@ -1223,19 +1219,29 @@
             tile load task
             </summary>
         </member>
-        <member name="T:GMap.NET.Internals.KiberTileCache">
+        <member name="T:GMap.NET.Internals.Cache">
             <summary>
-            kiber speed memory cache for tiles with history support ;}
+            cache system for tiles, geocoding, etc...
             </summary>
         </member>
-        <member name="F:GMap.NET.Internals.KiberTileCache.MemoryCacheCapacity">
+        <member name="F:GMap.NET.Internals.Cache.ImageCache">
             <summary>
-            the amount of tiles in MB to keep in memmory, default: 22MB, if each ~100Kb it's ~222 tiles
+            abstract image cache
             </summary>
         </member>
-        <member name="P:GMap.NET.Internals.KiberTileCache.MemoryCacheSize">
+        <member name="F:GMap.NET.Internals.Cache.ImageCacheSecond">
             <summary>
-            current memmory cache size in MB
+            second level abstract image cache
+            </summary>
+        </member>
+        <member name="P:GMap.NET.Internals.Cache.CacheLocation">
+            <summary>
+            local cache location
+            </summary>
+        </member>
+        <member name="T:GMap.NET.Point">
+            <summary>
+            the point ;}
             </summary>
         </member>
     </members>

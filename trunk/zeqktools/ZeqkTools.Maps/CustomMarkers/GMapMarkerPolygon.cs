@@ -1,6 +1,7 @@
 ﻿
 namespace GMap.NET.WindowsForms.Markers
 {
+   using System.Linq;
    using System.Drawing;
    using System.Collections.Generic;
 
@@ -8,7 +9,25 @@ namespace GMap.NET.WindowsForms.Markers
    {
       public Pen Pen;
 
-      public List<PointLatLng> GeoPoints;
+      public List<PointLatLng> GeoPoints;      
+
+      public RectLatLng Rectangle
+      {
+          get 
+          {
+              double maxLat = GeoPoints.Max(p => p.Lat);
+              double minLat = GeoPoints.Min(p => p.Lat);
+
+              double maxLng = GeoPoints.Max(p => p.Lng);
+              double minLng = GeoPoints.Min(p => p.Lng);
+
+              RectLatLng rect = new RectLatLng(maxLat, minLng, maxLng - minLng, maxLat - minLat);
+
+              return rect; 
+          }
+          
+      }
+
       private List<Point> _localPoints;
 
       public GMapMarkerPolygon(PointLatLng p, List<PointLatLng> points, Pen pen)
