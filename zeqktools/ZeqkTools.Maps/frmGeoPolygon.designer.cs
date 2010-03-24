@@ -84,6 +84,9 @@
             this.MainMap.Location = new System.Drawing.Point(3, 3);
             this.MainMap.MapType = GMap.NET.MapType.GoogleMap;
             this.MainMap.MarkersEnabled = true;
+            this.MainMap.MaxZoom = 2;
+            this.MainMap.MinZoom = 2;
+            this.MainMap.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
             this.MainMap.Name = "MainMap";
             this.MainMap.RoutesEnabled = true;
             this.MainMap.ShowTileGridLines = false;
@@ -196,6 +199,7 @@
             this.btnCancel.TabIndex = 13;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnOk
             // 
@@ -346,6 +350,9 @@
             this.gMapControl1.Location = new System.Drawing.Point(3, 3);
             this.gMapControl1.MapType = GMap.NET.MapType.GoogleMap;
             this.gMapControl1.MarkersEnabled = true;
+            this.gMapControl1.MaxZoom = 2;
+            this.gMapControl1.MinZoom = 2;
+            this.gMapControl1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
             this.gMapControl1.Name = "gMapControl1";
             this.gMapControl1.RoutesEnabled = true;
             this.gMapControl1.ShowTileGridLines = false;

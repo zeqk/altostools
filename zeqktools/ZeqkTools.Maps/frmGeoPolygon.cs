@@ -52,7 +52,14 @@ namespace ZeqkTools.WindowsForms.Maps
         {
             get 
             {
-                return this.top.Markers.OfType<GMapMarkerPolygon>().First().GeoPoints;            
+                List<PointLatLng> rv = null;
+                if (polygonIsComplete)
+                {
+                    IEnumerable<GMapMarker> marks = this.top.Markers.Where(m => m.Tag == "__MyPolygon__");
+                    if (marks.Count() > 0)
+                        rv = ((GMapMarkerPolygon)marks.First()).GeoPoints;                 
+                }
+                return rv;            
             }
             set
             {
@@ -129,9 +136,7 @@ namespace ZeqkTools.WindowsForms.Maps
             PointLatLng? middle = null;
             if (_polygon.Count > 0)
             {
-                List<GeoPoint> points = _polygon.Select(p => new GeoPoint(p.Lat, p.Lng)).ToList();
-                GeoPoint point = Functions.CalculateMiddlePoint(points);
-                middle = new PointLatLng(point.Lat, point.Lng);
+                middle = Functions.CalculateMiddlePoint(_polygon);
             }
             else
                 if (_secondaryMarkers.Count > 0)
@@ -463,28 +468,18 @@ namespace ZeqkTools.WindowsForms.Maps
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            if (polygonIsComplete || !_allowDrawPolygon)
-            {
-                this.DialogResult = DialogResult.OK;
-                this.Close();
-            }
-            else
-                MessageBox.Show("Polygon is incomplete");
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
 
         private void btnGenImage_Click(object sender, EventArgs e)
         {
             //calculate the area to print
-            if (top.Markers[1].GetType() == typeof(GMapMarkerPolygon))
+            if (top.Markers.Where(m => m.Tag == "__MyPolygon__").Count() > 0)
             {
-                GMapMarkerPolygon polygon = (GMapMarkerPolygon)top.Markers[1];
-                double maxLat = polygon.GeoPoints.Max(p => p.Lat);
-                double minLat = polygon.GeoPoints.Min(p => p.Lat);
-
-                double maxLng = polygon.GeoPoints.Max(p => p.Lng);
-                double minLng = polygon.GeoPoints.Min(p => p.Lng);
-                RectLatLng area = new RectLatLng(maxLat, minLng, maxLng - minLng, maxLat - minLat);
-                MainMap.SelectedArea = area;
+                //por ahora solo calcula el ractangulo según el polígono principal
+                GMapMarkerPolygon polygon = (GMapMarkerPolygon)top.Markers.Where(m => m.Tag == "__MyPolygon__").First();
+                MainMap.SelectedArea = polygon.Rectangle;
             }
             else
                 MainMap.SelectedArea = CalculateRectangle(_secondaryMarkers);
@@ -519,9 +514,9 @@ namespace ZeqkTools.WindowsForms.Maps
             auxiliar.Markers.Clear();
             vertices.Markers.Clear();
 
-            if (top.Markers.OfType<GMapMarkerPolygon>().Count() > 0)
+            if (top.Markers.Where(m => m.Tag == "__MyPolygon__").Count() > 0)
             {
-                GMapMarkerPolygon polygon = top.Markers.OfType<GMapMarkerPolygon>().First();
+                GMapMarkerPolygon polygon = (GMapMarkerPolygon)top.Markers.Where(m => m.Tag == "__MyPolygon__").First();
                 top.Markers.Remove(polygon);                
             }
 
@@ -544,10 +539,9 @@ namespace ZeqkTools.WindowsForms.Maps
 
         private PointLatLng CalculateMiddlePoint(List<GMapMarker> marks)
         {
-            var points = marks.Select(m => new GeoPoint(m.Position.Lat, m.Position.Lng));
+            List<PointLatLng> points = marks.Select(m => m.Position).ToList();
 
-            var aux = Functions.CalculateMiddlePoint(points.ToList());
-            PointLatLng point = new PointLatLng(aux.Lat, aux.Lng);
+            PointLatLng point = Functions.CalculateMiddlePoint(points.ToList());
 
             return point;
 
@@ -555,10 +549,8 @@ namespace ZeqkTools.WindowsForms.Maps
 
         private PointLatLng CalculateMiddlePoint(List<PointLatLng> marks)
         {
-            var points = marks.Select(m => new GeoPoint(m.Lat, m.Lng));
 
-            var aux = Functions.CalculateMiddlePoint(points.ToList());
-            PointLatLng point = new PointLatLng(aux.Lat, aux.Lng);
+            PointLatLng point = Functions.CalculateMiddlePoint(marks);
 
             return point;
         }
@@ -579,6 +571,7 @@ namespace ZeqkTools.WindowsForms.Maps
                 double heightLng = maxLng - minLng;
 
                 rect = new RectLatLng(maxLat, minLng, heightLng, widthLat);
+                
             }
             else
             {
@@ -606,22 +599,21 @@ namespace ZeqkTools.WindowsForms.Maps
             var center = CalculateMiddlePoint(vertices);
             GMapMarkerPolygon polygon = null;
             //si ya hay un poligono, lo remuevo
-            if (this.top.Markers.OfType<GMapMarkerPolygon>().Count() > 0)
+            if (this.top.Markers.Where(m => m.Tag == "__MyPolygon__").Count() > 0)
             {
-                polygon = (GMapMarkerPolygon)this.top.Markers.Where(m => m.GetType() == typeof(GMapMarkerPolygon)).First();
-                top.Markers.Remove(polygon);
+                    polygon = (GMapMarkerPolygon)this.top.Markers.Where(m => m.Tag == "__MyPolygon__").First();
+                    top.Markers.Remove(polygon);
             }
             Pen pen = new Pen(Brushes.Blue, 3);
             
             polygon = new GMapMarkerPolygon(center, vertices.Select(m => m.Position).ToList(), pen);
             polygon.Size = new System.Drawing.Size(20,20);
-            polygon.TooltipMode = MarkerTooltipMode.OnMouseOver;
-            polygon.ToolTipText = "Toooltip";
-            
+            polygon.Tag = "__MyPolygon__";
             top.Markers.Add(polygon);
         }
 
 
         #endregion
+
     }
 }

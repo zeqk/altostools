@@ -33,9 +33,10 @@
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.checkedListComboBox1 = new ZeqkTools.WindowsForms.Controls.CheckedListComboBox(this.components);
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
+            this.checkedListComboBox1 = new ZeqkTools.WindowsForms.Controls.CheckedListComboBox(this.components);
+            this.checkedListComboBox2 = new ZeqkTools.WindowsForms.Controls.CheckedListComboBox(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -76,20 +77,9 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // checkedListComboBox1
-            // 
-            this.checkedListComboBox1.ConcatChar = ", ";
-            this.checkedListComboBox1.DisplayMember = null;
-            this.checkedListComboBox1.FormattingEnabled = true;
-            this.checkedListComboBox1.Location = new System.Drawing.Point(167, 121);
-            this.checkedListComboBox1.Name = "checkedListComboBox1";
-            this.checkedListComboBox1.Size = new System.Drawing.Size(172, 21);
-            this.checkedListComboBox1.TabIndex = 9;
-            this.checkedListComboBox1.ValueMember = null;
-            // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(179, 265);
+            this.button6.Location = new System.Drawing.Point(179, 206);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(75, 23);
             this.button6.TabIndex = 10;
@@ -99,18 +89,41 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(98, 265);
+            this.button7.Location = new System.Drawing.Point(98, 206);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(75, 23);
             this.button7.TabIndex = 11;
             this.button7.Text = "get chekced items";
             this.button7.UseVisualStyleBackColor = true;
             // 
+            // checkedListComboBox1
+            // 
+            this.checkedListComboBox1.ConcatChar = ", ";
+            this.checkedListComboBox1.DisplayMember = null;
+            this.checkedListComboBox1.FormattingEnabled = true;
+            this.checkedListComboBox1.Location = new System.Drawing.Point(98, 75);
+            this.checkedListComboBox1.Name = "checkedListComboBox1";
+            this.checkedListComboBox1.Size = new System.Drawing.Size(172, 21);
+            this.checkedListComboBox1.TabIndex = 9;
+            this.checkedListComboBox1.ValueMember = null;
+            // 
+            // checkedListComboBox2
+            // 
+            this.checkedListComboBox2.ConcatChar = ", ";
+            this.checkedListComboBox2.DisplayMember = null;
+            this.checkedListComboBox2.FormattingEnabled = true;
+            this.checkedListComboBox2.Location = new System.Drawing.Point(156, 298);
+            this.checkedListComboBox2.Name = "checkedListComboBox2";
+            this.checkedListComboBox2.Size = new System.Drawing.Size(203, 21);
+            this.checkedListComboBox2.TabIndex = 12;
+            this.checkedListComboBox2.ValueMember = null;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(554, 394);
+            this.Controls.Add(this.checkedListComboBox2);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.checkedListComboBox1);
@@ -136,5 +149,6 @@
         private ZeqkTools.WindowsForms.Controls.CheckedListComboBox checkedListComboBox1;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
+        private ZeqkTools.WindowsForms.Controls.CheckedListComboBox checkedListComboBox2;
     }
 }

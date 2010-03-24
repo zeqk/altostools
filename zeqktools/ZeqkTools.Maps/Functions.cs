@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GMap.NET;
 
 namespace ZeqkTools
 {
     public class Functions
     {
-        static public GeoPoint CalculateMiddlePoint(List<GeoPoint> points)
+        static public PointLatLng CalculateMiddlePoint(List<PointLatLng> points)
         {
 
             double lat = 0;
@@ -24,21 +25,10 @@ namespace ZeqkTools
             double auxLng = lngDistance / 2;
             lng = points.Min(p => p.Lng) + auxLng;
 
-            GeoPoint point = new GeoPoint(lat, lng);
+            PointLatLng point = new PointLatLng(lat, lng);
 
             return point;
 
-        }
-    }
-
-    public struct GeoPoint
-    {
-        public double Lat, Lng;
-
-        public GeoPoint(double lat, double lng)
-        {
-            this.Lat = lat;
-            this.Lng = lng;
         }
     }
 }
