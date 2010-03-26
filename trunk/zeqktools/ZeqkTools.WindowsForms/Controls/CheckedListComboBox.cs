@@ -73,7 +73,12 @@ namespace ZeqkTools.WindowsForms.Controls
 
         public CheckedListBox.ObjectCollection Items
         {
-            get { return checkedListBox.Items; }
+            get 
+            {
+                CheckedListBox.ObjectCollection rv = checkedListBox.Items;
+                rv.Remove(ALLITEMSSTRING);
+                return rv; 
+            }
         }
 
         public List<object> CheckedItemsValues
