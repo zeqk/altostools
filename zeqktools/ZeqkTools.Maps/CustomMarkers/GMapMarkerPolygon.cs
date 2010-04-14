@@ -28,8 +28,6 @@ namespace GMap.NET.WindowsForms.Markers
           
       }
 
-      private List<Point> _localPoints;
-
       public GMapMarkerPolygon(PointLatLng p, List<PointLatLng> points, Pen pen)
           : base(p)
       {
@@ -50,14 +48,15 @@ namespace GMap.NET.WindowsForms.Markers
 
       public override void OnRender(Graphics g)
       {
-          _localPoints = new List<Point>();
-          foreach (var item in GeoPoints)
+          Point[] _localPoints = new Point[GeoPoints.Count];
+
+          for (int i = 0; i < _localPoints.Length; i++)
           {
-              Position = item;
-              _localPoints.Add(LocalPosition);
+              Position = GeoPoints[i];
+              _localPoints[i] = LocalPosition;
           }
 
-          g.DrawPolygon(Pen, _localPoints.ToArray());
+          g.DrawPolygon(Pen, _localPoints);
       }
    }
 }
