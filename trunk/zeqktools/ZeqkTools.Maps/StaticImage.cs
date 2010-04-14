@@ -24,9 +24,8 @@ namespace ZeqkTools.WindowsForms.Maps
       public StaticImage(GMapControl main)
       {
          InitializeComponent();
-
-         this.MainMap = main;
-
+          
+         this.MainMap = main;          
          numericUpDown1.Maximum = MainMap.MaxZoom;
          numericUpDown1.Minimum = MainMap.MinZoom;
          numericUpDown1.Value = Convert.ToInt32(MainMap.Zoom);

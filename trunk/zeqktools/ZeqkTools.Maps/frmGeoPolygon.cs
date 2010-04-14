@@ -15,6 +15,8 @@ namespace ZeqkTools.WindowsForms.Maps
 {
     public partial class frmGeoPolygon : Form
     {
+
+        GMapPolygon nativePolygon;
         #region Fields
         private MapType _mapType;
         private int _mapZoom;
@@ -51,15 +53,8 @@ namespace ZeqkTools.WindowsForms.Maps
         public List<PointLatLng> Polygon
         {
             get 
-            {
-                List<PointLatLng> rv = null;
-                if (polygonIsComplete)
-                {
-                    IEnumerable<GMapMarker> marks = this.top.Markers.Where(m => m.Tag == "__MyPolygon__");
-                    if (marks.Count() > 0)
-                        rv = ((GMapMarkerPolygon)marks.First()).GeoPoints;                 
-                }
-                return rv;            
+            {                
+                return _polygon;            
             }
             set
             {
@@ -123,7 +118,8 @@ namespace ZeqkTools.WindowsForms.Maps
         }
         #endregion
         private void frmGeoArea_Load(object sender, EventArgs e)
-        {
+        {          
+            
             //Load comboboxes
             cboMapType.DataSource = Enum.GetValues(_mapType.GetType());
 
@@ -159,16 +155,12 @@ namespace ZeqkTools.WindowsForms.Maps
                     GMapMarkerWitheSquare vertice = null;
 
                     //the first and last vertice have the same coordinate, so they are the same object
-                    if (i == _polygon.Count - 1)
+                    if (i == _polygon.Count - 1) //only the last vertice
                         vertice = (GMapMarkerWitheSquare)vertices.Markers[0];
                     else
                         vertice = new GMapMarkerWitheSquare(_polygon[i]);
 
-                    vertices.Markers.Add(vertice);
-
-                    DrawPloygon(vertices.Markers.ToList());
-
-                    polygonIsComplete = true;
+                    vertices.Markers.Add(vertice);                    
 
                     //start to add intermediate points from the second vertice
                     if (i > 0)
@@ -178,6 +170,10 @@ namespace ZeqkTools.WindowsForms.Maps
                         auxiliar.Markers.Add(intermediatePoint);
                     }
                 }
+
+                DrawPloygon(_polygon);
+
+                polygonIsComplete = true;
             }
 
             //add the secondary markers in the top layer
@@ -300,7 +296,8 @@ namespace ZeqkTools.WindowsForms.Maps
 
                             if (polygonIsComplete)
                             {
-                                DrawPloygon(vertices.Markers.ToList());
+                                _polygon = vertices.Markers.Select(m => m.Position).ToList();
+                                DrawPloygon(_polygon);
 
                                 //rearrangement intermediate points
                                 int selectedIndex = vertices.Markers.IndexOf(selectedVertice);
@@ -336,7 +333,8 @@ namespace ZeqkTools.WindowsForms.Maps
                             int newVerticeIndex = selectedIndex + 1;
 
                             vertices.Markers.Insert(newVerticeIndex, newVertice);
-                            DrawPloygon(vertices.Markers.ToList());
+                            _polygon = vertices.Markers.Select(m => m.Position).ToList();
+                            DrawPloygon(_polygon);
 
                             //make and add new intermediate points
                             PointLatLng intermediatePosition1 = CalculateMiddlePoint(vertices.Markers[newVerticeIndex - 1], vertices.Markers[newVerticeIndex]);
@@ -389,7 +387,8 @@ namespace ZeqkTools.WindowsForms.Maps
                     {
                         this.vertices.Markers.Add(this.selectedVertice);
                         //make the polygon
-                        DrawPloygon(vertices.Markers.ToList());
+                        _polygon = vertices.Markers.Select(m => m.Position).ToList();
+                        DrawPloygon(_polygon);
                         polygonIsComplete = true;
                         auxiliar.Markers.Clear();
                         //add new intermediate points between the vertices
@@ -594,22 +593,20 @@ namespace ZeqkTools.WindowsForms.Maps
 
             return rect;
         }
-        private void DrawPloygon(List<GMapMarker> vertices)
+        private void DrawPloygon(List<PointLatLng> vertices)
         {
-            var center = CalculateMiddlePoint(vertices);
-            GMapMarkerPolygon polygon = null;
-            //si ya hay un poligono, lo remuevo
-            if (this.top.Markers.Where(m => m.Tag == "__MyPolygon__").Count() > 0)
+            if (nativePolygon != null)
             {
-                    polygon = (GMapMarkerPolygon)this.top.Markers.Where(m => m.Tag == "__MyPolygon__").First();
-                    top.Markers.Remove(polygon);
+                nativePolygon.Points.Clear();
+                nativePolygon.Points.AddRange(vertices);
+                MainMap.UpdatePolygonLocalPosition(nativePolygon);
             }
-            Pen pen = new Pen(Brushes.Blue, 3);
+            else
+            {
+                nativePolygon = new GMapPolygon(vertices, "myPoligono");
+                top.Polygons.Add(nativePolygon);
+            }
             
-            polygon = new GMapMarkerPolygon(center, vertices.Select(m => m.Position).ToList(), pen);
-            polygon.Size = new System.Drawing.Size(20,20);
-            polygon.Tag = "__MyPolygon__";
-            top.Markers.Add(polygon);
         }
 
 
