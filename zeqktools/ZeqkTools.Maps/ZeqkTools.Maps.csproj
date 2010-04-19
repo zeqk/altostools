@@ -65,6 +65,7 @@
     <Compile Include="CustomMarkers\GMapMarkerGraySquare.cs" />
     <Compile Include="CustomMarkers\GMapMarkerLine.cs" />
     <Compile Include="CustomMarkers\GMapMarkerPolygon.cs" />
+    <Compile Include="CustomMarkers\GMapMarkerRect.cs" />
     <Compile Include="CustomMarkers\GMapMarkerWitheSquare.cs" />
     <Compile Include="frmGeoPoint.cs">
       <SubType>Form</SubType>

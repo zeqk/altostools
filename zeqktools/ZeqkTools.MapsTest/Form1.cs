@@ -34,30 +34,26 @@ namespace ZeqkTools.MapsTest
         {
             using (ZeqkTools.WindowsForms.Maps.frmGeoPolygon myForm = new ZeqkTools.WindowsForms.Maps.frmGeoPolygon())
             {
-                List<PointLatLng> polygon = new List<PointLatLng>();
+                List<PointLatLng> vertices = new List<PointLatLng>();
                 PointLatLng point1 = new PointLatLng(-34.802387, -58.372250);
-                polygon.Add(point1);
+                vertices.Add(point1);
                 PointLatLng point2 = new PointLatLng(-34.819160, -58.344440);
-                polygon.Add(point2);
+                vertices.Add(point2);
                 PointLatLng point3 = new PointLatLng(-34.785187, -58.315773);
-                polygon.Add(point3);
+                vertices.Add(point3);
                 PointLatLng point4 = new PointLatLng(-34.773769, -58.343925);
-                polygon.Add(point4);
+                vertices.Add(point4);
                 PointLatLng point5 = new PointLatLng(-34.802387, -58.372250);
-                polygon.Add(point5);
-                //myForm.Polygon = polygon;
+                vertices.Add(point5);
+                GMapPolygon polygon = new GMapPolygon(vertices, "MyPolygon");
+                myForm.Polygon = polygon;
 
                 List<GMapMarker> myMarks = new List<GMapMarker>();
                 GMapMarkerGoogleRed myMark1 = new GMapMarkerGoogleRed(new PointLatLng(-34.788151, -58.345299));
                 GMapMarkerGoogleRed myMark2 = new GMapMarkerGoogleRed(new PointLatLng(-34.799286, -58.334827));
-                PointLatLng middlePoint = Functions.CalculateMiddlePoint(polygon);
-                Pen pen = new Pen(Brushes.Aqua, 3);
-                pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-                GMapMarkerPolygon myPolygonMark = new GMapMarkerPolygon(middlePoint, polygon, pen);
-
+                
                 myMarks.Add(myMark1);
                 myMarks.Add(myMark2);
-                myMarks.Add(myPolygonMark);
 
                 myForm.SecondaryMarkers = myMarks;
                 myForm.AllowDrawPolygon = true;

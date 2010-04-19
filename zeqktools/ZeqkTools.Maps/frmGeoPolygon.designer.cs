@@ -88,11 +88,12 @@
             this.MainMap.MinZoom = 2;
             this.MainMap.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
             this.MainMap.Name = "MainMap";
+            this.MainMap.PolygonsEnabled = true;
             this.MainMap.RoutesEnabled = true;
             this.MainMap.ShowTileGridLines = false;
             this.MainMap.Size = new System.Drawing.Size(651, 441);
             this.MainMap.TabIndex = 10;
-            this.MainMap.Zoom = 2;
+            this.MainMap.Zoom = 2;            
             // 
             // trackBar1
             // 
@@ -354,6 +355,7 @@
             this.gMapControl1.MinZoom = 2;
             this.gMapControl1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
             this.gMapControl1.Name = "gMapControl1";
+            this.gMapControl1.PolygonsEnabled = true;
             this.gMapControl1.RoutesEnabled = true;
             this.gMapControl1.ShowTileGridLines = false;
             this.gMapControl1.Size = new System.Drawing.Size(142, 8);
