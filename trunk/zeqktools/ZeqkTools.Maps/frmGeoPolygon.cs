@@ -15,19 +15,17 @@ namespace ZeqkTools.WindowsForms.Maps
 {
     public partial class frmGeoPolygon : Form
     {
-
-        GMapPolygon nativePolygon;
         #region Fields
         private MapType _mapType;
         private int _mapZoom;
         private bool _allowDrawPolygon;        
-        
+               
+        private GMapPolygon _polygon;
         private List<GMapMarker> _secondaryMarkers;
-        private List<PointLatLng> _polygon;
+        private List<GMapPolygon> _secondaryPolygons;
         #endregion
 
-        #region Internal variables
-        private List<Type> markerTypes;        
+        #region Internal variables  
 
         // markers
         GMapMarker center;
@@ -38,6 +36,7 @@ namespace ZeqkTools.WindowsForms.Maps
         GMapOverlay top;
         GMapOverlay vertices;
         GMapOverlay auxiliar;
+        GMapOverlay polygonsRects;
 
         bool isMouseDown;
         bool polygonIsComplete = false;
@@ -48,9 +47,9 @@ namespace ZeqkTools.WindowsForms.Maps
         #region Public properties
 
         /// <summary>
-        /// Get set the polygon coordinates list
+        /// Get set the main polygon
         /// </summary>
-        public List<PointLatLng> Polygon
+        public GMapPolygon Polygon
         {
             get 
             {                
@@ -63,12 +62,21 @@ namespace ZeqkTools.WindowsForms.Maps
         }
 
         /// <summary>
-        /// Get/set the secondary markers, this markers will be show, but does not affect the drawing of the polygon
+        /// Get/set the secondary markers, this markers will be show, but does not affect the drawing of the main polygon
         /// </summary>
         public List<GMapMarker> SecondaryMarkers
         {
             get { return _secondaryMarkers; }
             set { _secondaryMarkers = value; }
+        }
+
+        /// <summary>
+        /// Get/set the secondary markers, this polygons will be show, but does not affect the drawing of the main polygon
+        /// </summary>
+        public List<GMapPolygon> SecondaryPolygons
+        {
+            get { return _secondaryPolygons; }
+            set { _secondaryPolygons = value; }
         }
 
         /// <summary>
@@ -105,14 +113,12 @@ namespace ZeqkTools.WindowsForms.Maps
         public frmGeoPolygon()
         {
             //contruct fields
-            _polygon = new List<PointLatLng>();
             _secondaryMarkers = new List<GMapMarker>();            
             _mapType = MapType.GoogleMap;
             _mapZoom = 15;
             _allowDrawPolygon = true;
 
-            //contruct internal variables
-            markerTypes = new List<Type>();
+            _polygon = new GMapPolygon(new List<PointLatLng>(), "MyPolygon");
             
             InitializeComponent();
         }
@@ -130,7 +136,7 @@ namespace ZeqkTools.WindowsForms.Maps
 
             //get the center of the markers
             PointLatLng? middle = null;
-            if (_polygon.Count > 0)
+            if (_polygon.Points.Count > 0)
             {
                 middle = Functions.CalculateMiddlePoint(_polygon);
             }
@@ -146,21 +152,32 @@ namespace ZeqkTools.WindowsForms.Maps
                 top.Markers.Add(center);
             }
 
+            //add the secondary markers in the top layer
+            foreach (var mark in _secondaryMarkers)
+            {
+                top.Markers.Add(mark);
+            }
+
+            foreach (GMapPolygon polygon in _secondaryPolygons)
+            {
+                top.Polygons.Add(polygon);
+            }
+
             //draw the polygon
-            if (_polygon.Count > 2)
+            if (_polygon.Points.Count > 2)
             {
                 //go through the polygon vertices
-                for (int i = 0; i < _polygon.Count; i++)
+                for (int i = 0; i < _polygon.Points.Count; i++)
                 {
                     GMapMarkerWitheSquare vertice = null;
 
                     //the first and last vertice have the same coordinate, so they are the same object
-                    if (i == _polygon.Count - 1) //only the last vertice
+                    if (i == _polygon.Points.Count - 1) //only the last vertice
                         vertice = (GMapMarkerWitheSquare)vertices.Markers[0];
                     else
-                        vertice = new GMapMarkerWitheSquare(_polygon[i]);
+                        vertice = new GMapMarkerWitheSquare(_polygon.Points[i]);
 
-                    vertices.Markers.Add(vertice);                    
+                    vertices.Markers.Add(vertice);
 
                     //start to add intermediate points from the second vertice
                     if (i > 0)
@@ -170,19 +187,14 @@ namespace ZeqkTools.WindowsForms.Maps
                         auxiliar.Markers.Add(intermediatePoint);
                     }
                 }
-
-                DrawPloygon(_polygon);
-
                 polygonIsComplete = true;
             }
+            else
+                _polygon = new GMapPolygon(new List<PointLatLng>(), "MyPolygon");
 
-            //add the secondary markers in the top layer
-            foreach (var mark in _secondaryMarkers)
-            {
-                top.Markers.Add(mark);
-                if(!markerTypes.Contains(mark.GetType()))
-                    markerTypes.Add(mark.GetType());
-            }
+            
+            top.Polygons.Add(_polygon);
+            
 
             if (center == null)
                 GoToAddress(Address);            
@@ -233,7 +245,8 @@ namespace ZeqkTools.WindowsForms.Maps
                 MainMap.Overlays.Add(auxiliar);
                 vertices = new GMapOverlay(MainMap, "vertices");
                 MainMap.Overlays.Add(vertices);
-
+                polygonsRects = new GMapOverlay(MainMap, "polygonsRects");
+                MainMap.Overlays.Add(polygonsRects);
             }
 
             MainMap.ZoomAndCenterMarkers(null);
@@ -296,8 +309,9 @@ namespace ZeqkTools.WindowsForms.Maps
 
                             if (polygonIsComplete)
                             {
-                                _polygon = vertices.Markers.Select(m => m.Position).ToList();
-                                DrawPloygon(_polygon);
+                                _polygon.Points.Clear();
+                                _polygon.Points.AddRange(vertices.Markers.Select(m => m.Position));
+                                MainMap.UpdatePolygonLocalPosition(_polygon);
 
                                 //rearrangement intermediate points
                                 int selectedIndex = vertices.Markers.IndexOf(selectedVertice);
@@ -333,8 +347,11 @@ namespace ZeqkTools.WindowsForms.Maps
                             int newVerticeIndex = selectedIndex + 1;
 
                             vertices.Markers.Insert(newVerticeIndex, newVertice);
-                            _polygon = vertices.Markers.Select(m => m.Position).ToList();
-                            DrawPloygon(_polygon);
+                            
+                            //update polygon
+                            _polygon.Points.Clear();
+                            _polygon.Points.AddRange(vertices.Markers.Select(m => m.Position));
+                            MainMap.UpdatePolygonLocalPosition(_polygon);
 
                             //make and add new intermediate points
                             PointLatLng intermediatePosition1 = CalculateMiddlePoint(vertices.Markers[newVerticeIndex - 1], vertices.Markers[newVerticeIndex]);
@@ -386,9 +403,11 @@ namespace ZeqkTools.WindowsForms.Maps
                     if (vertices.Markers.First() == this.selectedVertice && vertices.Markers.Count > 1)
                     {
                         this.vertices.Markers.Add(this.selectedVertice);
-                        //make the polygon
-                        _polygon = vertices.Markers.Select(m => m.Position).ToList();
-                        DrawPloygon(_polygon);
+                        
+                        //add the vertices to polygon (make polygon)
+                        _polygon.Points.AddRange(vertices.Markers.Select(m => m.Position));
+                        MainMap.UpdatePolygonLocalPosition(_polygon);
+
                         polygonIsComplete = true;
                         auxiliar.Markers.Clear();
                         //add new intermediate points between the vertices
@@ -418,6 +437,9 @@ namespace ZeqkTools.WindowsForms.Maps
                 if (auxiliar.Markers.Contains(item))
                     this.selectedIntermediatePoint = item;
             }
+
+
+            
         }
 
         private void MainMap_OnMarkerLeave(GMapMarker item)
@@ -474,14 +496,12 @@ namespace ZeqkTools.WindowsForms.Maps
         private void btnGenImage_Click(object sender, EventArgs e)
         {
             //calculate the area to print
-            if (top.Markers.Where(m => m.Tag == "__MyPolygon__").Count() > 0)
+            if (_polygon.Points.Count > 0)
             {
-                //por ahora solo calcula el ractangulo según el polígono principal
-                GMapMarkerPolygon polygon = (GMapMarkerPolygon)top.Markers.Where(m => m.Tag == "__MyPolygon__").First();
-                MainMap.SelectedArea = polygon.Rectangle;
+                MainMap.SelectedArea = CalculateRectangle(_polygon.Points);
             }
             else
-                MainMap.SelectedArea = CalculateRectangle(_secondaryMarkers);
+                MainMap.SelectedArea = CalculateRectangle(_secondaryMarkers.Select(m => m.Position).ToList());
 
             MainMap.SelectedArea = AddMargin(MainMap.SelectedArea);
 
@@ -513,11 +533,9 @@ namespace ZeqkTools.WindowsForms.Maps
             auxiliar.Markers.Clear();
             vertices.Markers.Clear();
 
-            if (top.Markers.Where(m => m.Tag == "__MyPolygon__").Count() > 0)
-            {
-                GMapMarkerPolygon polygon = (GMapMarkerPolygon)top.Markers.Where(m => m.Tag == "__MyPolygon__").First();
-                top.Markers.Remove(polygon);                
-            }
+            //clear polygon
+            _polygon.Points.Clear();
+            MainMap.UpdatePolygonLocalPosition(_polygon);
 
             polygonIsComplete = false;
         }
@@ -552,32 +570,32 @@ namespace ZeqkTools.WindowsForms.Maps
             PointLatLng point = Functions.CalculateMiddlePoint(marks);
 
             return point;
-        }
+        }        
 
-        private RectLatLng CalculateRectangle(IList<GMapMarker> marks)
+        private RectLatLng CalculateRectangle(IList<PointLatLng> points)
         {
             RectLatLng rect = new RectLatLng();
 
-            if (marks.Count > 1)
+            if (points.Count > 1)
             {
-                double maxLat = marks.Max(m => m.Position.Lat);
-                double minLat = marks.Min(m => m.Position.Lat);
+                double maxLat = points.Max(p => p.Lat);
+                double minLat = points.Min(p => p.Lat);
 
-                double maxLng = marks.Max(m => m.Position.Lng);
-                double minLng = marks.Min(m => m.Position.Lng);
+                double maxLng = points.Max(p => p.Lng);
+                double minLng = points.Min(p => p.Lng);
 
                 double widthLat = maxLat - minLat;
                 double heightLng = maxLng - minLng;
 
                 rect = new RectLatLng(maxLat, minLng, heightLng, widthLat);
-                
+
             }
             else
             {
-                if (marks.Count > 0)
+                if (points.Count > 0)
                 {
                     SizeLatLng size = new SizeLatLng(0.005, 0.009);
-                    PointLatLng point = new PointLatLng(marks[0].Position.Lat + 0.0025, marks[0].Position.Lng - 0.0045);
+                    PointLatLng point = new PointLatLng(points[0].Lat + 0.0025, points[0].Lng - 0.0045);
                     rect = new RectLatLng(point, size);
 
                 }
@@ -593,24 +611,32 @@ namespace ZeqkTools.WindowsForms.Maps
 
             return rect;
         }
-        private void DrawPloygon(List<PointLatLng> vertices)
+
+        #endregion
+
+
+        RectLatLng polygonToRect(GMapPolygon polygon)
         {
-            if (nativePolygon != null)
-            {
-                nativePolygon.Points.Clear();
-                nativePolygon.Points.AddRange(vertices);
-                MainMap.UpdatePolygonLocalPosition(nativePolygon);
-            }
-            else
-            {
-                nativePolygon = new GMapPolygon(vertices, "myPoligono");
-                top.Polygons.Add(nativePolygon);
-            }
+            double maxLat = polygon.Points.Max(p => p.Lat);
+            double minLat = polygon.Points.Min(p => p.Lat);
+
+            double maxLng = polygon.Points.Max(p => p.Lng);
+            double minLng = polygon.Points.Min(p => p.Lng);
+
+            double widthLat = maxLat - minLat;
+            double heightLng = maxLng - minLng;
+
+            RectLatLng rect = new RectLatLng(maxLat, minLng, heightLng, widthLat);
+
+            return rect;
+        }
+
+        void hola(GMapPolygon polygon)
+        {
+            RectLatLng rect = polygonToRect(polygon);
             
         }
 
-
-        #endregion
 
     }
 }

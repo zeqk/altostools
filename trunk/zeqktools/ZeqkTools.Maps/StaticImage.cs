@@ -178,10 +178,27 @@ namespace ZeqkTools.WindowsForms.Maps
                        //bmpDestination.RotateFlip(RotateFlipType.Rotate270FlipNone);
                        using (Graphics gfx = Graphics.FromImage(bmpDestination))
                        {
+                           //draw polygons
+                           foreach (GMapPolygon polygon in info.Polygons)
+                           {
+
+                               List<System.Drawing.Point> points = new List<System.Drawing.Point>();
+                               foreach (var gPoint in polygon.Points)
+                               {
+                                   int x, y = 0;
+                                   FromLatLngToLocal(info, rect.Height, rect.Width, gPoint.Lat, gPoint.Lng, out x, out y);
+                                   points.Add(new System.Drawing.Point(x, y));
+                               }
+                               Pen pen = new Pen(Color.Blue, 4);
+                               pen.DashStyle = DashStyle.Dot;
+
+                               gfx.DrawPolygon(pen, points.ToArray());
+                           }
+
+                           //draw marks
                            foreach (var marker in info.Markers)
                            {
-                               if (marker.GetType() != typeof(GMapMarkerPolygon) && 
-                                   marker.GetType() != typeof(GMapMarkerLine) &&
+                               if (marker.GetType() != typeof(GMapMarkerLine) &&
                                    marker.GetType() != typeof(GMapMarkerCross))
                                {   
                                    int x, y = 0;
@@ -204,24 +221,6 @@ namespace ZeqkTools.WindowsForms.Maps
                                        infoTag = marker.Tag.ToString();
 
                                    gfx.DrawString(infoTag, font, Brushes.Red, x + 10, y - 10);
-                               }
-
-                               if (marker.GetType() == typeof(GMapMarkerPolygon))
-                               {
-                                   GMapMarkerPolygon customMark = (GMapMarkerPolygon)marker;
-
-
-                                   List<System.Drawing.Point> points = new List<System.Drawing.Point>();
-                                   foreach (var gPoint in customMark.GeoPoints)
-                                   {
-                                       int x, y = 0;
-                                       FromLatLngToLocal(info, rect.Height, rect.Width, gPoint.Lat, gPoint.Lng, out x, out y);
-                                       points.Add(new System.Drawing.Point(x, y));
-                                   }
-                                   Pen pen = new Pen(Color.Blue, 4);
-                                   pen.DashStyle = DashStyle.Dot;
-
-                                   gfx.DrawPolygon(pen, points.ToArray());
                                }
                            }
                        }
@@ -249,7 +248,7 @@ namespace ZeqkTools.WindowsForms.Maps
                numericUpDown1.Enabled = false;
                progressBar1.Value = 0;
                button1.Enabled = false;
-               bg.RunWorkerAsync(new MapInfo(MainMap.Projection, area, (int)numericUpDown1.Value, MainMap.MapType, MainMap.Overlays[0].Markers));
+               bg.RunWorkerAsync(new MapInfo(MainMap.Projection, area, (int)numericUpDown1.Value, MainMap.MapType, MainMap.Overlays[0].Markers, MainMap.Overlays[0].Polygons));
                
             }
          }
@@ -288,15 +287,17 @@ namespace ZeqkTools.WindowsForms.Maps
       public int Zoom;
       public MapType Type;
       public ObservableCollectionThreadSafe<GMapMarker> Markers;
+      public ObservableCollection<GMapPolygon> Polygons;
 
 
-      public MapInfo(PureProjection Projection, RectLatLng Area, int Zoom, MapType Type, ObservableCollectionThreadSafe<GMapMarker> markers)
+      public MapInfo(PureProjection Projection, RectLatLng Area, int Zoom, MapType Type, ObservableCollectionThreadSafe<GMapMarker> markers, ObservableCollection<GMapPolygon> polygons)
       {
          this.Projection = Projection;
          this.Area = Area;
          this.Zoom = Zoom;
          this.Type = Type;
          this.Markers = markers;
+         this.Polygons = polygons;
       }
    }
 }
