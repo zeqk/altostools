@@ -48,8 +48,7 @@ namespace ZeqkTools.WindowsForms.Controls
                 }
                 else
                 {
-                    checkedListBox = new CheckedListBox();
-                    items = new List<object>();
+                    checkedListBox.Items.Clear();
                 }
             }
         }
