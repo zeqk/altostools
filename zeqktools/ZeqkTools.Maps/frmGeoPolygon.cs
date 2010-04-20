@@ -36,7 +36,6 @@ namespace ZeqkTools.WindowsForms.Maps
         GMapOverlay top;
         GMapOverlay vertices;
         GMapOverlay auxiliar;
-        GMapOverlay polygonsRects;
 
         bool isMouseDown;
         bool polygonIsComplete = false;
@@ -113,7 +112,8 @@ namespace ZeqkTools.WindowsForms.Maps
         public frmGeoPolygon()
         {
             //contruct fields
-            _secondaryMarkers = new List<GMapMarker>();            
+            _secondaryMarkers = new List<GMapMarker>();
+            _secondaryPolygons = new List<GMapPolygon>();
             _mapType = MapType.GoogleMap;
             _mapZoom = 15;
             _allowDrawPolygon = true;
@@ -245,8 +245,6 @@ namespace ZeqkTools.WindowsForms.Maps
                 MainMap.Overlays.Add(auxiliar);
                 vertices = new GMapOverlay(MainMap, "vertices");
                 MainMap.Overlays.Add(vertices);
-                polygonsRects = new GMapOverlay(MainMap, "polygonsRects");
-                MainMap.Overlays.Add(polygonsRects);
             }
 
             MainMap.ZoomAndCenterMarkers(null);
@@ -613,29 +611,6 @@ namespace ZeqkTools.WindowsForms.Maps
         }
 
         #endregion
-
-
-        RectLatLng polygonToRect(GMapPolygon polygon)
-        {
-            double maxLat = polygon.Points.Max(p => p.Lat);
-            double minLat = polygon.Points.Min(p => p.Lat);
-
-            double maxLng = polygon.Points.Max(p => p.Lng);
-            double minLng = polygon.Points.Min(p => p.Lng);
-
-            double widthLat = maxLat - minLat;
-            double heightLng = maxLng - minLng;
-
-            RectLatLng rect = new RectLatLng(maxLat, minLng, heightLng, widthLat);
-
-            return rect;
-        }
-
-        void hola(GMapPolygon polygon)
-        {
-            RectLatLng rect = polygonToRect(polygon);
-            
-        }
 
 
     }

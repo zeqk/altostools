@@ -42,8 +42,14 @@
     <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GMap.NET.Core, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=x86" />
-    <Reference Include="GMap.NET.WindowsForms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=x86" />
+    <Reference Include="GMap.NET.Core, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin\GMap.NET.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="GMap.NET.WindowsForms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin\GMap.NET.WindowsForms.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -64,7 +70,6 @@
     <Compile Include="CustomMarkers\GMapMarkerCustom.cs" />
     <Compile Include="CustomMarkers\GMapMarkerGraySquare.cs" />
     <Compile Include="CustomMarkers\GMapMarkerLine.cs" />
-    <Compile Include="CustomMarkers\GMapMarkerPolygon.cs" />
     <Compile Include="CustomMarkers\GMapMarkerRect.cs" />
     <Compile Include="CustomMarkers\GMapMarkerWitheSquare.cs" />
     <Compile Include="frmGeoPoint.cs">
