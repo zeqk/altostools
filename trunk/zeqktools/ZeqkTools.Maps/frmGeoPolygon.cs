@@ -10,6 +10,7 @@ using System.Globalization;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
+using GMap.NET.WindowsForms.ToolTips;
 
 namespace ZeqkTools.WindowsForms.Maps
 {
@@ -475,6 +476,23 @@ namespace ZeqkTools.WindowsForms.Maps
                 }
             }
         }
+
+        private void MainMap_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            PointLatLng point = MainMap.FromLocalToLatLng(e.X, e.Y);
+            foreach (GMapPolygon polygon in top.Polygons)
+            {
+                if (Functions.PointInPolygon(point, polygon.Points.ToArray()))
+                {
+                    if (polygon.Tag != null)
+                    {
+                        ToolTip tip = new ToolTip();
+                        tip.SetToolTip(MainMap, polygon.Tag.ToString());
+                        tip.Show("", this, 1000);
+                    }
+                }
+            }
+        }
     #endregion        
 
         #region Controls events methods
@@ -611,6 +629,12 @@ namespace ZeqkTools.WindowsForms.Maps
         }
 
         #endregion
+
+        
+
+        
+
+        
 
 
     }

@@ -93,7 +93,9 @@
             this.MainMap.ShowTileGridLines = false;
             this.MainMap.Size = new System.Drawing.Size(651, 441);
             this.MainMap.TabIndex = 10;
-            this.MainMap.Zoom = 2;            
+            this.MainMap.Zoom = 2;
+            this.MainMap.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MainMap_MouseDoubleClick);
+            
             // 
             // trackBar1
             // 
