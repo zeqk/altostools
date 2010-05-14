@@ -204,9 +204,9 @@ namespace ZeqkTools.MapsTest
                 MainMap.MouseUp += new MouseEventHandler(MainMap_MouseUp);
             }
             // get zoom  
-            trackBar1.Minimum = MainMap.MinZoom;
-            trackBar1.Maximum = MainMap.MaxZoom;
-            trackBar1.Value = Convert.ToInt32(MainMap.Zoom);
+            trackBarZoom.Minimum = MainMap.MinZoom;
+            trackBarZoom.Maximum = MainMap.MaxZoom;
+            trackBarZoom.Value = Convert.ToInt32(MainMap.Zoom);
 
             // add custom layers  
             {
@@ -250,7 +250,7 @@ namespace ZeqkTools.MapsTest
 
         private void MainMap_OnMapZoomChanged()
         {
-            trackBar1.Value = Convert.ToInt32(MainMap.Zoom);
+            trackBarZoom.Value = Convert.ToInt32(MainMap.Zoom);
         }
 
         // current point changed
@@ -350,7 +350,7 @@ namespace ZeqkTools.MapsTest
 
         private void trackBar1_ValueChanged(object sender, EventArgs e)
         {
-            MainMap.Zoom = trackBar1.Value;
+            MainMap.Zoom = trackBarZoom.Value;
         }
 
         #endregion
