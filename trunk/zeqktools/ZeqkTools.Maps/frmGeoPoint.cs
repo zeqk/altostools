@@ -80,8 +80,7 @@ namespace ZeqkTools.WindowsForms.Maps
             // map events
             MainMap.OnCurrentPositionChanged += new CurrentPositionChanged(MainMap_OnCurrentPositionChanged);
             //MainMap.OnTileLoadStart += new TileLoadStart(MainMap_OnTileLoadStart);
-            //MainMap.OnTileLoadComplete += new TileLoadComplete(MainMap_OnTileLoadComplete);
-            MainMap.OnMarkerClick += new MarkerClick(MainMap_OnMarkerClick);
+            //MainMap.OnTileLoadComplete += new TileLoadComplete(MainMap_OnTileLoadComplete);            
             //MainMap.OnEmptyTileError += new EmptyTileError(MainMap_OnEmptyTileError);
             MainMap.OnMapZoomChanged += new MapZoomChanged(MainMap_OnMapZoomChanged);
             //MainMap.OnMapTypeChanged += new MapTypeChanged(MainMap_OnMapTypeChanged);
@@ -201,12 +200,6 @@ namespace ZeqkTools.WindowsForms.Maps
                 currentMarker.Position = MainMap.FromLocalToLatLng(e.X, e.Y);
                 UpdateCurrentMarkerPositionText();
             }
-        }
-
-        void MainMap_OnMarkerClick(GMapMarker item)
-        {
-            MainMap.CurrentPosition = item.Position;
-            MainMap.Zoom = 5;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

@@ -33,7 +33,7 @@
             this.btnGo = new System.Windows.Forms.Button();
             this.txtAddress = new System.Windows.Forms.TextBox();
             this.tableBody = new System.Windows.Forms.TableLayoutPanel();
-            this.MainMap = new System.Windows.Forms.GMapControl();
+            this.MainMap = new GMap.NET.WindowsForms.GMapControl();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.tableBottom = new System.Windows.Forms.TableLayoutPanel();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -308,7 +308,7 @@
         private System.Windows.Forms.TextBox txtLng;
         private System.Windows.Forms.Label lblLat;
         private System.Windows.Forms.TextBox txtLat;
-        private System.Windows.Forms.GMapControl MainMap;
+        private GMap.NET.WindowsForms.GMapControl MainMap;
         private System.Windows.Forms.TableLayoutPanel tableTop;
         private System.Windows.Forms.TableLayoutPanel tableBody;
         private System.Windows.Forms.TableLayoutPanel tableBottom;
