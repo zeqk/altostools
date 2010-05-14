@@ -181,18 +181,21 @@ namespace ZeqkTools.WindowsForms.Maps
                            //draw polygons
                            foreach (GMapPolygon polygon in info.Polygons)
                            {
-
-                               List<System.Drawing.Point> points = new List<System.Drawing.Point>();
-                               foreach (var gPoint in polygon.Points)
+                               if (polygon.Points.Count > 2)
                                {
-                                   int x, y = 0;
-                                   FromLatLngToLocal(info, rect.Height, rect.Width, gPoint.Lat, gPoint.Lng, out x, out y);
-                                   points.Add(new System.Drawing.Point(x, y));
-                               }
-                               Pen pen = new Pen(Color.Blue, 4);
-                               pen.DashStyle = DashStyle.Dot;
+                                   List<System.Drawing.Point> points = new List<System.Drawing.Point>();
+                                   foreach (var gPoint in polygon.Points)
+                                   {
+                                       int x, y = 0;
+                                       FromLatLngToLocal(info, rect.Height, rect.Width, gPoint.Lat, gPoint.Lng, out x, out y);
+                                       points.Add(new System.Drawing.Point(x, y));
+                                   }
+                                   Color color = Color.FromArgb(95, polygon.Stroke.Color);
+                                   Pen pen = new Pen(color, 4);
+                                   pen.DashStyle = DashStyle.Custom;
 
-                               gfx.DrawPolygon(pen, points.ToArray());
+                                   gfx.DrawPolygon(pen, points.ToArray());                                   
+                               }
                            }
 
                            //draw marks
