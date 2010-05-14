@@ -42,7 +42,7 @@
     <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GMap.NET.Core, Version=1.5.1.1, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=x86">
+    <Reference Include="GMap.NET.Core, Version=1.5.1.3, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\GMap.NET.Core.dll</HintPath>
     </Reference>

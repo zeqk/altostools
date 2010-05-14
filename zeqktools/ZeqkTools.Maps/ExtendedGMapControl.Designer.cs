@@ -1,4 +1,4 @@
-﻿namespace ZeqkTools.Maps
+﻿namespace ZeqkTools.WindowsForms.Maps
 {
     partial class ExtendedGMapControl
     {
@@ -33,10 +33,14 @@
             // ExtendedGMapControl
             // 
             this.Name = "ExtendedGMapControl";
-            this.OnCurrentPositionChanged += new GMap.NET.CurrentPositionChanged(this.ExtendedGMapControl_OnCurrentPositionChanged);
+            this.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ExtendedGMapControl_MouseDoubleClick);
             this.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.ExtendedGMapControl_OnMarkerClick);
+            this.OnMarkerEnter += new GMap.NET.WindowsForms.MarkerEnter(this.ExtendedGMapControl_OnMarkerEnter);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ExtendedGMapControl_MouseUp);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ExtendedGMapControl_MouseMove);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ExtendedGMapControl_MouseDown);
+            this.OnMarkerLeave += new GMap.NET.WindowsForms.MarkerLeave(this.ExtendedGMapControl_OnMarkerLeave);
+            this.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ExtendedGMapControl_MouseDoubleClick);
             this.ResumeLayout(false);
 
         }

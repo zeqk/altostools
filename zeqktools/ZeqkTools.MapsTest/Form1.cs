@@ -32,7 +32,7 @@ namespace ZeqkTools.MapsTest
 
         private void button2_Click(object sender, EventArgs e)
         {
-            using (ZeqkTools.WindowsForms.Maps.frmGeoPolygon myForm = new ZeqkTools.WindowsForms.Maps.frmGeoPolygon())
+            using (ZeqkTools.MapsTest.frmGeoPolygonTest myForm = new ZeqkTools.MapsTest.frmGeoPolygonTest())
             {
                 List<PointLatLng> vertices = new List<PointLatLng>();
                 PointLatLng point1 = new PointLatLng(-34.802387, -58.372250);
@@ -46,6 +46,7 @@ namespace ZeqkTools.MapsTest
                 PointLatLng point5 = new PointLatLng(-34.802387, -58.372250);
                 vertices.Add(point5);
                 GMapPolygon polygon = new GMapPolygon(vertices, "MyPolygon");
+                myForm.AllowDrawPolygon = false;
                 myForm.Polygon = polygon;
 
                 List<GMapMarker> myMarks = new List<GMapMarker>();
@@ -54,9 +55,7 @@ namespace ZeqkTools.MapsTest
                 
                 myMarks.Add(myMark1);
                 myMarks.Add(myMark2);
-
                 myForm.SecondaryMarkers = myMarks;
-                myForm.AllowDrawPolygon = true;
                 myForm.Address = "Claypole, Buenos Aires, Argentina";
                 myForm.MapZoom = 12;
                 myForm.ShowDialog();

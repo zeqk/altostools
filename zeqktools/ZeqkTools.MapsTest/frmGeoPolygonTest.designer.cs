@@ -1,6 +1,6 @@
-﻿namespace ZeqkTools.WindowsForms.Maps
+﻿namespace ZeqkTools.MapsTest
 {
-    partial class frmGeoPolygon
+    partial class frmGeoPolygonTest
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.MainMap = new GMap.NET.WindowsForms.GMapControl();
+            this.MainMap = new ZeqkTools.WindowsForms.Maps.ExtendedGMapControl();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.lblMapType = new System.Windows.Forms.Label();
             this.cboMapType = new System.Windows.Forms.ComboBox();
@@ -92,8 +92,7 @@
             this.MainMap.ShowTileGridLines = false;
             this.MainMap.Size = new System.Drawing.Size(651, 441);
             this.MainMap.TabIndex = 10;
-            this.MainMap.Zoom = 2;
-            this.MainMap.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MainMap_MouseDoubleClick);
+            this.MainMap.Zoom = 2;            
             
             // 
             // trackBar1
@@ -340,7 +339,7 @@
             this.tableBody.RowCount = 1;
             this.tableBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableBody.Size = new System.Drawing.Size(194, 14);
-            this.tableBody.TabIndex = 1;            
+            this.tableBody.TabIndex = 1;
             // 
             // trackBar2
             // 
@@ -509,7 +508,7 @@
 
         private System.Windows.Forms.Button btnGenImage;
         private System.Windows.Forms.SaveFileDialog sfdSaveScreen;
-        private GMap.NET.WindowsForms.GMapControl MainMap;
+        private ZeqkTools.WindowsForms.Maps.ExtendedGMapControl MainMap;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Label lblMapType;
         private System.Windows.Forms.ComboBox cboMapType;
