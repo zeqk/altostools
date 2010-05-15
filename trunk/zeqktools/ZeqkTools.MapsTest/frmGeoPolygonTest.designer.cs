@@ -244,8 +244,8 @@
             // 
             // btnClear
             // 
-            this.btnClear.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnClear.Location = new System.Drawing.Point(123, 3);
+            this.btnClear.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnClear.Location = new System.Drawing.Point(110, 3);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 38);
             this.btnClear.TabIndex = 16;
@@ -257,9 +257,10 @@
             // 
             this.panelMapType.Controls.Add(this.cboMapType);
             this.panelMapType.Controls.Add(this.lblMapType);
+            this.panelMapType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelMapType.Location = new System.Drawing.Point(539, 3);
             this.panelMapType.Name = "panelMapType";
-            this.panelMapType.Size = new System.Drawing.Size(232, 38);
+            this.panelMapType.Size = new System.Drawing.Size(264, 38);
             this.panelMapType.TabIndex = 19;
             // 
             // cboMapType
@@ -269,7 +270,7 @@
             this.cboMapType.FormattingEnabled = true;
             this.cboMapType.Location = new System.Drawing.Point(2, 14);
             this.cboMapType.Name = "cboMapType";
-            this.cboMapType.Size = new System.Drawing.Size(227, 21);
+            this.cboMapType.Size = new System.Drawing.Size(259, 21);
             this.cboMapType.TabIndex = 16;
             this.cboMapType.SelectedValueChanged += new System.EventHandler(this.cboMapType_SelectedValueChanged);
             // 
@@ -363,6 +364,7 @@
             this.btnCancel.TabIndex = 13;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnOk
             // 
@@ -373,6 +375,7 @@
             this.btnOk.TabIndex = 12;
             this.btnOk.Text = "Ok";
             this.btnOk.UseVisualStyleBackColor = true;
+            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
             // label1
             // 
