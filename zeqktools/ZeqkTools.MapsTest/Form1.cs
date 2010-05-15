@@ -46,7 +46,8 @@ namespace ZeqkTools.MapsTest
                 PointLatLng point5 = new PointLatLng(-34.802387, -58.372250);
                 vertices.Add(point5);
                 GMapPolygon polygon = new GMapPolygon(vertices, "MyPolygon");
-                myForm.AllowDrawPolygon = false;
+                polygon.Tag = "Mi poligono";
+                myForm.AllowDrawPolygon = true;
                 myForm.Polygon = polygon;
 
                 List<GMapMarker> myMarks = new List<GMapMarker>();
@@ -64,9 +65,10 @@ namespace ZeqkTools.MapsTest
 
         private void button3_Click(object sender, EventArgs e)
         {
-            using (ZeqkTools.WindowsForms.Maps.frmGeoPoint myForm = new ZeqkTools.WindowsForms.Maps.frmGeoPoint())
+            using (ZeqkTools.MapsTest.frmGeoPolygonTest myForm = new ZeqkTools.MapsTest.frmGeoPolygonTest())
             {
                 myForm.Address = "Claypole, Buenos Aires, Argentina";
+                myForm.AllowDrawPolygon = false;
                 if (myForm.ShowDialog() == DialogResult.OK)
                 {
                     MessageBox.Show("Result is ok");

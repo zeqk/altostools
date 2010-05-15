@@ -14,8 +14,11 @@ namespace ZeqkTools.WindowsForms.Maps
 {
     public partial class ExtendedGMapControl : GMapControl
     {
+        #region Fields
 
-        private bool _allowDrawPolygon; 
+        private bool _allowDrawPolygon;
+
+        #endregion
 
         #region Internal variables
 
@@ -34,7 +37,10 @@ namespace ZeqkTools.WindowsForms.Maps
         bool isDraggingIntermediatePoint = false;
 
         GMapPolygon _polygon;
+
         #endregion
+
+        #region Constructors
 
         public ExtendedGMapControl()
         {
@@ -48,11 +54,19 @@ namespace ZeqkTools.WindowsForms.Maps
             InitializeComponent();
         }
 
+        #endregion
+
+        #region Properties
+        
         public bool AllowDrawPolygon
         {
             get { return _allowDrawPolygon; }
             set { _allowDrawPolygon = value; }
         }
+
+        #endregion
+
+        #region Public methods
 
         public void SetDrawingPolygon(GMapPolygon polygon)
         {
@@ -103,16 +117,22 @@ namespace ZeqkTools.WindowsForms.Maps
 
         public void ClearDrawingPolygon()
         {
-            auxiliar.Markers.Clear();
-            vertices.Markers.Clear();
+            if(this.PolygonsEnabled && _allowDrawPolygon)
+            {
+                auxiliar.Markers.Clear();
+                vertices.Markers.Clear();
 
-            //clear polygon
-            _polygon.Points.Clear();
-            this.UpdatePolygonLocalPosition(_polygon);
+                //clear polygon
+                _polygon.Points.Clear();
+                this.UpdatePolygonLocalPosition(_polygon);
 
-            polygonIsComplete = false;
+                polygonIsComplete = false;
+            }
         }
 
+        #endregion
+
+        #region Map event methods
         private void ExtendedGMapControl_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -308,20 +328,25 @@ namespace ZeqkTools.WindowsForms.Maps
 
         private void ExtendedGMapControl_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            PointLatLng point = this.FromLocalToLatLng(e.X, e.Y);
-            foreach (GMapPolygon polygon in this.Overlays[0].Polygons)
+            if (this.PolygonsEnabled)
             {
-                if (Functions.PointInPolygon(point, polygon.Points.ToArray()))
+                PointLatLng point = this.FromLocalToLatLng(e.X, e.Y);
+                foreach (GMapPolygon polygon in this.Overlays[0].Polygons)
                 {
-                    if (polygon.Tag != null)
+                    if (Functions.PointInPolygon(point, polygon.Points.ToArray()))
                     {
-                        ToolTip tip = new ToolTip();
-                        tip.SetToolTip(this, polygon.Tag.ToString());
-                        //tip.Show("", this., 1000); TODO
+                        if (polygon.Name != null)
+                        {
+                            ToolTip tip = new ToolTip();
+                            tip.SetToolTip(this, polygon.Name.ToString());
+                            tip.Show("",this.FindForm(),5000);
+                        }
                     }
                 }
             }
         }
+
+        #endregion
 
         #region Auxiliar functions
 
@@ -337,12 +362,10 @@ namespace ZeqkTools.WindowsForms.Maps
             PointLatLng point = Functions.CalculateMiddlePoint(points.ToList());
 
             return point;
-
         }
 
         private PointLatLng CalculateMiddlePoint(List<PointLatLng> marks)
         {
-
             PointLatLng point = Functions.CalculateMiddlePoint(marks);
 
             return point;

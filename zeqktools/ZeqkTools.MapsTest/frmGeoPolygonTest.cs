@@ -149,7 +149,7 @@ namespace ZeqkTools.MapsTest
                 if (!_allowDrawPolygon)
                 {
                     currentMarker = new GMapMarkerGoogleRed(MainMap.CurrentPosition);
-                    top.Markers.Insert(0,currentMarker);
+                    top.Markers.Add(currentMarker);
                 }
             }
 
@@ -230,7 +230,10 @@ namespace ZeqkTools.MapsTest
             if (!_allowDrawPolygon)
             {
                 if (currentMarker == null)
+                {
                     currentMarker = new GMapMarkerGoogleRed(new PointLatLng());
+                    top.Markers.Add(currentMarker);
+                }
 
                 currentMarker.Position = MainMap.CurrentPosition;
             }
