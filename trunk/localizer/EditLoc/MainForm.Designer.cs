@@ -300,7 +300,7 @@ namespace EditLoc
 			this.Controls.Add(this.btnSave);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.groupBox2);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
 			this.Name = "MainForm";

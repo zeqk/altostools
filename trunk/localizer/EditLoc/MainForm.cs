@@ -91,7 +91,12 @@ namespace EditLoc
 				DisableControls();
 				grpEdit.Tag = "Edit";
 				txtOriginal.Text = grdLanguages.SelectedRows[0].Cells[0].Value.ToString();
-				txtTranslated.Text = grdLanguages.SelectedRows[0].Cells[1].Value.ToString();
+				
+				if (grdLanguages.SelectedRows[0].Cells[1].Value!=null)
+					txtTranslated.Text = grdLanguages.SelectedRows[0].Cells[1].Value.ToString();
+				else
+					txtTranslated.Text = "";
+				
 				grpEdit.Visible = true;
 				txtTranslated.Focus();
 			}
