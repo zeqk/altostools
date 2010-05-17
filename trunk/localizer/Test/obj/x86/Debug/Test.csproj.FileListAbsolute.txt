@@ -1,0 +1,43 @@
+C:\Users\Supernato\Documents\SharpDevelop Projects\Localization\Test\bin\Debug\Test.exe
+C:\Users\Supernato\Documents\SharpDevelop Projects\Localization\Test\bin\Debug\Test.pdb
+C:\Users\Supernato\Documents\SharpDevelop Projects\Localization\Test\bin\Debug\Localizer.dll
+C:\Users\Supernato\Documents\SharpDevelop Projects\Localization\Test\bin\Debug\Localizer.pdb
+C:\Users\Supernato\Documents\SharpDevelop Projects\Localization\Test\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Supernato\Documents\SharpDevelop Projects\Localization\Test\obj\x86\Debug\Test.exe
+C:\Users\Supernato\Documents\SharpDevelop Projects\Localization\Test\obj\x86\Debug\Test.pdb
+E:\Localization\Test\bin\Debug\Test.exe
+E:\Localization\Test\bin\Debug\Test.pdb
+E:\Localization\Test\bin\Debug\Localizer.dll
+E:\Localization\Test\bin\Debug\Localizer.pdb
+E:\Localization\Test\obj\x86\Debug\ResolveAssemblyReference.cache
+E:\Localization\Test\obj\x86\Debug\Test.exe
+E:\Localization\Test\obj\x86\Debug\Test.pdb
+E:\Localization\Test\obj\x86\Debug\Test.MainForm.resources
+E:\Localization\Test\obj\x86\Debug\Test.csproj.GenerateResource.Cache
+D:\Proyects\Localizer\Test\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\Proyects\Localizer\Test\obj\x86\Debug\Test.MainForm.resources
+D:\Proyects\Localizer\Test\obj\x86\Debug\Test.csproj.GenerateResource.Cache
+D:\Proyects\Localizer\Test\bin\Debug\Test.exe
+D:\Proyects\Localizer\Test\bin\Debug\Test.pdb
+D:\Proyects\Localizer\Test\bin\Debug\Localizer.dll
+D:\Proyects\Localizer\Test\bin\Debug\Localizer.pdb
+D:\Proyects\Localizer\Test\obj\x86\Debug\Test.exe
+D:\Proyects\Localizer\Test\obj\x86\Debug\Test.pdb
+E:\Localizer\Test\bin\Debug\Test.exe
+E:\Localizer\Test\bin\Debug\Test.pdb
+E:\Localizer\Test\bin\Debug\Localizer.dll
+E:\Localizer\Test\bin\Debug\Localizer.pdb
+E:\Localizer\Test\obj\x86\Debug\ResolveAssemblyReference.cache
+E:\Localizer\Test\obj\x86\Debug\Test.MainForm.resources
+E:\Localizer\Test\obj\x86\Debug\Test.csproj.GenerateResource.Cache
+E:\Localizer\Test\obj\x86\Debug\Test.exe
+E:\Localizer\Test\obj\x86\Debug\Test.pdb
+G:\Localizer\Test\bin\Debug\Test.exe
+G:\Localizer\Test\bin\Debug\Test.pdb
+G:\Localizer\Test\bin\Debug\Localizer.dll
+G:\Localizer\Test\bin\Debug\Localizer.pdb
+G:\Localizer\Test\obj\x86\Debug\ResolveAssemblyReference.cache
+G:\Localizer\Test\obj\x86\Debug\Test.MainForm.resources
+G:\Localizer\Test\obj\x86\Debug\Test.csproj.GenerateResource.Cache
+G:\Localizer\Test\obj\x86\Debug\Test.exe
+G:\Localizer\Test\obj\x86\Debug\Test.pdb
