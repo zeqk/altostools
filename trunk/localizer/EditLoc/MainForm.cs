@@ -135,7 +135,8 @@ namespace EditLoc
 			}
 			else if (grpEdit.Tag.ToString() == "Add" && txtOriginal.Text != "")
 			{
-				grdLanguages.Rows.Add(txtOriginal.Text, txtTranslated.Text);
+                if(!ContainsOriginalValue(txtOriginal.Text))
+				    grdLanguages.Rows.Add(txtOriginal.Text, txtTranslated.Text);
 			}
 			grpEdit.Visible = false;
 			EnableControls();
@@ -279,5 +280,21 @@ namespace EditLoc
 		{
 			this.Close();
 		}
+
+        bool ContainsOriginalValue(string value)
+        {
+            bool rv = false;
+
+            foreach (DataGridViewRow row in grdLanguages.Rows)
+            {
+                if (row.Cells["Original"].Value.ToString() == value)
+                {
+                    rv = true;
+                    break;
+                }
+            }
+
+            return rv;
+        }
 	}
 }
