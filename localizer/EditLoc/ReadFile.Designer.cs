@@ -221,7 +221,10 @@ namespace EditLoc
 			this.Controls.Add(this.cmdReadFile);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.MaximizeBox = false;
 			this.Name = "ReadFile";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "ReadFile";
 			this.Load += new System.EventHandler(this.ReadFileLoad);
 			this.groupBox1.ResumeLayout(false);
