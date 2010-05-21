@@ -250,14 +250,32 @@ namespace EditLoc
 						XmlNode nodeOriginal;
 						XmlNode nodeTranslated;
 						XmlNode nodeHeader;
+						
+						String textOriginal = "";
+						String textTranslated = "";
 					
 						nodeHeader = doc.CreateElement("String");
 						nodeOriginal = doc.CreateElement("Original");
 						nodeTranslated = doc.CreateElement("Translated");
 					
+						
+						if(grdLanguages.Rows[i].Cells.Count<0)
+						{
+							textOriginal = grdLanguages.Rows[i].Cells[0].Value.ToString();
+
+							if(grdLanguages.Rows[i].Cells.Count<1)
+							{
+								textTranslated = grdLanguages.Rows[i].Cells[1].Value.ToString();
+							}
+							else
+							{
+								textTranslated = "";
+							}
+						}
+
 						nodeHeader.RemoveAll();
-						nodeOriginal.InnerText = grdLanguages.Rows[i].Cells[0].Value.ToString();
-						nodeTranslated.InnerText = grdLanguages.Rows[i].Cells[1].Value.ToString();
+						nodeOriginal.InnerText = textOriginal;
+						nodeTranslated.InnerText = textTranslated;
 						
 						nodeHeader.AppendChild(nodeOriginal);
 						nodeHeader.AppendChild(nodeTranslated);
