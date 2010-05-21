@@ -5,6 +5,8 @@
  * Hora: 10:34 p.m.
  * 
  * Para cambiar esta plantilla use Herramientas | Opciones | Codificación | Editar Encabezados Estándar
+ * 
+ * Author: supernato
  */
 using System;
 using System.IO;
