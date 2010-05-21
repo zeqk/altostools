@@ -108,7 +108,10 @@ namespace EditLoc
 									int Length = line.IndexOf(ends,Start)- Start;
 									if(Length>0)
 									{
-										texts.Add(line.Substring(Start,Length));
+										if(!texts.Contains(line.Substring(Start,Length)))
+										{
+											texts.Add(line.Substring(Start,Length));
+										}
 									}
 									break;
 								}
