@@ -1,0 +1,3 @@
+TODO:
+que el archivo q ya está guardado lo guarde en el mismo lugar, y no pregunte donde
+que no deje cambiar el nombre por de un item si el nuevo nombre ya existe
