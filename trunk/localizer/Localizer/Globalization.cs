@@ -89,7 +89,7 @@ namespace Localizer
 					{
 						if(translated.InnerText=="")
 						{
-							ret.Add(original.InnerText, original.InnerText);
+							ret.Add(original.InnerText, "");
 						}
 						else
 						{
