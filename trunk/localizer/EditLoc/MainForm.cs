@@ -263,7 +263,7 @@ namespace EditLoc
 						{
 							textOriginal = grdLanguages.Rows[i].Cells[0].Value.ToString();
 
-							if(grdLanguages.Rows[i].Cells.Count<1)
+							if(grdLanguages.Rows[i].Cells.Count>1)
 							{
 								textTranslated = grdLanguages.Rows[i].Cells[1].Value.ToString();
 							}
