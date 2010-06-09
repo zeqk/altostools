@@ -123,7 +123,9 @@ namespace EditLoc
 					foreach(String text in texts)
 					{
 						MainForm main = (MainForm)Application.OpenForms["MainForm"];
-						main.grdLanguages.Rows.Add(text);
+                        if(!main.ContainsOriginalValue(text))
+						    main.grdLanguages.Rows.Add(text);
+                        
 					}
 					this.Close();
 				}

@@ -259,7 +259,7 @@ namespace EditLoc
 						nodeTranslated = doc.CreateElement("Translated");
 					
 						
-						if(grdLanguages.Rows[i].Cells.Count<0)
+						if(grdLanguages.Rows[i].Cells.Count>0)
 						{
 							textOriginal = grdLanguages.Rows[i].Cells[0].Value.ToString();
 
@@ -299,7 +299,7 @@ namespace EditLoc
 			this.Close();
 		}
 
-        bool ContainsOriginalValue(string value)
+        internal bool ContainsOriginalValue(string value)
         {
             bool rv = false;
 
