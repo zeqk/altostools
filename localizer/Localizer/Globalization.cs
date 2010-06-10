@@ -377,34 +377,38 @@ namespace Localizer
 		
 		private static bool LocalizeComboBox(ComboBox cmb)
 		{
-			Object[] ObjectList = new object[cmb.Items.Count];
-			
-			for(int i=0;i<cmb.Items.Count;i++)
-			{
-				ObjectList[i]=LocalizeString(cmb.Items[i].ToString());
-			}
-			
-			cmb.Items.Clear();
-			cmb.Items.AddRange(ObjectList);
+            if (cmb.DataSource == null)
+            {
+                Object[] ObjectList = new object[cmb.Items.Count];
 
+                for (int i = 0; i < cmb.Items.Count; i++)
+                {
+                    ObjectList[i] = LocalizeString(cmb.Items[i].ToString());
+                }
+
+                cmb.Items.Clear();
+                cmb.Items.AddRange(ObjectList);
+            }
 			return true;
 		}
 		
 		private static bool LocalizeListBox(ListBox lst)
 		{
-			Object[] ObjectList = new object[lst.Items.Count];
-			
-			for(int i=0;i<lst.Items.Count;i++)
-			{
-				String Text;
-				
-				Text = lst.Items[i].ToString();
-				ObjectList[i]=LocalizeString(Text);
-			}
-			
-			lst.Items.Clear();
-			lst.Items.AddRange(ObjectList);
+            if (lst.DataSource == null)
+            {
+                Object[] ObjectList = new object[lst.Items.Count];
 
+                for (int i = 0; i < lst.Items.Count; i++)
+                {
+                    String Text;
+
+                    Text = lst.Items[i].ToString();
+                    ObjectList[i] = LocalizeString(Text);
+                }
+
+                lst.Items.Clear();
+                lst.Items.AddRange(ObjectList);
+            }
 			return true;
 		}
 		
