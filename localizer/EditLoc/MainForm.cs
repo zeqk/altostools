@@ -13,6 +13,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using Localizer;
 using System.Xml;
+using System.Globalization;
+using System.Linq;
 
 
 namespace EditLoc
@@ -33,6 +35,13 @@ namespace EditLoc
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
+            
+            CultureInfo[] cultureInfos = CultureInfo.GetCultures(CultureTypes.AllCultures);
+
+            cboAssociatedCulture.DisplayMember = "EnglishName";
+            cboAssociatedCulture.ValueMember = "Name";
+            cboAssociatedCulture.DataSource = cultureInfos.OrderBy(i => i.EnglishName).ToList();
+            cboAssociatedCulture.SelectedItem = null;
 		}
 		
 		
@@ -56,6 +65,7 @@ namespace EditLoc
 			{
 				LanguageInformation li = Globalization.GetTotalStrings(OpenDialog.FileName);
 				txtLanguageName.Text = li.LanguageName;
+                cboAssociatedCulture.SelectedItem = li.AssociatedCulture;
 				grdLanguages.Rows.Clear();
 				foreach(KeyValuePair<String, String> item in li.Strings)
 				{
@@ -242,6 +252,9 @@ namespace EditLoc
 				XmlNode localizer = doc.CreateElement("Localizer");
 				XmlAttribute language = doc.CreateAttribute("language");
 				language.InnerText = txtLanguageName.Text;
+                XmlAttribute associatedCulture = doc.CreateAttribute("associatedCulture");
+                CultureInfo info = (CultureInfo)cboAssociatedCulture.SelectedItem;
+                associatedCulture.InnerText = info.Name;
 				
 				if(grdLanguages.Rows.Count>0)
 				{
@@ -284,6 +297,7 @@ namespace EditLoc
 				}
 				
 				localizer.Attributes.Append(language);
+                localizer.Attributes.Append(associatedCulture);
 				doc.AppendChild(localizer);
 				doc.Save(SaveDialog.FileName);
 			}
