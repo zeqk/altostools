@@ -24,6 +24,7 @@ namespace Localizer
 		private static List<String> _listLanguages;
 		private static Dictionary<String, String> _languagesFiles;
 		private static String _currentLanguage;
+        private static String _currentAssociatedCulture;
 		private static Dictionary<String, String> _localizedStrings;
 		private static Dictionary<String, String> _originalValues;
 		private static String _languagesPath;
@@ -55,6 +56,11 @@ namespace Localizer
 				LoadLanguagesList();
 			}
 		}
+
+        public static String CurrentAssociatedCulture
+        {
+            get { return _currentAssociatedCulture; }
+        }
 		
 		public static LanguageInformation GetTotalStrings(String FileName)
 		{
@@ -62,6 +68,7 @@ namespace Localizer
 			{
 				Dictionary<String, String> ret = new Dictionary<string, string>();
 				String languageName;
+                String associatedCulture;
 				
 				// Crea el XmlDocument
 				XmlDocument doc = new XmlDocument();
@@ -70,7 +77,11 @@ namespace Localizer
 				
 				
 				languageName = localizer.Attributes["language"].Value;
-				
+                if (localizer.Attributes["associatedCulture"] != null)
+                    associatedCulture = localizer.Attributes["associatedCulture"].Value;
+                else
+                    associatedCulture = "";
+
 				XmlNodeList strings = localizer.SelectNodes("String");
 				
 				// Recorre todos los nodos "String" que contienen los textos localizados
@@ -98,7 +109,7 @@ namespace Localizer
 					}
 				}
 				
-				return new LanguageInformation(languageName, ret);
+				return new LanguageInformation(languageName, associatedCulture, ret);
 			}
 			catch(Exception ex)
 			{
@@ -122,8 +133,8 @@ namespace Localizer
 					XmlElement localizer = doc.DocumentElement;
 					
 					XmlNodeList strings = localizer.SelectNodes("String");
-					
 
+                    _currentAssociatedCulture = localizer.GetAttribute("AssociatedCulture");
 					
 					// Recorre todos los nodos "String" que contienen los textos localizados
 					foreach(XmlNode nodelist in strings)

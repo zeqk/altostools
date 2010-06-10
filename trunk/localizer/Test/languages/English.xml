@@ -1,0 +1,182 @@
+<Localizer language="English">
+  <String>
+    <Original>File</Original>
+    <Translated>File</Translated>
+  </String>
+  <String>
+    <Original>Edit</Original>
+    <Translated>Edit</Translated>
+  </String>
+  <String>
+    <Original>View</Original>
+    <Translated>View</Translated>
+  </String>
+  <String>
+    <Original>Help</Original>
+    <Translated>Help</Translated>
+  </String>
+  <String>
+    <Original>New</Original>
+    <Translated>New</Translated>
+  </String>
+  <String>
+    <Original>Open...</Original>
+    <Translated>Open...</Translated>
+  </String>
+  <String>
+    <Original>Save</Original>
+    <Translated>Save</Translated>
+  </String>
+  <String>
+    <Original>Save as...</Original>
+    <Translated>Save as...</Translated>
+  </String>
+  <String>
+    <Original>Print</Original>
+    <Translated>Print</Translated>
+  </String>
+  <String>
+    <Original>Exit</Original>
+    <Translated>Exit</Translated>
+  </String>
+  <String>
+    <Original>Copy</Original>
+    <Translated>Copy</Translated>
+  </String>
+  <String>
+    <Original>Cut</Original>
+    <Translated>Cut</Translated>
+  </String>
+  <String>
+    <Original>Paste</Original>
+    <Translated>Paste</Translated>
+  </String>
+  <String>
+    <Original>Tools</Original>
+    <Translated>Tools</Translated>
+  </String>
+  <String>
+    <Original>Files</Original>
+    <Translated>Files</Translated>
+  </String>
+  <String>
+    <Original>Search Results</Original>
+    <Translated>Search Results</Translated>
+  </String>
+  <String>
+    <Original>About...</Original>
+    <Translated>About...</Translated>
+  </String>
+  <String>
+    <Original>Languages</Original>
+    <Translated>Languages</Translated>
+  </String>
+  <String>
+    <Original>Controls</Original>
+    <Translated>Controls</Translated>
+  </String>
+  <String>
+    <Original>Search</Original>
+    <Translated>Search</Translated>
+  </String>
+  <String>
+    <Original>Read Only</Original>
+    <Translated>Read Only</Translated>
+  </String>
+  <String>
+    <Original>Enabled</Original>
+    <Translated>Enabled</Translated>
+  </String>
+  <String>
+    <Original>Name and Last Name</Original>
+    <Translated>Name and Last Name</Translated>
+  </String>
+  <String>
+    <Original>Search...</Original>
+    <Translated>Search...</Translated>
+  </String>
+  <String>
+    <Original>Regular</Original>
+    <Translated>Regular</Translated>
+  </String>
+  <String>
+    <Original>Bold</Original>
+    <Translated>Bold</Translated>
+  </String>
+  <String>
+    <Original>Italic</Original>
+    <Translated>Italic</Translated>
+  </String>
+  <String>
+    <Original>Underline</Original>
+    <Translated>Underline</Translated>
+  </String>
+  <String>
+    <Original>Red</Original>
+    <Translated>Red</Translated>
+  </String>
+  <String>
+    <Original>Blue</Original>
+    <Translated>Blue</Translated>
+  </String>
+  <String>
+    <Original>Black</Original>
+    <Translated>Black</Translated>
+  </String>
+  <String>
+    <Original>Yellow</Original>
+    <Translated>Yellow</Translated>
+  </String>
+  <String>
+    <Original>Lists</Original>
+    <Translated>Lists</Translated>
+  </String>
+  <String>
+    <Original>File Name</Original>
+    <Translated>File Name</Translated>
+  </String>
+  <String>
+    <Original>Date</Original>
+    <Translated>Date</Translated>
+  </String>
+  <String>
+    <Original>Type</Original>
+    <Translated>Type</Translated>
+  </String>
+  <String>
+    <Original>Size</Original>
+    <Translated>Size</Translated>
+  </String>
+  <String>
+    <Original>Messages</Original>
+    <Translated>Messages</Translated>
+  </String>
+  <String>
+    <Original>Message #1</Original>
+    <Translated>Message #1</Translated>
+  </String>
+  <String>
+    <Original>Message #2</Original>
+    <Translated>Message #2</Translated>
+  </String>
+  <String>
+    <Original>Message #3</Original>
+    <Translated>Message #3</Translated>
+  </String>
+  <String>
+    <Original>Message #4</Original>
+    <Translated>Message #4</Translated>
+  </String>
+  <String>
+    <Original>File not found.</Original>
+    <Translated>File not found.</Translated>
+  </String>
+  <String>
+    <Original>Do you want to delete this record?</Original>
+    <Translated>Do you want to delete this record?</Translated>
+  </String>
+  <String>
+    <Original>Please enter your password.</Original>
+    <Translated>Please enter your password.</Translated>
+  </String>
+</Localizer>
