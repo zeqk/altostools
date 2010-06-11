@@ -59,6 +59,7 @@ namespace EditLoc
 			grdCriteria.Rows.Add("(\"","\")");
 			grdCriteria.Rows.Add("Text = \"","\"");
 			grdCriteria.Rows.Add("GetString(\"","\")");
+            grdCriteria.Rows.Add("GetString(\"", "\",");
 			
 			
 		}
