@@ -1173,6 +1173,14 @@
               SELE [rest of string was truncated]&quot;;.
              </summary>
         </member>
+        <member name="T:GMap.NET.Internals.FastReaderWriterLock">
+            <summary>
+            custom ReaderWriterLock
+            in Vista and later uses integrated Slim Reader/Writer (SRW) Lock
+            http://msdn.microsoft.com/en-us/library/aa904937(VS.85).aspx
+            http://msdn.microsoft.com/en-us/magazine/cc163405.aspx#S2
+            </summary>
+        </member>
         <member name="T:GMap.NET.Singleton`1">
             <summary>
             generic for singletons
@@ -1291,11 +1299,6 @@
             timeout for map connections
             </summary>
         </member>
-        <member name="F:GMap.NET.GMaps.RetryLoadTile">
-            <summary>
-            retry count to get tile 
-            </summary>
-        </member>
         <member name="F:GMap.NET.GMaps.Proxy">
             <summary>
             proxy for net access
@@ -1371,19 +1374,19 @@
             cache worker
             </summary>
         </member>
-        <member name="M:GMap.NET.GMaps.GetTileFromMemoryCache(GMap.NET.Internals.RawTile)">
-            <summary>
-            get a token from the Bing Maps Token service
-            </summary>
-            <param name="BingMapsDeveloperAccountID"></param>
-            <param name="BingMapsDeveloperAccountpassword"></param>
-        </member>
         <member name="M:GMap.NET.GMaps.GetAllLayersOfType(GMap.NET.MapType)">
             <summary>
             gets all layers of map type
             </summary>
             <param name="type"></param>
             <returns></returns>
+        </member>
+        <member name="M:GMap.NET.GMaps.AdjustProjection(GMap.NET.MapType,GMap.NET.PureProjection@,System.Int32@)">
+            <summary>
+            sets projection using specific map
+            </summary>
+            <param name="type"></param>
+            <param name="Projection"></param>
         </member>
         <member name="M:GMap.NET.GMaps.GetDistance(GMap.NET.PointLatLng,GMap.NET.PointLatLng)">
             <summary>
@@ -1651,7 +1654,7 @@
             <param name="zoomFactor"></param>
             <returns></returns>
         </member>
-        <member name="M:GMap.NET.GMaps.GetImageFrom(GMap.NET.MapType,GMap.NET.Point,System.Int32)">
+        <member name="M:GMap.NET.GMaps.GetImageFrom(GMap.NET.MapType,GMap.NET.Point,System.Int32,System.Exception@)">
             <summary>
             gets image from tile server
             </summary>
@@ -1710,15 +1713,22 @@
             internal map control core
             </summary>
         </member>
+        <member name="F:GMap.NET.Internals.Core.Projection">
+            <summary>
+            current peojection
+            </summary>
+        </member>
         <member name="F:GMap.NET.Internals.Core.IsDragging">
             <summary>
             is user dragging map
             </summary>
         </member>
-        <member name="F:GMap.NET.Internals.Core.TooltipTextPadding">
+        <member name="M:GMap.NET.Internals.Core.SetZoomToFitRect(GMap.NET.RectLatLng)">
             <summary>
-            for tooltip text padding
+            sets zoom to max to fit rect
             </summary>
+            <param name="rect"></param>
+            <returns></returns>
         </member>
         <member name="F:GMap.NET.Internals.Core.PolygonsEnabled">
             <summary>
@@ -1738,6 +1748,16 @@
         <member name="F:GMap.NET.Internals.Core.CanDragMap">
             <summary>
             can user drag map
+            </summary>
+        </member>
+        <member name="F:GMap.NET.Internals.Core.RetryLoadTile">
+            <summary>
+            retry count to get tile 
+            </summary>
+        </member>
+        <member name="F:GMap.NET.Internals.Core.LevelsKeepInMemmory">
+            <summary>
+            how many levels of tiles are staying decompresed in memory
             </summary>
         </member>
         <member name="F:GMap.NET.Internals.Core.RenderMode">
@@ -1827,7 +1847,7 @@
             updates map bounds
             </summary>
         </member>
-        <member name="M:GMap.NET.Internals.Core.FindTilesAround(System.Collections.Generic.List{GMap.NET.Point}@)">
+        <member name="M:GMap.NET.Internals.Core.FindTilesAround">
             <summary>
             find tiles around to fill screen
             </summary>
@@ -1836,11 +1856,6 @@
         <member name="M:GMap.NET.Internals.Core.UpdateGroundResolution">
             <summary>
             updates ground resolution info
-            </summary>
-        </member>
-        <member name="P:GMap.NET.Internals.Core.Projection">
-            <summary>
-            current peojection
             </summary>
         </member>
         <member name="P:GMap.NET.Internals.Core.Zoom">
@@ -1871,6 +1886,11 @@
         <member name="E:GMap.NET.Internals.Core.OnTileLoadStart">
             <summary>
             occurs when tile set is starting to load
+            </summary>
+        </member>
+        <member name="E:GMap.NET.Internals.Core.OnEmptyTileError">
+            <summary>
+            occurs on empty tile displayed
             </summary>
         </member>
         <member name="E:GMap.NET.Internals.Core.OnNeedInvalidation">

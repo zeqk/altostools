@@ -1,1 +1,4 @@
+TODO
+- serach component. que al apretar ENTER dispare el evento on Enter
+
 BUGS

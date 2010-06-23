@@ -76,6 +76,11 @@
             background color
             </summary>
         </member>
+        <member name="F:GMap.NET.WindowsForms.GMapToolTip.TextPadding">
+            <summary>
+            text padding
+            </summary>
+        </member>
         <member name="T:GMap.NET.WindowsForms.GMapOverlay">
             <summary>
             GMap.NET overlay
@@ -150,6 +155,16 @@
             GMap.NET marker
             </summary>
         </member>
+        <member name="P:GMap.NET.WindowsForms.GMapMarker.LocalPosition">
+            <summary>
+            marker position in local coordinates, internal only, do not set it manualy
+            </summary>
+        </member>
+        <member name="P:GMap.NET.WindowsForms.GMapMarker.ToolTipPosition">
+            <summary>
+            ToolTip position in local coordinates
+            </summary>
+        </member>
         <member name="T:GMap.NET.WindowsForms.GMapPolygon">
             <summary>
             GMap.NET polygon
@@ -193,6 +208,11 @@
         <member name="F:GMap.NET.WindowsForms.GMapControl.SelectionPen">
             <summary>
             area selection pen
+            </summary>
+        </member>
+        <member name="F:GMap.NET.WindowsForms.GMapControl.SelectedAreaFill">
+            <summary>
+            background of selected area
             </summary>
         </member>
         <member name="F:GMap.NET.WindowsForms.GMapControl.EmptytileBrush">
@@ -242,7 +262,7 @@
             construct
             </summary>
         </member>
-        <member name="M:GMap.NET.WindowsForms.GMapControl.GMap_OnMapDrag">
+        <member name="M:GMap.NET.WindowsForms.GMapControl.Core_OnMapDrag">
             <summary>
             update objects when map is draged
             </summary>
@@ -332,6 +352,12 @@
             <param name="x"></param>
             <param name="y"></param>
         </member>
+        <member name="M:GMap.NET.WindowsForms.GMapControl.OnPaintEtc(System.Drawing.Graphics)">
+            <summary>
+            override, to render something more
+            </summary>
+            <param name="g"></param>
+        </member>
         <member name="M:GMap.NET.WindowsForms.GMapControl.ReloadMap">
             <summary>
             reloads the map
@@ -386,11 +412,6 @@
             occurs on mouse leaves marker area
             </summary>
         </member>
-        <member name="E:GMap.NET.WindowsForms.GMapControl.OnEmptyTileError">
-            <summary>
-            occurs on empty tile displayed
-            </summary>
-        </member>
         <member name="P:GMap.NET.WindowsForms.GMapControl.MaxZoom">
             <summary>
             max zoom
@@ -404,6 +425,16 @@
         <member name="P:GMap.NET.WindowsForms.GMapControl.MouseWheelZoomType">
             <summary>
             map zooming type for mouse wheel
+            </summary>
+        </member>
+        <member name="P:GMap.NET.WindowsForms.GMapControl.RetryLoadTile">
+            <summary>
+            retry count to get tile 
+            </summary>
+        </member>
+        <member name="P:GMap.NET.WindowsForms.GMapControl.LevelsKeepInMemmory">
+            <summary>
+            how many levels of tiles are staying decompresed in memory
             </summary>
         </member>
         <member name="P:GMap.NET.WindowsForms.GMapControl.ShowTileGridLines">
@@ -444,11 +475,6 @@
         <member name="P:GMap.NET.WindowsForms.GMapControl.CurrentViewArea">
             <summary>
             gets current map view top/left coordinate, width in Lng, height in Lat
-            </summary>
-        </member>
-        <member name="P:GMap.NET.WindowsForms.GMapControl.TooltipTextPadding">
-            <summary>
-            for tooltip text padding
             </summary>
         </member>
         <member name="P:GMap.NET.WindowsForms.GMapControl.MapType">
@@ -519,6 +545,11 @@
         <member name="E:GMap.NET.WindowsForms.GMapControl.OnMapTypeChanged">
             <summary>
             occures on map type changed
+            </summary>
+        </member>
+        <member name="E:GMap.NET.WindowsForms.GMapControl.OnEmptyTileError">
+            <summary>
+            occurs on empty tile displayed
             </summary>
         </member>
         <member name="T:GMap.NET.WindowsForms.MarkerTooltipMode">
