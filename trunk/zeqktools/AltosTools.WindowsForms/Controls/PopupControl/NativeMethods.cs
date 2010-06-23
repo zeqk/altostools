@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using System.Security;
 using System.Security.Permissions;
 
-namespace ZeqkTools.WindowsForms.Controls
+namespace AltosTools.WindowsForms.Controls
 {
     internal static class NativeMethods
     {

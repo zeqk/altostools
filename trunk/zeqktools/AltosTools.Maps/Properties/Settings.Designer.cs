@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ZeqkTools.Maps.Properties {
+namespace AltosTools.Maps.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

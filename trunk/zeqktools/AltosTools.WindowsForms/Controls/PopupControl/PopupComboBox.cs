@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Security.Permissions;
 
-namespace ZeqkTools.WindowsForms.Controls
+namespace AltosTools.WindowsForms.Controls
 {
     /// <summary>
     /// Represents a Windows combo box control with a custom popup control attached.

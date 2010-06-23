@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ZeqkTools.WindowsForms
+namespace AltosTools.WindowsForms
 {
     public partial class ProgressReporter : Form
     {

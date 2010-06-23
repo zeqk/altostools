@@ -76,7 +76,4 @@
     <Reference Include="System.Data" />
     <Reference Include="System.XML" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Query\Enumerators\" />
-  </ItemGroup>
 </Project>

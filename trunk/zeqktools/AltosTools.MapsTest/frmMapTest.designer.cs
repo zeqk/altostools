@@ -1,6 +1,6 @@
 ﻿namespace AltosTools.MapsTest
 {
-    partial class frmGeoPolygonTest
+    partial class frmMapTest
     {
         /// <summary>
         /// Required designer variable.
@@ -38,8 +38,9 @@
             this.btnGo = new System.Windows.Forms.Button();
             this.tableBase = new System.Windows.Forms.TableLayoutPanel();
             this.tableMap = new System.Windows.Forms.TableLayoutPanel();
-            this.MainMap = new AltosTools.WindowsForms.Maps.ExtendedGMapControl(this.components);
             this.trackBarZoom = new System.Windows.Forms.TrackBar();
+            this.panelMap = new System.Windows.Forms.Panel();
+            this.MainMap = new AltosTools.WindowsForms.Maps.ExtendedGMapControl(this.components);
             this.tableMapActions = new System.Windows.Forms.TableLayoutPanel();
             this.btnToStaticMap = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
@@ -54,17 +55,23 @@
             this.tableButtons = new System.Windows.Forms.TableLayoutPanel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.grpAddInformation = new System.Windows.Forms.GroupBox();
+            this.btnDepartments = new System.Windows.Forms.Button();
+            this.btnCities = new System.Windows.Forms.Button();
+            this.btnTerritories = new System.Windows.Forms.Button();
+            this.btnAddresses = new System.Windows.Forms.Button();
             this.tableSearch.SuspendLayout();
             this.tableBase.SuspendLayout();
             this.tableMap.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarZoom)).BeginInit();
+            this.panelMap.SuspendLayout();
             this.tableMapActions.SuspendLayout();
             this.panelMapType.SuspendLayout();
             this.splitLatLng.Panel1.SuspendLayout();
             this.splitLatLng.Panel2.SuspendLayout();
             this.splitLatLng.SuspendLayout();
             this.tableButtons.SuspendLayout();
+            this.grpAddInformation.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnGenImage
@@ -114,7 +121,7 @@
             this.tableSearch.Controls.Add(this.txtAddress, 0, 0);
             this.tableSearch.Controls.Add(this.btnGo, 1, 0);
             this.tableSearch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableSearch.Location = new System.Drawing.Point(3, 48);
+            this.tableSearch.Location = new System.Drawing.Point(3, 73);
             this.tableSearch.Name = "tableSearch";
             this.tableSearch.RowCount = 1;
             this.tableSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -147,12 +154,12 @@
             this.tableBase.Controls.Add(this.tableMap, 0, 2);
             this.tableBase.Controls.Add(this.tableMapActions, 0, 3);
             this.tableBase.Controls.Add(this.tableButtons, 0, 4);
-            this.tableBase.Controls.Add(this.label1, 0, 0);
+            this.tableBase.Controls.Add(this.grpAddInformation, 0, 0);
             this.tableBase.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableBase.Location = new System.Drawing.Point(0, 0);
             this.tableBase.Name = "tableBase";
             this.tableBase.RowCount = 5;
-            this.tableBase.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tableBase.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
             this.tableBase.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
             this.tableBase.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableBase.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
@@ -165,36 +172,15 @@
             this.tableMap.ColumnCount = 2;
             this.tableMap.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableMap.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableMap.Controls.Add(this.MainMap, 0, 0);
             this.tableMap.Controls.Add(this.trackBarZoom, 1, 0);
+            this.tableMap.Controls.Add(this.panelMap, 0, 0);
             this.tableMap.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableMap.Location = new System.Drawing.Point(3, 93);
+            this.tableMap.Location = new System.Drawing.Point(3, 118);
             this.tableMap.Name = "tableMap";
             this.tableMap.RowCount = 1;
             this.tableMap.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableMap.Size = new System.Drawing.Size(806, 328);
+            this.tableMap.Size = new System.Drawing.Size(806, 303);
             this.tableMap.TabIndex = 35;
-            // 
-            // MainMap
-            // 
-            this.MainMap.AllowDrawPolygon = false;
-            this.MainMap.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MainMap.CanDragMap = true;
-            this.MainMap.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MainMap.GrayScaleMode = false;
-            this.MainMap.Location = new System.Drawing.Point(3, 3);
-            this.MainMap.MapType = GMap.NET.MapType.GoogleMap;
-            this.MainMap.MarkersEnabled = true;
-            this.MainMap.MaxZoom = 2;
-            this.MainMap.MinZoom = 2;
-            this.MainMap.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            this.MainMap.Name = "MainMap";
-            this.MainMap.PolygonsEnabled = true;
-            this.MainMap.RoutesEnabled = true;
-            this.MainMap.ShowTileGridLines = false;
-            this.MainMap.Size = new System.Drawing.Size(750, 322);
-            this.MainMap.TabIndex = 31;
-            this.MainMap.Zoom = 2;
             // 
             // trackBarZoom
             // 
@@ -206,11 +192,43 @@
             this.trackBarZoom.Minimum = 1;
             this.trackBarZoom.Name = "trackBarZoom";
             this.trackBarZoom.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.trackBarZoom.Size = new System.Drawing.Size(34, 322);
+            this.trackBarZoom.Size = new System.Drawing.Size(34, 297);
             this.trackBarZoom.TabIndex = 30;
             this.trackBarZoom.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
             this.trackBarZoom.Value = 12;
             this.trackBarZoom.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
+            // 
+            // panelMap
+            // 
+            this.panelMap.Controls.Add(this.MainMap);
+            this.panelMap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelMap.Location = new System.Drawing.Point(3, 3);
+            this.panelMap.Name = "panelMap";
+            this.panelMap.Size = new System.Drawing.Size(750, 297);
+            this.panelMap.TabIndex = 31;
+            // 
+            // MainMap
+            // 
+            this.MainMap.AllowDrawPolygon = false;
+            this.MainMap.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MainMap.CanDragMap = true;
+            this.MainMap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainMap.GrayScaleMode = false;
+            this.MainMap.LevelsKeepInMemmory = 5;
+            this.MainMap.Location = new System.Drawing.Point(0, 0);
+            this.MainMap.MapType = GMap.NET.MapType.GoogleMap;
+            this.MainMap.MarkersEnabled = true;
+            this.MainMap.MaxZoom = 2;
+            this.MainMap.MinZoom = 2;
+            this.MainMap.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.MainMap.Name = "MainMap";
+            this.MainMap.PolygonsEnabled = true;
+            this.MainMap.RetryLoadTile = 0;
+            this.MainMap.RoutesEnabled = true;
+            this.MainMap.ShowTileGridLines = false;
+            this.MainMap.Size = new System.Drawing.Size(750, 297);
+            this.MainMap.TabIndex = 32;
+            this.MainMap.Zoom = 2;
             // 
             // tableMapActions
             // 
@@ -249,7 +267,7 @@
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 38);
             this.btnClear.TabIndex = 16;
-            this.btnClear.Text = "Clear polygon";
+            this.btnClear.Text = "Clear area";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
@@ -377,31 +395,74 @@
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
-            // label1
+            // grpAddInformation
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(192, 25);
-            this.label1.TabIndex = 38;
-            this.label1.Text = "Gmap polygon test";
+            this.grpAddInformation.Controls.Add(this.btnDepartments);
+            this.grpAddInformation.Controls.Add(this.btnCities);
+            this.grpAddInformation.Controls.Add(this.btnTerritories);
+            this.grpAddInformation.Controls.Add(this.btnAddresses);
+            this.grpAddInformation.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpAddInformation.Location = new System.Drawing.Point(3, 3);
+            this.grpAddInformation.Name = "grpAddInformation";
+            this.grpAddInformation.Size = new System.Drawing.Size(806, 64);
+            this.grpAddInformation.TabIndex = 38;
+            this.grpAddInformation.TabStop = false;
+            this.grpAddInformation.Text = "Additional information";
             // 
-            // frmGeoPolygonTest
+            // btnDepartments
+            // 
+            this.btnDepartments.Enabled = false;
+            this.btnDepartments.Location = new System.Drawing.Point(165, 21);
+            this.btnDepartments.Name = "btnDepartments";
+            this.btnDepartments.Size = new System.Drawing.Size(75, 23);
+            this.btnDepartments.TabIndex = 3;
+            this.btnDepartments.Text = "Departments";
+            this.btnDepartments.UseVisualStyleBackColor = true;
+            this.btnDepartments.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // btnCities
+            // 
+            this.btnCities.Enabled = false;
+            this.btnCities.Location = new System.Drawing.Point(272, 21);
+            this.btnCities.Name = "btnCities";
+            this.btnCities.Size = new System.Drawing.Size(75, 23);
+            this.btnCities.TabIndex = 2;
+            this.btnCities.Text = "Cities";
+            this.btnCities.UseVisualStyleBackColor = true;
+            // 
+            // btnTerritories
+            // 
+            this.btnTerritories.Location = new System.Drawing.Point(380, 21);
+            this.btnTerritories.Name = "btnTerritories";
+            this.btnTerritories.Size = new System.Drawing.Size(75, 23);
+            this.btnTerritories.TabIndex = 1;
+            this.btnTerritories.Text = "Territories";
+            this.btnTerritories.UseVisualStyleBackColor = true;
+            // 
+            // btnAddresses
+            // 
+            this.btnAddresses.Location = new System.Drawing.Point(60, 21);
+            this.btnAddresses.Name = "btnAddresses";
+            this.btnAddresses.Size = new System.Drawing.Size(75, 23);
+            this.btnAddresses.TabIndex = 0;
+            this.btnAddresses.Text = "Addresses";
+            this.btnAddresses.UseVisualStyleBackColor = true;
+            // 
+            // frmMapTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(812, 519);
             this.Controls.Add(this.tableBase);
-            this.Name = "frmGeoPolygonTest";
+            this.Name = "frmMapTest";
             this.Text = "Area";
             this.Load += new System.EventHandler(this.frmGeoArea_Load);
             this.tableSearch.ResumeLayout(false);
             this.tableSearch.PerformLayout();
             this.tableBase.ResumeLayout(false);
-            this.tableBase.PerformLayout();
             this.tableMap.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.trackBarZoom)).EndInit();
+            this.panelMap.ResumeLayout(false);
             this.tableMapActions.ResumeLayout(false);
             this.panelMapType.ResumeLayout(false);
             this.panelMapType.PerformLayout();
@@ -411,6 +472,7 @@
             this.splitLatLng.Panel2.PerformLayout();
             this.splitLatLng.ResumeLayout(false);
             this.tableButtons.ResumeLayout(false);
+            this.grpAddInformation.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -426,7 +488,6 @@
         private System.Windows.Forms.Button btnGo;
         private System.Windows.Forms.TableLayoutPanel tableBase;
         private System.Windows.Forms.TableLayoutPanel tableMap;
-        private AltosTools.WindowsForms.Maps.ExtendedGMapControl MainMap;
         private System.Windows.Forms.TrackBar trackBarZoom;
         private System.Windows.Forms.TableLayoutPanel tableMapActions;
         private System.Windows.Forms.Button btnClear;
@@ -442,7 +503,13 @@
         private System.Windows.Forms.Label lblLat;
         private System.Windows.Forms.Label lblLng;
         private System.Windows.Forms.TextBox txtLng;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox grpAddInformation;
+        private System.Windows.Forms.Button btnDepartments;
+        private System.Windows.Forms.Button btnCities;
+        private System.Windows.Forms.Button btnTerritories;
+        private System.Windows.Forms.Button btnAddresses;
+        private System.Windows.Forms.Panel panelMap;
+        private AltosTools.WindowsForms.Maps.ExtendedGMapControl MainMap;
 
     }
 }

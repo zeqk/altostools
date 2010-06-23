@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ZeqkTools.WindowsForms.Controls
+namespace AltosTools.WindowsForms.Controls
 {
     /// <summary>
     /// Types of animation of the pop-up window.

@@ -7,10 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.Common;
-using ZeqkTools.Data;
+using AltosTools.Data;
 using System.IO;
 
-namespace ZeqkTools.WindowsForms
+namespace AltosTools.WindowsForms
 {
     public partial class ConnectionStringMaker : Form
     {

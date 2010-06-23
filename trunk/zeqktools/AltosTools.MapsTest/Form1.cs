@@ -10,7 +10,7 @@ using GMap.NET;
 using GMap.NET.WindowsForms.Markers;
 using GMap.NET.WindowsForms;
 
-namespace ZeqkTools.MapsTest
+namespace AltosTools.MapsTest
 {
     public partial class Form1 : Form
     {
@@ -21,18 +21,12 @@ namespace ZeqkTools.MapsTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            using (ZeqkTools.WindowsForms.Maps.frmGeoPolygon myForm = new ZeqkTools.WindowsForms.Maps.frmGeoPolygon())
-            {
-                List<PointLatLng> points = new List<PointLatLng>();
-                myForm.Address = "Claypole, Buenos Aires, Argentina";
-                //myForm.AlowDrawPolygon = false;
-                myForm.ShowDialog();
-            }
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            using (ZeqkTools.MapsTest.frmGeoPolygonTest myForm = new ZeqkTools.MapsTest.frmGeoPolygonTest())
+            using (AltosTools.MapsTest.frmMapTest myForm = new AltosTools.MapsTest.frmMapTest())
             {
                 List<PointLatLng> vertices = new List<PointLatLng>();
                 PointLatLng point1 = new PointLatLng(-34.802387, -58.372250);
@@ -47,8 +41,8 @@ namespace ZeqkTools.MapsTest
                 vertices.Add(point5);
                 GMapPolygon polygon = new GMapPolygon(vertices, "MyPolygon");
                 polygon.Tag = "Mi poligono";
-                myForm.AllowDrawPolygon = true;
-                myForm.Polygon = polygon;
+                myForm.MapMode = MapModeEnum.EditArea;
+                //myForm.setdr = polygon;
 
                 List<GMapMarker> myMarks = new List<GMapMarker>();
                 GMapMarkerGoogleRed myMark1 = new GMapMarkerGoogleRed(new PointLatLng(-34.788151, -58.345299));
@@ -56,7 +50,7 @@ namespace ZeqkTools.MapsTest
                 
                 myMarks.Add(myMark1);
                 myMarks.Add(myMark2);
-                myForm.SecondaryMarkers = myMarks;
+                myForm.OtherMarkers = myMarks;
                 myForm.Address = "Claypole, Buenos Aires, Argentina";
                 myForm.MapZoom = 12;
                 myForm.ShowDialog();
@@ -65,10 +59,10 @@ namespace ZeqkTools.MapsTest
 
         private void button3_Click(object sender, EventArgs e)
         {
-            using (ZeqkTools.MapsTest.frmGeoPolygonTest myForm = new ZeqkTools.MapsTest.frmGeoPolygonTest())
+            using (AltosTools.MapsTest.frmMapTest myForm = new AltosTools.MapsTest.frmMapTest())
             {
                 myForm.Address = "Claypole, Buenos Aires, Argentina";
-                myForm.AllowDrawPolygon = false;
+                myForm.MapMode = MapModeEnum.EditPoint;
                 if (myForm.ShowDialog() == DialogResult.OK)
                 {
                     MessageBox.Show("Result is ok");

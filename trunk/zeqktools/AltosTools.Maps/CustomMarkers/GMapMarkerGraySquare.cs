@@ -9,7 +9,7 @@ namespace GMap.NET.WindowsForms.Markers
        public GMapMarkerGraySquare(PointLatLng p)
            : base(p)
       {
-          Icon = ZeqkTools.Maps.Properties.Resources.transparentsquare;
+          Icon = AltosTools.Maps.Properties.Resources.transparentsquare;
           this.Size = new Size(8, 8);
       }
    }

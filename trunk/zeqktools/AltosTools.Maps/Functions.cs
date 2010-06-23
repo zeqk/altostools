@@ -5,7 +5,7 @@ using System.Text;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 
-namespace ZeqkTools
+namespace AltosTools
 {
     public class Functions
     {

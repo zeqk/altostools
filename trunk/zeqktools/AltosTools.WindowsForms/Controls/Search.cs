@@ -6,10 +6,9 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Data.Objects;
-using ZeqkTools.Query.Enumerators;
 using System.Windows.Forms;
 
-namespace ZeqkTools.WindowsForms.Controls
+namespace AltosTools.WindowsForms.Controls
 {
     public partial class Search : UserControl
     {

@@ -1,4 +1,4 @@
-﻿namespace ZeqkTools.MapsTest
+﻿namespace AltosTools.MapsTest
 {
     partial class Form1
     {
