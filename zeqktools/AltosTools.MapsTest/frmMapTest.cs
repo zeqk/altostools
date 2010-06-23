@@ -11,26 +11,31 @@ using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using GMap.NET.WindowsForms.ToolTips;
+using System.Collections;
 using AltosTools.WindowsForms.Maps;
+using AltosTools.MapsTest;
 
 namespace AltosTools.MapsTest
 {
-    public partial class frmGeoPolygonTest : Form
+    public partial class frmMapTest : Form
     {
         #region Fields
+        public object Object;
+
         private MapType _mapType;
         private int _mapZoom;
-        private bool _allowDrawPolygon;     
-               
-        private GMapPolygon currentPolygon;
-        private List<GMapMarker> _secondaryMarkers;
-        private List<GMapPolygon> _secondaryPolygons;
+        private MapModeEnum _mapMode;
+
+        private List<GMapPolygon> _otherPolygons;
+        private List<GMapMarker> _otherMarkers;
+        
         #endregion
 
         #region Internal variables  
 
+        GMapPolygon currentPolygon;
         // markers
-        GMapMarker center;
+        GMapMarker centerMarker;
         GMapMarker currentMarker;
 
         // layers
@@ -44,34 +49,23 @@ namespace AltosTools.MapsTest
         /// <summary>
         /// Get set the main polygon
         /// </summary>
-        public GMapPolygon Polygon
+        public GMapPolygon MainPolygon
         {
             get 
             {                
                 return currentPolygon;            
             }
-            set
+        }
+
+        /// <summary>
+        /// Get set the main marker
+        /// </summary>
+        public GMapMarker MainMarker
+        {
+            get
             {
-                currentPolygon = value;
+                return currentMarker;
             }
-        }
-
-        /// <summary>
-        /// Get/set the secondary markers, this markers will be show, but does not affect the drawing of the main polygon
-        /// </summary>
-        public List<GMapMarker> SecondaryMarkers
-        {
-            get { return _secondaryMarkers; }
-            set { _secondaryMarkers = value; }
-        }
-
-        /// <summary>
-        /// Get/set the secondary markers, this polygons will be show, but does not affect the drawing of the main polygon
-        /// </summary>
-        public List<GMapPolygon> SecondaryPolygons
-        {
-            get { return _secondaryPolygons; }
-            set { _secondaryPolygons = value; }
         }
 
         /// <summary>
@@ -82,6 +76,35 @@ namespace AltosTools.MapsTest
             get { return txtAddress.Text; }
             set { txtAddress.Text = value; }
         }
+
+        public List<GMapPolygon> OtherPolygons
+        {
+            get 
+            {
+                List<GMapPolygon> rv = top.Polygons.ToList();
+                rv.Remove(currentPolygon);
+                return rv;
+            }
+            set
+            {
+                _otherPolygons = value;
+            }
+        }
+
+        public List<GMapMarker> OtherMarkers
+        {
+            get
+            {
+                List<GMapMarker> rv = top.Markers.ToList();
+                rv.Remove(currentMarker);
+                return rv;
+            }
+            set
+            {
+                _otherMarkers = value;
+            }
+        }
+
 
         public MapType MapType
         {
@@ -95,84 +118,76 @@ namespace AltosTools.MapsTest
             set { _mapZoom = value; }
         }
 
-        public bool AllowDrawPolygon
+        public MapModeEnum MapMode
         {
-            get { return _allowDrawPolygon; }
-            set { _allowDrawPolygon = value; }
+            get { return _mapMode; }
+            set { _mapMode = value; }
         }
 	
         #endregion        
 
         #region Constructors
-        public frmGeoPolygonTest()
+        public frmMapTest()
         {
             //contruct fields
-            _secondaryMarkers = new List<GMapMarker>();
-            _secondaryPolygons = new List<GMapPolygon>();
             _mapType = MapType.GoogleMap;
             _mapZoom = 15;
+            _mapMode = MapModeEnum.ReadOnly;
 
+            //initializing
             currentPolygon = new GMapPolygon(new List<PointLatLng>(), "MyPolygon");
-            
+            currentMarker = new GMapMarkerGoogleRed(new PointLatLng());
+
             InitializeComponent();
         }
         #endregion
         private void frmGeoArea_Load(object sender, EventArgs e)
-        {          
-            
-            //Load comboboxes
+        {
+            ConfigureAdditionalData();            
+
+            //load comboboxes
             cboMapType.DataSource = Enum.GetValues(_mapType.GetType());
 
-            //Config map
+            //config map
             ConfigMap();
 
-            //Set the data to show on map
+            //extract data from the Object property
+            ExtractObjectData();
 
-            //get the center of the markers
-            PointLatLng? middle = null;
-            if (currentPolygon.Points.Count > 0)
+            if (_otherMarkers != null)
             {
-                middle = Functions.CalculateMiddlePoint(currentPolygon);
-            }
-            else
-                if (_secondaryMarkers.Count > 0)
-                    middle = CalculateMiddlePoint(_secondaryMarkers);
-
-            //set the center of the map
-            if (middle.HasValue)
-            {
-                MainMap.CurrentPosition = middle.Value;
-                center = new GMapMarkerCross(MainMap.CurrentPosition);
-                top.Markers.Add(center);
-
-                // set current marker
-                if (!_allowDrawPolygon)
-                {
-                    currentMarker = new GMapMarkerGoogleRed(MainMap.CurrentPosition);
-                    top.Markers.Add(currentMarker);
-                }
+                foreach (GMapMarker item in _otherMarkers)
+                    top.Markers.Add(item);
             }
 
-            //add the secondary markers in the top layer
-            foreach (var mark in _secondaryMarkers)
+            if (_otherPolygons != null)
             {
-                top.Markers.Add(mark);
+                foreach (GMapPolygon item in _otherPolygons)
+                    top.Polygons.Add(item);
             }
 
-            foreach (GMapPolygon polygon in _secondaryPolygons)
+            PointLatLng? center = null;
+            switch (_mapMode)
             {
-                top.Polygons.Add(polygon);
+                case MapModeEnum.EditPoint:
+                    center = GetMainMarkerCenter();
+                    if (center == null)
+                        center = GetOtherPolygonsAndMarkersCenter();
+                    break;
+                case MapModeEnum.EditArea:
+                    center = GetMainPolygonCenter();
+                    if (center == null)
+                        center = GetOtherPolygonsAndMarkersCenter();
+                    break;
+                case MapModeEnum.ReadOnly:
+                    center = GetOtherPolygonsAndMarkersCenter();
+                    break;
+                default:
+                    break;
             }
 
-            //config the polygon             
-            top.Polygons.Add(currentPolygon);
-
-            if (_allowDrawPolygon)
-                MainMap.SetDrawingPolygon(currentPolygon);
-
-            if (center == null)
-                GoToAddress(Address);            
-
+            SetCenter(center);
+            //MainMap.ZoomAndCenterMarkers("top");
         }
 
         private void ConfigMap()
@@ -191,13 +206,16 @@ namespace AltosTools.MapsTest
 
             MainMap.CurrentPosition = new PointLatLng();
             MainMap.PolygonsEnabled = true;
-            MainMap.AllowDrawPolygon = _allowDrawPolygon;
+            if (_mapMode == MapModeEnum.EditArea)
+                MainMap.AllowDrawPolygon = true;
+            else
+                MainMap.AllowDrawPolygon = false;
 
             // map events
             MainMap.OnCurrentPositionChanged += new CurrentPositionChanged(MainMap_OnCurrentPositionChanged);
             MainMap.OnMapZoomChanged += new MapZoomChanged(this.MainMap_OnMapZoomChanged);
 
-            if (!_allowDrawPolygon)
+            if (_mapMode == MapModeEnum.EditArea)
             {
                 MainMap.MouseMove += new MouseEventHandler(MainMap_MouseMove);
                 MainMap.MouseDown += new MouseEventHandler(MainMap_MouseDown);
@@ -217,6 +235,31 @@ namespace AltosTools.MapsTest
             MainMap.ZoomAndCenterMarkers("top");
         }
 
+        private void SetCenter(PointLatLng? center)
+        {
+            if (center != null)
+            {
+                MainMap.CurrentPosition = center.Value;
+
+                if (centerMarker == null)
+                    centerMarker = new GMapMarkerCross(new PointLatLng());
+
+                centerMarker.Position = MainMap.CurrentPosition;
+                if (!top.Markers.Contains(centerMarker))
+                    top.Markers.Add(centerMarker);
+            }
+            else
+            {
+                GoToAddress(this.Address);
+                centerMarker.Position = MainMap.CurrentPosition;
+                if (!top.Markers.Contains(centerMarker))
+                    top.Markers.Add(centerMarker);
+            }
+
+            txtLat.Text = MainMap.CurrentPosition.Lat.ToString(CultureInfo.CurrentCulture);
+            txtLng.Text = MainMap.CurrentPosition.Lng.ToString(CultureInfo.CurrentCulture);
+        }
+
         private void GoToAddress(string keywordsToSearch)
         {
 
@@ -227,26 +270,19 @@ namespace AltosTools.MapsTest
             }
 
             // set current marker
-            if (!_allowDrawPolygon)
+            if (_mapMode == MapModeEnum.EditPoint)
             {
-                if (currentMarker == null)
-                {
-                    currentMarker = new GMapMarkerGoogleRed(new PointLatLng());
+                if (!top.Markers.Contains(currentMarker))
                     top.Markers.Add(currentMarker);
-                }
 
                 currentMarker.Position = MainMap.CurrentPosition;
-            }
-
-            if (center == null)
-                center = new GMapMarkerCross(new PointLatLng());
+            }            
             
-            center.Position = MainMap.CurrentPosition;
-            if(!top.Markers.Contains(center))
-                top.Markers.Add(center);
+        }
 
-            txtLat.Text = MainMap.CurrentPosition.Lat.ToString(CultureInfo.CurrentCulture);
-            txtLng.Text = MainMap.CurrentPosition.Lng.ToString(CultureInfo.CurrentCulture);
+        void ExtractObjectData()
+        {
+            //to implement
         }
 
         #region Map event methods
@@ -259,7 +295,7 @@ namespace AltosTools.MapsTest
         // current point changed
         void MainMap_OnCurrentPositionChanged(PointLatLng point)
         {
-            center.Position = point;
+            centerMarker.Position = point;
         }
 
         void MainMap_MouseMove(object sender, MouseEventArgs e)
@@ -297,6 +333,9 @@ namespace AltosTools.MapsTest
         
         #endregion        
 
+        
+
+
         #region Controls events methods
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -315,11 +354,9 @@ namespace AltosTools.MapsTest
         {
             //calculate the area to print
             if (currentPolygon.Points.Count > 0)
-            {
                 MainMap.SelectedArea = CalculateRectangle(currentPolygon.Points);
-            }
             else
-                MainMap.SelectedArea = CalculateRectangle(_secondaryMarkers.Select(m => m.Position).ToList());
+                //MainMap.SelectedArea = CalculateRectangle(_secondaryMarkers.Select(m => m.Position).ToList()); TODO: generar el rectangulo segun los poligonos secundarios
 
             MainMap.SelectedArea = AddMargin(MainMap.SelectedArea);
 
@@ -344,6 +381,7 @@ namespace AltosTools.MapsTest
         private void btnGo_Click(object sender, EventArgs e)
         {
             GoToAddress(txtAddress.Text);
+            SetCenter(null); //Set center by MainMap.CurrentPosition
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -369,7 +407,7 @@ namespace AltosTools.MapsTest
         {
             List<PointLatLng> points = marks.Select(m => m.Position).ToList();
 
-            PointLatLng point = Functions.CalculateMiddlePoint(points.ToList());
+            PointLatLng point = AltosTools.Functions.CalculateMiddlePoint(points.ToList());
 
             return point;
 
@@ -378,7 +416,7 @@ namespace AltosTools.MapsTest
         private PointLatLng CalculateMiddlePoint(List<PointLatLng> marks)
         {
 
-            PointLatLng point = Functions.CalculateMiddlePoint(marks);
+            PointLatLng point = AltosTools.Functions.CalculateMiddlePoint(marks);
 
             return point;
         }        
@@ -423,13 +461,70 @@ namespace AltosTools.MapsTest
             return rect;
         }
 
+        
+
         #endregion
 
-        
+        private void chklstTerritory_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
-        
+        }
 
-        
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ConfigureAdditionalData()
+        {
+
+            //to implement
+
+        }
+
+        #region GetCenter methods
+
+        PointLatLng? GetMainPolygonCenter()
+        {
+            PointLatLng? center = null;
+
+            if(currentPolygon.Points.Count > 0)                
+                center = AltosTools.Functions.CalculateMiddlePoint(currentPolygon);
+
+            return center;            
+        }
+
+        PointLatLng? GetMainMarkerCenter()
+        {
+            PointLatLng? center = null;
+            if(currentMarker != null)
+                center = currentMarker.Position;
+            return center;
+        }
+
+        PointLatLng? GetOtherPolygonsAndMarkersCenter()
+        {
+            PointLatLng? center = null;
+
+            List<PointLatLng> centers = new List<PointLatLng>();
+
+            if (_otherPolygons != null && _otherPolygons.Count > 0)
+                centers.Add(AltosTools.Functions.CalculateMiddlePoint(_otherPolygons[0]));
+
+            if (_otherMarkers != null && _otherMarkers.Count > 0)
+                centers.Add(CalculateMiddlePoint(_otherMarkers));
+
+            if (centers.Count > 0)
+                center = AltosTools.Functions.CalculateMiddlePoint(centers);
+
+            return center;
+        }     
+
+        #endregion
+
+
+
+
 
 
     }

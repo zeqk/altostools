@@ -12,7 +12,7 @@ using System.Drawing.Imaging;
 using GMap.NET.WindowsForms.Markers;
 using GMap.NET.ObjectModel;
 
-namespace ZeqkTools.WindowsForms.Maps
+namespace AltosTools.WindowsForms.Maps
 {
    public partial class StaticImage : Form
    {
@@ -208,7 +208,7 @@ namespace ZeqkTools.WindowsForms.Maps
                                    int x, y = 0;
                                    FromLatLngToLocal(info, rect.Height, rect.Width, marker.Position.Lat, marker.Position.Lng, out x, out y);
 
-                                   IntPtr iconHandle1 = ZeqkTools.Maps.Properties.Resources.legendIcon.GetHicon();
+                                   IntPtr iconHandle1 = AltosTools.Maps.Properties.Resources.legendIcon.GetHicon();
                                    if (marker.GetType().GetProperty("Icon") != null)
                                    {
                                        Bitmap bitmap = (Bitmap)marker.GetType().GetProperty("Icon", typeof(Bitmap)).GetValue(marker, null);

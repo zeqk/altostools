@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Win32;
 using System.IO;
 
-namespace ZeqkTools.WindowsForms
+namespace AltosTools.WindowsForms
 {
 
     /// <summary>

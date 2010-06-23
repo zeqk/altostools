@@ -7,7 +7,7 @@ using System.IO;
 using System.Globalization;
 using System.Resources;
 
-namespace ZeqkTools.Internationalization
+namespace AltosTools.Internationalization
 {
 	
 	

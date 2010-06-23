@@ -1,4 +1,4 @@
-﻿namespace ZeqkTools.WindowsForms.Controls
+﻿namespace AltosTools.WindowsForms.Controls
 {
     partial class PopupComboBox
     {

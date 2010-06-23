@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace ZeqkTools.WindowsForms.Controls
+namespace AltosTools.WindowsForms.Controls
 {
     internal struct GripBounds
     {

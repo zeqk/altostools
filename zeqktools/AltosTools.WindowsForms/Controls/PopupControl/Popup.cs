@@ -14,7 +14,7 @@ using VS = System.Windows.Forms.VisualStyles;
 <li>Base class for custom tooltips.</li>
 <li>Office-2007-like tooltip class.</li>
 */
-namespace ZeqkTools.WindowsForms.Controls
+namespace AltosTools.WindowsForms.Controls
 {
     /// <summary>
     /// Represents a pop-up window.

@@ -1,4 +1,4 @@
-﻿namespace ZeqkTools.WindowsForms
+﻿namespace AltosTools.WindowsForms
 {
     partial class ProgressReporter
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data;
 
-namespace ZeqkTools.Data
+namespace AltosTools.Data
 {
     public interface IExtractor
     {

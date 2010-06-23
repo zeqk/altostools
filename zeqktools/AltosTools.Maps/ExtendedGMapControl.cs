@@ -10,7 +10,7 @@ using GMap.NET.WindowsForms.Markers;
 using GMap.NET.WindowsForms;
 using GMap.NET;
 
-namespace ZeqkTools.WindowsForms.Maps
+namespace AltosTools.WindowsForms.Maps
 {
     public partial class ExtendedGMapControl : GMapControl
     {

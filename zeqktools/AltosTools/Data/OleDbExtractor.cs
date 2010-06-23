@@ -6,7 +6,7 @@ using System.Text;
 using System.Data.OleDb;
 using System.Data;
 
-namespace ZeqkTools.Data
+namespace AltosTools.Data
 {
     class OleDbExtractor : IExtractor
     {

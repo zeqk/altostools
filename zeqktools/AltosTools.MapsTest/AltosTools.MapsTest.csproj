@@ -70,19 +70,20 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmGeoPolygonTest.cs">
+    <Compile Include="frmMapTest.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmGeoPolygonTest.designer.cs">
-      <DependentUpon>frmGeoPolygonTest.cs</DependentUpon>
+    <Compile Include="frmMapTest.designer.cs">
+      <DependentUpon>frmMapTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="MapModeEnum.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmGeoPolygonTest.resx">
-      <DependentUpon>frmGeoPolygonTest.cs</DependentUpon>
+    <EmbeddedResource Include="frmMapTest.resx">
+      <DependentUpon>frmMapTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -103,6 +104,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AltosTools.Maps\AltosTools.Maps.csproj">
+      <Project>{802DF1EC-A9E4-474D-A683-A123308F36F2}</Project>
+      <Name>AltosTools.Maps</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

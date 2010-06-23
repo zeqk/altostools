@@ -1,4 +1,4 @@
-﻿namespace ZeqkTools.WindowsForms.Maps
+﻿namespace AltosTools.WindowsForms.Maps
 {
     partial class ExtendedGMapControl
     {
