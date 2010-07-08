@@ -8,8 +8,8 @@
     <ProjectGuid>{802DF1EC-A9E4-474D-A683-A123308F36F2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ZeqkTools.Maps</RootNamespace>
-    <AssemblyName>ZeqkTools.Maps</AssemblyName>
+    <RootNamespace>AltosTools.Maps</RootNamespace>
+    <AssemblyName>AltosTools.Maps</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
