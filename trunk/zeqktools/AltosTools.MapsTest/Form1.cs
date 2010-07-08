@@ -46,7 +46,7 @@ namespace AltosTools.MapsTest
 
                 List<GMapMarker> myMarks = new List<GMapMarker>();
                 GMapMarkerGoogleRed myMark1 = new GMapMarkerGoogleRed(new PointLatLng(-34.788151, -58.345299));
-                GMapMarkerGoogleRed myMark2 = new GMapMarkerGoogleRed(new PointLatLng(-34.799286, -58.334827));
+                GMapMarkerGoogleGreen myMark2 = new GMapMarkerGoogleGreen(new PointLatLng(-34.799286, -58.334827));
                 
                 myMarks.Add(myMark1);
                 myMarks.Add(myMark2);

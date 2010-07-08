@@ -33,6 +33,7 @@
             // ExtendedGMapControl
             // 
             this.Name = "ExtendedGMapControl";
+            this.Load += new System.EventHandler(this.ExtendedGMapControl_Load);
             this.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ExtendedGMapControl_MouseDoubleClick);
             this.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.ExtendedGMapControl_OnMarkerClick);
             this.OnMarkerEnter += new GMap.NET.WindowsForms.MarkerEnter(this.ExtendedGMapControl_OnMarkerEnter);
@@ -40,7 +41,6 @@
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ExtendedGMapControl_MouseMove);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ExtendedGMapControl_MouseDown);
             this.OnMarkerLeave += new GMap.NET.WindowsForms.MarkerLeave(this.ExtendedGMapControl_OnMarkerLeave);
-            this.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ExtendedGMapControl_MouseDoubleClick);
             this.ResumeLayout(false);
 
         }

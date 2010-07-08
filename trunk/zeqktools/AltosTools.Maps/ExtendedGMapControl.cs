@@ -16,7 +16,7 @@ namespace AltosTools.WindowsForms.Maps
     {
         #region Fields
 
-        private bool _allowDrawPolygon;
+        private bool _allowDrawPolygon = false;
 
         #endregion
 
@@ -141,7 +141,7 @@ namespace AltosTools.WindowsForms.Maps
 
                 if (this.PolygonsEnabled && _allowDrawPolygon)
                 {
-                    //OnDrop
+                    #region OnDrop vertice
                     if (selectedVertice != null)
                     {
 
@@ -182,7 +182,8 @@ namespace AltosTools.WindowsForms.Maps
 
                         selectedVertice = null;
                     }
-
+                    #endregion
+                    #region OnDrop intermediate point
                     //if dragging intermediate point dragging is finish
                     if (selectedIntermediatePoint != null)
                     {
@@ -219,6 +220,7 @@ namespace AltosTools.WindowsForms.Maps
 
                         selectedIntermediatePoint = null;
                     }
+                    #endregion
                 }
             }
         }
@@ -248,6 +250,7 @@ namespace AltosTools.WindowsForms.Maps
         {
             if (this.PolygonsEnabled && _allowDrawPolygon)
             {
+                #region close polygon
                 //only can create the polygon if the polygon is incomplete
                 if (!polygonIsComplete)
                 {
@@ -274,6 +277,7 @@ namespace AltosTools.WindowsForms.Maps
                         }
                     }
                 }
+                #endregion
             }
         }
 
@@ -371,5 +375,14 @@ namespace AltosTools.WindowsForms.Maps
             return point;
         }
         #endregion
+
+        private void ExtendedGMapControl_Load(object sender, EventArgs e)
+        {
+            //TODO: probar
+            //if (_polygon == null)
+            //{
+            //    SetDrawingPolygon(new GMapPolygon(new List<PointLatLng>(), ""));
+            //}
+        }
     }
 }
