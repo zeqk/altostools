@@ -19,7 +19,7 @@ namespace AltosTools.WindowsForms.Maps
       GMapControl MainMap;
       BackgroundWorker bg = new BackgroundWorker();
       readonly List<GMap.NET.Point> tileArea = new List<GMap.NET.Point>();
-	
+      string path = "";
 
       public StaticImage(GMapControl main)
       {
@@ -76,7 +76,7 @@ namespace AltosTools.WindowsForms.Maps
          MapInfo info = e.Argument as MapInfo;
          if(!info.Area.IsEmpty)
          {
-            string bigImage = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + Path.DirectorySeparatorChar + "GMap-" + DateTime.Now.Ticks + ".png";
+            string bigImage = path;
             e.Result = bigImage;
 
             MapType[] types = GMaps.Instance.GetAllLayersOfType(info.Type);
@@ -243,17 +243,20 @@ namespace AltosTools.WindowsForms.Maps
          {
             if(!bg.IsBusy)
             {
-               lock(tileArea)
-               {
-                  tileArea.Clear();
-                  tileArea.AddRange(MainMap.Projection.GetAreaTileList(area, (int) numericUpDown1.Value, 1));
-                  tileArea.TrimExcess();
-               }
-               numericUpDown1.Enabled = false;
-               progressBar1.Value = 0;
-               button1.Enabled = false;
-               bg.RunWorkerAsync(new MapInfo(MainMap.Projection, area, (int)numericUpDown1.Value, MainMap.MapType, MainMap.Overlays[0].Markers, MainMap.Overlays[0].Polygons));
-               
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    path = Path.GetFullPath(saveFileDialog.FileName);
+                    lock (tileArea)
+                    {
+                        tileArea.Clear();
+                        tileArea.AddRange(MainMap.Projection.GetAreaTileList(area, (int)numericUpDown1.Value, 1));
+                        tileArea.TrimExcess();
+                    }
+                    numericUpDown1.Enabled = false;
+                    progressBar1.Value = 0;
+                    button1.Enabled = false;
+                    bg.RunWorkerAsync(new MapInfo(MainMap.Projection, area, (int)numericUpDown1.Value, MainMap.MapType, MainMap.Overlays[0].Markers, MainMap.Overlays[0].Polygons));
+                }
             }
          }
          else

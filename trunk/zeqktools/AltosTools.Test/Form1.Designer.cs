@@ -35,8 +35,8 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
-            this.checkedListComboBox1 = new ZeqkTools.WindowsForms.Controls.CheckedListComboBox(this.components);
-            this.checkedListComboBox2 = new ZeqkTools.WindowsForms.Controls.CheckedListComboBox(this.components);
+            this.checkedListComboBox1 = new AltosTools.WindowsForms.Controls.CheckedListComboBox(this.components);
+            this.checkedListComboBox2 = new AltosTools.WindowsForms.Controls.CheckedListComboBox(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -146,9 +146,9 @@
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
-        private ZeqkTools.WindowsForms.Controls.CheckedListComboBox checkedListComboBox1;
+        private AltosTools.WindowsForms.Controls.CheckedListComboBox checkedListComboBox1;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
-        private ZeqkTools.WindowsForms.Controls.CheckedListComboBox checkedListComboBox2;
+        private AltosTools.WindowsForms.Controls.CheckedListComboBox checkedListComboBox2;
     }
 }

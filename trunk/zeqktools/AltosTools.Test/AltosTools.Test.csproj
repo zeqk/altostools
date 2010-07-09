@@ -98,7 +98,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ZeqkTools.WindowsForms\AltosTools.WindowsForms.csproj">
+    <ProjectReference Include="..\AltosTools.WindowsForms\AltosTools.WindowsForms.csproj">
       <Project>{10B0ABBC-894E-4890-8988-18C4BA8A05BE}</Project>
       <Name>AltosTools.WindowsForms</Name>
     </ProjectReference>
