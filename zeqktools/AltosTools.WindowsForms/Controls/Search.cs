@@ -179,7 +179,7 @@ namespace AltosTools.WindowsForms.Controls
                             if (i > 0)
                                 _query += " OR ";
                             _parameters[i].Value = "%" + txtValue.Text.ToString() + "%";
-                            _query += _columns[i] + " LIKE @" + _variableNames[i];
+                            _query += "ToLower(" + _columns[i] + ") LIKE ToLower(@" + _variableNames[i] + ")";
                         };
                         break;
 
@@ -189,7 +189,7 @@ namespace AltosTools.WindowsForms.Controls
                             if (i > 0)
                                 _query += " OR ";
                             _parameters[i].Value = "%" + txtValue.Text.ToString() + "%";
-                            _query += _columns[i] + " NOT LIKE @" + _variableNames[i];
+                            _query += "ToLower(" + _columns[i] + ") NOT LIKE ToLower(@" + _variableNames[i] + ")";
                         };
                         break;
                     default:
