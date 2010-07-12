@@ -34,15 +34,13 @@ namespace AltosTools.WindowsForms.Controls
 
         public ICollection DataSource
         {
-            get { return this.Items; }
+            get { return items; }
             set
             {
                 this.ClearSelected();
+                items = new List<object>();
                 if (value != null)
                 {
-
-                    items = new List<object>();
-
                     this.Items.Add(ALLITEMSSTRING);
 
                     foreach (var item in value)
