@@ -91,6 +91,12 @@
     <Compile Include="Controls\CheckedListComboBox.Designer.cs">
       <DependentUpon>CheckedListComboBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ExtendedCheckedListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ExtendedCheckedListBox.Designer.cs">
+      <DependentUpon>ExtendedCheckedListBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PopupControl\GripBounds.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -141,6 +147,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\CheckedListComboBox.resx">
       <DependentUpon>CheckedListComboBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ExtendedCheckedListBox.resx">
+      <DependentUpon>ExtendedCheckedListBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProgressReporter.resx">
       <DependentUpon>ProgressReporter.cs</DependentUpon>
