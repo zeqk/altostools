@@ -134,7 +134,7 @@ namespace Localizer
 					
 					XmlNodeList strings = localizer.SelectNodes("String");
 
-                    _currentAssociatedCulture = localizer.GetAttribute("AssociatedCulture");
+                    _currentAssociatedCulture = localizer.GetAttribute("associatedCulture");
 					
 					// Recorre todos los nodos "String" que contienen los textos localizados
 					foreach(XmlNode nodelist in strings)
