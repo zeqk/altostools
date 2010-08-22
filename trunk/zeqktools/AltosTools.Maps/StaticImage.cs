@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 using GMap.NET;
-using GMap.NET.WindowsForms;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using GMap.NET.WindowsForms.Markers;
 using GMap.NET.ObjectModel;
+using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
 
 namespace AltosTools.WindowsForms.Maps
 {
@@ -138,45 +138,7 @@ namespace AltosTools.WindowsForms.Maps
                            rect.Size = new System.Drawing.Size(pxDelta.X, pxDelta.Y);
                            
                        }
-                       //using (Font f = new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold))
-                       //using (Graphics gfx = Graphics.FromImage(bmpDestination))
-                       //{
-                       //    gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
-                       //    // draw bounds & coordinates
-                       //    using (Pen p = new Pen(Brushes.Red, 3))
-                       //    {
-                       //        p.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
-
-                       //        gfx.DrawRectangle(p, rect);
-
-                       //        string topleft = info.Area.LocationTopLeft.ToString();
-                       //        SizeF s = gfx.MeasureString(topleft, f);
-
-                       //        gfx.DrawString(topleft, f, p.Brush, rect.X + s.Height / 2, rect.Y + s.Height / 2);
-
-                       //        string rightBottom = new PointLatLng(info.Area.Bottom, info.Area.Right).ToString();
-                       //        SizeF s2 = gfx.MeasureString(rightBottom, f);
-
-                       //        gfx.DrawString(rightBottom, f, p.Brush, rect.Right - s2.Width - s2.Height / 2, rect.Bottom - s2.Height - s2.Height / 2);
-                       //    }
-
-                       //    // draw scale
-                       //    using (Pen p = new Pen(Brushes.Blue, 1))
-                       //    {
-                       //        double rez = info.Projection.GetGroundResolution(info.Zoom, info.Area.Bottom);
-                       //        int px100 = (int)(100.0 / rez); // 100 meters
-                       //        int px1000 = (int)(1000.0 / rez); // 1km   
-
-                       //        gfx.DrawRectangle(p, rect.X + 10, rect.Bottom - 20, px1000, 10);
-                       //        gfx.DrawRectangle(p, rect.X + 10, rect.Bottom - 20, px100, 10);
-
-                       //        string leftBottom = "scale: 100m | 1Km";
-                       //        SizeF s = gfx.MeasureString(leftBottom, f);
-                       //        gfx.DrawString(leftBottom, f, p.Brush, rect.X + 10, rect.Bottom - s.Height - 20);
-                       //    }
-                       //}
-                       //bmpDestination.RotateFlip(RotateFlipType.Rotate270FlipNone);
                        using (Graphics gfx = Graphics.FromImage(bmpDestination))
                        {
                            //draw polygons
@@ -217,7 +179,7 @@ namespace AltosTools.WindowsForms.Maps
 
                                    Icon icon1 = Icon.FromHandle(iconHandle1);
 
-                                   gfx.DrawIcon(icon1, x, y);
+                                   gfx.DrawIcon(icon1, x - (icon1.Size.Width / 2) , y - (icon1.Size.Height / 2));
                                    Font font = new Font(FontFamily.GenericSansSerif, 12);
 
                                    string infoTag = "";
