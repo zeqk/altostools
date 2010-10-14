@@ -30,7 +30,7 @@ namespace AltosTools.WindowsForms.Controls
             set 
             {
                 UncheckAllItems();
-                if (value != null)
+                if (value != null && value.Count > 0)
                 {
                     int h = 22 * (value.Count + 1);
 

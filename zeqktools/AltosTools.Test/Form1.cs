@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using GMap.NET;
+using AltosTools.WindowsForms;
 
 
 namespace ZeqkTools.Test
@@ -59,6 +60,12 @@ namespace ZeqkTools.Test
         private void checkedListComboBox1_ItemCheck(object sender, ItemCheckEventArgs e)
         {
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            AboutBox form = new AboutBox();
+            form.ShowDialog();
         }
 
 

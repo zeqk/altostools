@@ -39,7 +39,7 @@ namespace AltosTools.WindowsForms.Controls
             {
                 this.ClearSelected();
                 items = new List<object>();
-                if (value != null)
+                if (value != null && value.Count > 0)
                 {
                     this.Items.Add(ALLITEMSSTRING);
 
