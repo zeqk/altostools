@@ -42,7 +42,7 @@ namespace AltosTools.MapsTest
                 GMapPolygon polygon = new GMapPolygon(vertices, "MyPolygon");
                 polygon.Tag = "Mi poligono";
                 myForm.MapMode = MapModeEnum.EditArea;
-                //myForm.setdr = polygon;
+                myForm.MainPolygon = polygon;
 
                 List<GMapMarker> myMarks = new List<GMapMarker>();
                 GMapMarkerGoogleRed myMark1 = new GMapMarkerGoogleRed(new PointLatLng(-34.788151, -58.345299));

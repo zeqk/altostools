@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Globalization;
+using System.Linq;
+using System.Windows.Forms;
+using AltosTools.WindowsForms.Maps;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
-using GMap.NET.WindowsForms.ToolTips;
-using System.Collections;
-using AltosTools.WindowsForms.Maps;
-using AltosTools.MapsTest;
 
 namespace AltosTools.MapsTest
 {
@@ -28,10 +22,9 @@ namespace AltosTools.MapsTest
 
         private List<GMapPolygon> _otherPolygons;
         private List<GMapMarker> _otherMarkers;
-        
         #endregion
 
-        #region Internal variables  
+        #region Internal variables
 
         GMapPolygon currentPolygon;
         // markers
@@ -51,9 +44,13 @@ namespace AltosTools.MapsTest
         /// </summary>
         public GMapPolygon MainPolygon
         {
-            get 
-            {                
-                return currentPolygon;            
+            get
+            {
+                return currentPolygon;
+            }
+            set
+            {
+                currentPolygon = value;
             }
         }
 
@@ -65,6 +62,10 @@ namespace AltosTools.MapsTest
             get
             {
                 return currentMarker;
+            }
+            set
+            {
+                currentMarker = value;
             }
         }
 
@@ -79,7 +80,7 @@ namespace AltosTools.MapsTest
 
         public List<GMapPolygon> OtherPolygons
         {
-            get 
+            get
             {
                 List<GMapPolygon> rv = top.Polygons.ToList();
                 rv.Remove(currentPolygon);
@@ -105,7 +106,6 @@ namespace AltosTools.MapsTest
             }
         }
 
-
         public MapType MapType
         {
             get { return _mapType; }
@@ -123,8 +123,8 @@ namespace AltosTools.MapsTest
             get { return _mapMode; }
             set { _mapMode = value; }
         }
-	
-        #endregion        
+
+        #endregion
 
         #region Constructors
         public frmMapTest()
@@ -134,25 +134,34 @@ namespace AltosTools.MapsTest
             _mapZoom = 15;
             _mapMode = MapModeEnum.ReadOnly;
 
-            //initializing
-            currentPolygon = new GMapPolygon(new List<PointLatLng>(), "MyPolygon");
-            currentMarker = new GMapMarkerGoogleRed(new PointLatLng());
-
             InitializeComponent();
         }
         #endregion
+
+
+        public void Clear()
+        {
+            foreach (GMapOverlay overlay in MainMap.Overlays)
+            {
+                overlay.Markers.Clear();
+            }
+
+            MainMap.Overlays.Clear();
+            _otherPolygons = null;
+            _otherMarkers = null;
+            Object = null;
+        }
+
         private void frmGeoArea_Load(object sender, EventArgs e)
         {
-            ConfigureAdditionalData();            
-
             //load comboboxes
             cboMapType.DataSource = Enum.GetValues(_mapType.GetType());
 
             //config map
             ConfigMap();
 
-            //extract data from the Object property
-            ExtractObjectData();
+            //set the objects to edit
+            SetObjectToEdit();
 
             if (_otherMarkers != null)
             {
@@ -166,28 +175,31 @@ namespace AltosTools.MapsTest
                     top.Polygons.Add(item);
             }
 
-            PointLatLng? center = null;
-            switch (_mapMode)
+            if (!SetCenter(null))
+                GoToAddress(this.Address);
+        }
+
+        void SetObjectToEdit()
+        {
+
+            if (_mapMode == MapModeEnum.EditPoint)
             {
-                case MapModeEnum.EditPoint:
-                    center = GetMainMarkerCenter();
-                    if (center == null)
-                        center = GetOtherPolygonsAndMarkersCenter();
-                    break;
-                case MapModeEnum.EditArea:
-                    center = GetMainPolygonCenter();
-                    if (center == null)
-                        center = GetOtherPolygonsAndMarkersCenter();
-                    break;
-                case MapModeEnum.ReadOnly:
-                    center = GetOtherPolygonsAndMarkersCenter();
-                    break;
-                default:
-                    break;
+                //if (currentMarker == null)
+                //    currentMarker = new GMapMarkerGoogleRed(new PointLatLng());
+
+                if (currentMarker != null)
+                    top.Markers.Add(currentMarker);
             }
 
-            SetCenter(center);
-            //MainMap.ZoomAndCenterMarkers("top");
+            if (_mapMode == MapModeEnum.EditArea)
+            {
+                if (currentPolygon == null)
+                    currentPolygon = new GMapPolygon(new List<PointLatLng>(), "MyPolygon");
+
+                MainMap.SetDrawingPolygon(currentPolygon);
+            }
+
+
         }
 
         private void ConfigMap()
@@ -204,7 +216,7 @@ namespace AltosTools.MapsTest
             MainMap.MinZoom = 5;
             MainMap.Zoom = _mapZoom;
 
-            MainMap.CurrentPosition = new PointLatLng();
+            MainMap.Position = new PointLatLng();
             MainMap.PolygonsEnabled = true;
             if (_mapMode == MapModeEnum.EditArea)
                 MainMap.AllowDrawPolygon = true;
@@ -215,12 +227,19 @@ namespace AltosTools.MapsTest
             MainMap.OnCurrentPositionChanged += new CurrentPositionChanged(MainMap_OnCurrentPositionChanged);
             MainMap.OnMapZoomChanged += new MapZoomChanged(this.MainMap_OnMapZoomChanged);
 
-            if (_mapMode == MapModeEnum.EditArea)
+            if (_mapMode == MapModeEnum.EditPoint)
             {
                 MainMap.MouseMove += new MouseEventHandler(MainMap_MouseMove);
                 MainMap.MouseDown += new MouseEventHandler(MainMap_MouseDown);
                 MainMap.MouseUp += new MouseEventHandler(MainMap_MouseUp);
             }
+            else
+            {
+                MainMap.MouseMove -= new MouseEventHandler(MainMap_MouseMove);
+                MainMap.MouseDown -= new MouseEventHandler(MainMap_MouseDown);
+                MainMap.MouseUp -= new MouseEventHandler(MainMap_MouseUp);
+            }
+
             // get zoom  
             trackBarZoom.Minimum = MainMap.MinZoom;
             trackBarZoom.Maximum = MainMap.MaxZoom;
@@ -231,33 +250,73 @@ namespace AltosTools.MapsTest
                 top = new GMapOverlay(MainMap, "top");
                 MainMap.Overlays.Add(top);
             }
-
-            MainMap.ZoomAndCenterMarkers("top");
         }
 
-        private void SetCenter(PointLatLng? center)
+        private bool SetCenter(PointLatLng? center)
         {
+            bool centered = false;
             if (center != null)
             {
-                MainMap.CurrentPosition = center.Value;
+                MainMap.Position = center.Value;
 
                 if (centerMarker == null)
                     centerMarker = new GMapMarkerCross(new PointLatLng());
 
-                centerMarker.Position = MainMap.CurrentPosition;
+                centerMarker.Position = MainMap.Position;
                 if (!top.Markers.Contains(centerMarker))
                     top.Markers.Add(centerMarker);
+
+                centered = true;
             }
             else
             {
-                GoToAddress(this.Address);
-                centerMarker.Position = MainMap.CurrentPosition;
+                if (_mapMode == MapModeEnum.EditArea)
+                {
+                    centered = MainMap.ZoomAndCenterMarkers("vertices");
+                    if (!centered) centered = MainMap.ZoomAndCenterMarkers("top");
+                    if (!centered)
+                    {
+                        if (top.Polygons.Count > 0 && top.Polygons[0].Points.Count > 0)
+                        {
+                            MainMap.Position = AltosTools.Functions.CalculateMiddlePoint(top.Polygons[0]);
+                            centered = true;
+                        }
+                    }
+                }
+
+                if (_mapMode == MapModeEnum.EditPoint)
+                {
+                    if (currentMarker != null)
+                    {
+                        MainMap.Position = currentMarker.Position;
+                        centered = true;
+                    }
+
+                    if (!centered)
+                        centered = MainMap.ZoomAndCenterMarkers("top");
+
+                    if (!centered)
+                    {
+                        if (top.Polygons.Count > 0)
+                            center = AltosTools.Functions.CalculateMiddlePoint(top.Polygons[0]);
+                    }
+                }
+
+                if (_mapMode == MapModeEnum.ReadOnly)
+                    centered = MainMap.ZoomAndCenterMarkers("top");
+
+                if (centerMarker == null)
+                    centerMarker = new GMapMarkerCross(new PointLatLng());
+
+                centerMarker.Position = MainMap.Position;
                 if (!top.Markers.Contains(centerMarker))
                     top.Markers.Add(centerMarker);
             }
 
-            txtLat.Text = MainMap.CurrentPosition.Lat.ToString(CultureInfo.CurrentCulture);
-            txtLng.Text = MainMap.CurrentPosition.Lng.ToString(CultureInfo.CurrentCulture);
+            txtLat.Text = MainMap.Position.Lat.ToString(CultureInfo.CurrentCulture);
+            txtLng.Text = MainMap.Position.Lng.ToString(CultureInfo.CurrentCulture);
+
+            return centered;
         }
 
         private void GoToAddress(string keywordsToSearch)
@@ -269,21 +328,25 @@ namespace AltosTools.MapsTest
                 MessageBox.Show("Google Maps Geocoder can't find: '" + txtAddress.Text + "', reason: " + status.ToString(), "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
+
             // set current marker
             if (_mapMode == MapModeEnum.EditPoint)
             {
+                if (currentMarker != null)
+                    currentMarker.Position = MainMap.Position;
+                else
+                    currentMarker = new GMapMarkerGoogleRed(MainMap.Position);
+
                 if (!top.Markers.Contains(currentMarker))
                     top.Markers.Add(currentMarker);
 
-                currentMarker.Position = MainMap.CurrentPosition;
-            }            
-            
+            }
+
+            SetCenter(MainMap.Position);
+
         }
 
-        void ExtractObjectData()
-        {
-            //to implement
-        }
+        
 
         #region Map event methods
 
@@ -330,11 +393,8 @@ namespace AltosTools.MapsTest
                 UpdateCurrentMarkerPositionText();
             }
         }
-        
-        #endregion        
 
-        
-
+        #endregion
 
         #region Controls events methods
 
@@ -352,11 +412,15 @@ namespace AltosTools.MapsTest
 
         private void btnGenImage_Click(object sender, EventArgs e)
         {
-            //calculate the area to print
-            if (currentPolygon.Points.Count > 0)
-                MainMap.SelectedArea = CalculateRectangle(currentPolygon.Points);
-            else
-                //MainMap.SelectedArea = CalculateRectangle(_secondaryMarkers.Select(m => m.Position).ToList()); TODO: generar el rectangulo segun los poligonos secundarios
+
+            MainMap.SelectedArea = MainMap.CurrentViewArea;
+
+            if (_mapMode == MapModeEnum.EditArea)
+            {
+                if (currentPolygon.Points.Count > 2)
+                    MainMap.SelectedArea = CalculateRectangle(currentPolygon.Points);
+            }
+
 
             MainMap.SelectedArea = AddMargin(MainMap.SelectedArea);
 
@@ -381,7 +445,7 @@ namespace AltosTools.MapsTest
         private void btnGo_Click(object sender, EventArgs e)
         {
             GoToAddress(txtAddress.Text);
-            SetCenter(null); //Set center by MainMap.CurrentPosition
+            SetCenter(null); //Set center by MainMap.Position
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -419,7 +483,7 @@ namespace AltosTools.MapsTest
             PointLatLng point = AltosTools.Functions.CalculateMiddlePoint(marks);
 
             return point;
-        }        
+        }
 
         private RectLatLng CalculateRectangle(IList<PointLatLng> points)
         {
@@ -461,69 +525,14 @@ namespace AltosTools.MapsTest
             return rect;
         }
 
-        
 
-        #endregion
-
-        private void chklstTerritory_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ConfigureAdditionalData()
-        {
-
-            //to implement
-
-        }
-
-        #region GetCenter methods
-
-        PointLatLng? GetMainPolygonCenter()
-        {
-            PointLatLng? center = null;
-
-            if(currentPolygon.Points.Count > 0)                
-                center = AltosTools.Functions.CalculateMiddlePoint(currentPolygon);
-
-            return center;            
-        }
-
-        PointLatLng? GetMainMarkerCenter()
-        {
-            PointLatLng? center = null;
-            if(currentMarker != null)
-                center = currentMarker.Position;
-            return center;
-        }
-
-        PointLatLng? GetOtherPolygonsAndMarkersCenter()
-        {
-            PointLatLng? center = null;
-
-            List<PointLatLng> centers = new List<PointLatLng>();
-
-            if (_otherPolygons != null && _otherPolygons.Count > 0)
-                centers.Add(AltosTools.Functions.CalculateMiddlePoint(_otherPolygons[0]));
-
-            if (_otherMarkers != null && _otherMarkers.Count > 0)
-                centers.Add(CalculateMiddlePoint(_otherMarkers));
-
-            if (centers.Count > 0)
-                center = AltosTools.Functions.CalculateMiddlePoint(centers);
-
-            return center;
-        }     
 
         #endregion
 
 
-
+        private void button1_Click(object sender, EventArgs e)
+        {
+        }
 
 
 

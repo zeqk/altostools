@@ -37,15 +37,18 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Release\</OutputPath>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GMap.NET.Core, Version=1.5.3.3, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\GMap.NET.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="GMap.NET.WindowsForms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\GMap.NET.WindowsForms.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -76,7 +79,9 @@
     <Compile Include="frmMapTest.designer.cs">
       <DependentUpon>frmMapTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="MapModeEnum.cs" />
+    <Compile Include="MapModeEnum.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -109,6 +114,7 @@
     <ProjectReference Include="..\AltosTools.Maps\AltosTools.Maps.csproj">
       <Project>{802DF1EC-A9E4-474D-A683-A123308F36F2}</Project>
       <Name>AltosTools.Maps</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
