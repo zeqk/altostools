@@ -18,7 +18,9 @@ namespace AltosTools.WindowsForms
 
         private string _connectionString;
 
-        private DataProviders _dataProvider;
+        private DataProviders? _dataProvider;
+
+        List<DataProviderItem> providerItems;
 
         #region Properties
 
@@ -31,7 +33,7 @@ namespace AltosTools.WindowsForms
             }
         }        
 
-        public DataProviders DataProvider
+        public DataProviders? DataProvider
         {
             get 
             {
@@ -50,23 +52,34 @@ namespace AltosTools.WindowsForms
         {
             InitializeComponent();
 
-            List<DataProviderItem> items = new List<DataProviderItem>();
-            items.Add(new DataProviderItem("MS Excel", DataProviders.OleDb));
-            items.Add(new DataProviderItem("MS Access", DataProviders.OleDb));
-            items.Add(new DataProviderItem("OleDb", DataProviders.OleDb));
-            items.Add(new DataProviderItem("Odbc", DataProviders.Odbc));
-            items.Add(new DataProviderItem("SQL Server", DataProviders.SQLServer));
+            providerItems = new List<DataProviderItem>();
+            providerItems.Add(new DataProviderItem("MS Excel", DataProviders.OleDb));
+            providerItems.Add(new DataProviderItem("MS Access", DataProviders.OleDb));
+            providerItems.Add(new DataProviderItem("OleDb", DataProviders.OleDb));
+            providerItems.Add(new DataProviderItem("Odbc", DataProviders.Odbc));
+            providerItems.Add(new DataProviderItem("SQL Server", DataProviders.SQLServer));
             cboDataProvider.ValueMember = "Provider";
             cboDataProvider.DisplayMember = "Name";
-            cboDataProvider.DataSource = items;
+            cboDataProvider.DataSource = providerItems;
             cboDataProvider.SelectedItem = null;
         }
 
         private void ConnectionStringMaker_Load(object sender, EventArgs e)
         {
-            cboDataProvider.SelectedItem = _dataProvider;
-            if (_sb != null) 
+            if (_dataProvider != null)
+            {
+                DataProviderItem item = providerItems.Where(i => i.Provider == _dataProvider).First();
+                cboDataProvider.SelectedItem = item;
+            }
+            else
+                cboDataProvider.SelectedItem = null;
+
+            if (_sb != null)
+            {
                 _sb.ConnectionString = _connectionString;
+                propConnection.SelectedObject = _sb;
+                propConnection.Refresh();
+            }
         }
 
         private void cboDataProvider_SelectedIndexChanged(object sender, EventArgs e)
@@ -121,7 +134,7 @@ namespace AltosTools.WindowsForms
         private void ofdSlectSource_FileOk(object sender, CancelEventArgs e)
         {
             txtDataSource.Text = Path.GetFullPath(ofdSlectSource.FileName);
-            _sb["DataSource"] = txtDataSource.Text;
+            _sb["Data Source"] = txtDataSource.Text;
             propConnection.Refresh();
         }
 
