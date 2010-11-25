@@ -18,7 +18,7 @@ namespace AltosTools.WindowsForms.Maps
    {
       GMapControl MainMap;
       BackgroundWorker bg = new BackgroundWorker();
-      readonly List<GMap.NET.Point> tileArea = new List<GMap.NET.Point>();
+      readonly List<GMap.NET.GPoint> tileArea = new List<GMap.NET.GPoint>();
       string path = "";
 
       public StaticImage(GMapControl main)
@@ -67,7 +67,7 @@ namespace AltosTools.WindowsForms.Maps
       {
          progressBar1.Value = e.ProgressPercentage;
 
-         GMap.NET.Point p = (GMap.NET.Point) e.UserState;
+         GMap.NET.GPoint p = (GMap.NET.GPoint)e.UserState;
          this.Text = "Static Map maker: Downloading[" + p + "]: " + tileArea.IndexOf(p) + " of " + tileArea.Count;
       }
 
@@ -82,9 +82,9 @@ namespace AltosTools.WindowsForms.Maps
             MapType[] types = GMaps.Instance.GetAllLayersOfType(info.Type);
 
             // current area
-            GMap.NET.Point topLeftPx = info.Projection.FromLatLngToPixel(info.Area.LocationTopLeft, info.Zoom);
-            GMap.NET.Point rightButtomPx = info.Projection.FromLatLngToPixel(info.Area.Bottom, info.Area.Right, info.Zoom);
-            GMap.NET.Point pxDelta = new GMap.NET.Point(rightButtomPx.X - topLeftPx.X, rightButtomPx.Y - topLeftPx.Y);
+            GMap.NET.GPoint topLeftPx = info.Projection.FromLatLngToPixel(info.Area.LocationTopLeft, info.Zoom);
+            GMap.NET.GPoint rightButtomPx = info.Projection.FromLatLngToPixel(info.Area.Bottom, info.Area.Right, info.Zoom);
+            GMap.NET.GPoint pxDelta = new GMap.NET.GPoint(rightButtomPx.X - topLeftPx.X, rightButtomPx.Y - topLeftPx.Y);
 
             int padding = 0;
             {

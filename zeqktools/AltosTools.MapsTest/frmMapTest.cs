@@ -141,6 +141,8 @@ namespace AltosTools.MapsTest
 
         public void Clear()
         {
+            currentMarker = null;
+            currentPolygon = null;
             foreach (GMapOverlay overlay in MainMap.Overlays)
             {
                 overlay.Markers.Clear();
@@ -197,6 +199,7 @@ namespace AltosTools.MapsTest
                     currentPolygon = new GMapPolygon(new List<PointLatLng>(), "MyPolygon");
 
                 MainMap.SetDrawingPolygon(currentPolygon);
+
             }
 
 
@@ -528,12 +531,6 @@ namespace AltosTools.MapsTest
 
 
         #endregion
-
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-        }
-
 
 
     }
