@@ -142,7 +142,6 @@
             this.btnViewAdData.TabIndex = 0;
             this.btnViewAdData.Text = "View additional data";
             this.btnViewAdData.UseVisualStyleBackColor = true;
-            this.btnViewAdData.Click += new System.EventHandler(this.button1_Click);
             // 
             // panelBase
             // 
