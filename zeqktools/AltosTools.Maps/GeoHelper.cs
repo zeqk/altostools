@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using GMap.NET;
 using GMap.NET.WindowsForms;
+using System.Collections;
 
 namespace AltosTools
 {
-    public class Functions
+    public class GeoHelper
     {
         static public PointLatLng CalculateMiddlePoint(List<PointLatLng> points)
         {
@@ -92,6 +93,45 @@ namespace AltosTools
             }
 
             return inside;
+        }
+
+        static public IList GetClusteredPoints(List<PointLatLng> points, double distance)
+        {
+            //source http://es.efreedom.com/Question/1-1434222/Mapa-de-organizacion-por-clusteres-de-algoritmo
+            IList rv = new List<List<PointLatLng>>();
+
+            while (points.Count > 0)
+            {
+                List<PointLatLng> cluster = new List<PointLatLng>();
+                PointLatLng initialPoint = points[0];
+                points.Remove(initialPoint);
+                cluster.Add(initialPoint);                
+
+                foreach (PointLatLng item in points)
+                {
+                    double currentDistance = GMaps.Instance.GetDistance(initialPoint, item);
+                    if (currentDistance <= distance)
+                        cluster.Add(item);
+                }
+
+                foreach (PointLatLng item in cluster)
+                {
+                    if(points.Contains(item))
+                        points.Remove(item);
+                }
+                rv.Add(cluster);
+            }
+
+            return rv;
+        }
+
+        static public PointLatLng? AddressToGeoPos(string address)
+        {
+            GeoCoderStatusCode status = GeoCoderStatusCode.Unknow;
+            PointLatLng? pos = GMaps.Instance.GetLatLngFromGeocoder(address, out status);
+            if (status != GeoCoderStatusCode.G_GEO_SUCCESS)
+                pos = null;
+            return pos;
         }
     }
 }

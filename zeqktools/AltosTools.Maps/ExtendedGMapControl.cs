@@ -337,7 +337,7 @@ namespace AltosTools.WindowsForms.Maps
                 PointLatLng point = this.FromLocalToLatLng(e.X, e.Y);
                 foreach (GMapPolygon polygon in this.Overlays[0].Polygons)
                 {
-                    if (Functions.PointInPolygon(point, polygon.Points.ToArray()))
+                    if (GeoHelper.PointInPolygon(point, polygon.Points.ToArray()))
                     {
                         if (polygon.Name != null)
                         {
@@ -363,14 +363,14 @@ namespace AltosTools.WindowsForms.Maps
         {
             List<PointLatLng> points = marks.Select(m => m.Position).ToList();
 
-            PointLatLng point = Functions.CalculateMiddlePoint(points.ToList());
+            PointLatLng point = GeoHelper.CalculateMiddlePoint(points.ToList());
 
             return point;
         }
 
         private PointLatLng CalculateMiddlePoint(List<PointLatLng> marks)
         {
-            PointLatLng point = Functions.CalculateMiddlePoint(marks);
+            PointLatLng point = GeoHelper.CalculateMiddlePoint(marks);
 
             return point;
         }
