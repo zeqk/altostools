@@ -42,11 +42,21 @@
     <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GMap.NET.Core, Version=1.5.4.3, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=x86" />
-    <Reference Include="GMap.NET.WindowsForms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=x86" />
+    <Reference Include="GMap.NET.Core, Version=1.5.4.3, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin\GMap.NET.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="GMap.NET.WindowsForms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin\GMap.NET.WindowsForms.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -62,6 +72,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomMarkers\GMapMarkerCustom.cs" />
+    <Compile Include="CustomMarkers\GMapMarkerCustomBalloon.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CustomMarkers\GMapMarkerGraySquare.cs" />
     <Compile Include="CustomMarkers\GMapMarkerLine.cs" />
     <Compile Include="CustomMarkers\GMapMarkerRect.cs" />
@@ -72,7 +85,7 @@
     <Compile Include="ExtendedGMapControl.Designer.cs">
       <DependentUpon>ExtendedGMapControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Functions.cs" />
+    <Compile Include="GeoHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ExtendedGMapControl.resx">
       <DependentUpon>ExtendedGMapControl.cs</DependentUpon>
@@ -114,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\legend.png" />
+    <None Include="Resources\red.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

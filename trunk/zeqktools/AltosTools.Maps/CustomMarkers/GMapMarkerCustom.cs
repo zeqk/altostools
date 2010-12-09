@@ -25,8 +25,9 @@ namespace GMap.NET.WindowsForms.Markers
        }
 
       public override void OnRender(Graphics g)
-      {  
-          g.DrawImageUnscaled(_icon, LocalPosition.X - (_icon.Size.Width / 2), LocalPosition.Y - (_icon.Size.Height / 2));        
+      {
+          g.DrawImageUnscaled(_icon, LocalPosition.X - (_icon.Size.Width / 2), LocalPosition.Y - (_icon.Size.Height / 2));
+          
       }
    }
 }
