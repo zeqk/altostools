@@ -38,6 +38,7 @@ namespace AltosTools.WindowsForms.Controls
             set
             {
                 this.ClearSelected();
+                this.Items.Clear();
                 items = new List<object>();
                 if (value != null && value.Count > 0)
                 {
@@ -48,10 +49,6 @@ namespace AltosTools.WindowsForms.Controls
                         this.Items.Add(item);
                         items.Add(item);
                     }
-                }
-                else
-                {
-                    this.Items.Clear();
                 }
             }
         }
