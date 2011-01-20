@@ -30,6 +30,7 @@ namespace AltosTools.WindowsForms.Controls
             set 
             {
                 UncheckAllItems();
+                checkedListBox.Items.Clear();
                 if (value != null && value.Count > 0)
                 {
                     int h = 22 * (value.Count + 1);
@@ -45,10 +46,6 @@ namespace AltosTools.WindowsForms.Controls
                         items.Add(item);
                     }
                     int aux = checkedListBox.ItemHeight;
-                }
-                else
-                {
-                    checkedListBox.Items.Clear();
                 }
             }
         }
