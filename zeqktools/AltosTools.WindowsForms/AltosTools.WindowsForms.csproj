@@ -79,12 +79,6 @@
     <Compile Include="AboutBox.designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="AboutBox2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AboutBox2.Designer.cs">
-      <DependentUpon>AboutBox2.cs</DependentUpon>
-    </Compile>
     <Compile Include="ConnectionStringMaker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -147,9 +141,6 @@
   <ItemGroup>
     <EmbeddedResource Include="AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AboutBox2.resx">
-      <DependentUpon>AboutBox2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ConnectionStringMaker.resx">
       <DependentUpon>ConnectionStringMaker.cs</DependentUpon>
