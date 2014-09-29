@@ -8,9 +8,9 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 using GMap.NET;
-using GMap.NET.ObjectModel;
+using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
-using GMap.NET.WindowsForms.Markers;
+using GMap.NET.ObjectModel;
 
 namespace AltosTools.WindowsForms.Maps
 {
@@ -18,255 +18,264 @@ namespace AltosTools.WindowsForms.Maps
    {
       GMapControl MainMap;
       BackgroundWorker bg = new BackgroundWorker();
-      readonly List<GMap.NET.GPoint> tileArea = new List<GMap.NET.GPoint>();
       string path = "";
+
+      readonly List<GPoint> tileArea = new List<GPoint>();
 
       public StaticImage(GMapControl main)
       {
-         InitializeComponent();
-          
-         this.MainMap = main;          
-         numericUpDown1.Maximum = MainMap.MaxZoom;
-         numericUpDown1.Minimum = MainMap.MinZoom;
-         numericUpDown1.Value = Convert.ToInt32(MainMap.Zoom);
+          InitializeComponent();
 
-         bg.WorkerReportsProgress = true;
-         bg.WorkerSupportsCancellation = true;
-         bg.DoWork += new DoWorkEventHandler(bg_DoWork);
-         bg.ProgressChanged += new ProgressChangedEventHandler(bg_ProgressChanged);
-         bg.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bg_RunWorkerCompleted);
+          MainMap = main;
+
+          numericUpDown1.Maximum = main.MaxZoom;
+          numericUpDown1.Minimum = main.MinZoom;
+          numericUpDown1.Value = new decimal(main.Zoom);
+
+          bg.WorkerReportsProgress = true;
+          bg.WorkerSupportsCancellation = true;
+          bg.DoWork += new DoWorkEventHandler(bg_DoWork);
+          bg.ProgressChanged += new ProgressChangedEventHandler(bg_ProgressChanged);
+          bg.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bg_RunWorkerCompleted);
       }
 
       void bg_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
       {
-         if(!e.Cancelled)
-         {
-            if(e.Error != null)
-            {
-               MessageBox.Show("Error:" + e.Error.ToString(), "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else if(e.Result != null)
-            {
-               try
-               {
-                  Process.Start(e.Result as string);
-               }
-               catch
-               {
-               }
-            }
-         }
+          if (!e.Cancelled)
+          {
+              if (e.Error != null)
+              {
+                  MessageBox.Show("Error:" + e.Error.ToString(), "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Error);
+              }
+              else if (e.Result != null)
+              {
+                  try
+                  {
+                      Process.Start(e.Result as string);
+                  }
+                  catch
+                  {
+                  }
+              }
+          }
 
-         this.Text = "Static Map maker";
-         progressBar1.Value = 0;
-         button1.Enabled = true;
-         numericUpDown1.Enabled = true;
+          this.Text = "Static Map maker";
+          progressBar1.Value = 0;
+          button1.Enabled = true;
+          numericUpDown1.Enabled = true;
       }
 
       void bg_ProgressChanged(object sender, ProgressChangedEventArgs e)
       {
-         progressBar1.Value = e.ProgressPercentage;
+          progressBar1.Value = e.ProgressPercentage;
 
-         GMap.NET.GPoint p = (GMap.NET.GPoint)e.UserState;
-         this.Text = "Static Map maker: Downloading[" + p + "]: " + tileArea.IndexOf(p) + " of " + tileArea.Count;
+          GPoint p = (GPoint)e.UserState;
+          this.Text = "Static Map maker: Downloading[" + p + "]: " + tileArea.IndexOf(p) + " of " + tileArea.Count;
       }
 
       void bg_DoWork(object sender, DoWorkEventArgs e)
       {
-         MapInfo info = e.Argument as MapInfo;
-         if(!info.Area.IsEmpty)
-         {
-            string bigImage = path;
-            e.Result = bigImage;
+          MapInfo info = (MapInfo)e.Argument;
+          if (!info.Area.IsEmpty)
+          {
+              //var types = GMaps.Instance.GetAllLayersOfType(info.Type);
 
-            MapType[] types = GMaps.Instance.GetAllLayersOfType(info.Type);
+              string bigImage = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + Path.DirectorySeparatorChar + "GMap at zoom " + info.Zoom + " - " + info.Type + "-" + DateTime.Now.Ticks + ".png";
+              e.Result = bigImage;
 
-            // current area
-            GMap.NET.GPoint topLeftPx = info.Projection.FromLatLngToPixel(info.Area.LocationTopLeft, info.Zoom);
-            GMap.NET.GPoint rightButtomPx = info.Projection.FromLatLngToPixel(info.Area.Bottom, info.Area.Right, info.Zoom);
-            GMap.NET.GPoint pxDelta = new GMap.NET.GPoint(rightButtomPx.X - topLeftPx.X, rightButtomPx.Y - topLeftPx.Y);
+              // current area
+              GPoint topLeftPx = info.Type.Projection.FromLatLngToPixel(info.Area.LocationTopLeft, info.Zoom);
+              GPoint rightButtomPx = info.Type.Projection.FromLatLngToPixel(info.Area.Bottom, info.Area.Right, info.Zoom);
+              GPoint pxDelta = new GPoint(rightButtomPx.X - topLeftPx.X, rightButtomPx.Y - topLeftPx.Y);
+              GMap.NET.GSize maxOfTiles = info.Type.Projection.GetTileMatrixMaxXY(info.Zoom);
 
-            int padding = 0;
-            {
-               using(Bitmap bmpDestination = new Bitmap(pxDelta.X + padding*2, pxDelta.Y + padding*2))
-               {
-                   using (Graphics gfx = Graphics.FromImage(bmpDestination))
-                   {
-                       gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+              int padding = info.MakeWorldFile ? 0 : 22;
+              {
+                  using (Bitmap bmpDestination = new Bitmap((int)(pxDelta.X + padding * 2), (int)(pxDelta.Y + padding * 2)))
+                  {
+                      using (Graphics gfx = Graphics.FromImage(bmpDestination))
+                      {
+                          gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                          gfx.SmoothingMode = SmoothingMode.HighQuality;
 
-                       int i = 0;
+                          int i = 0;
 
-                       // get tiles & combine into one
-                       lock (tileArea)
-                       {
-                           foreach (var p in tileArea)
-                           {
-                               if (bg.CancellationPending)
-                               {
-                                   e.Cancel = true;
-                                   return;
-                               }
+                          // get tiles & combine into one
+                          lock (tileArea)
+                          {
+                              foreach (var p in tileArea)
+                              {
+                                  if (bg.CancellationPending)
+                                  {
+                                      e.Cancel = true;
+                                      return;
+                                  }
 
-                               int pc = (int)(((double)++i / tileArea.Count) * 100);
-                               bg.ReportProgress(pc, p);
+                                  int pc = (int)(((double)++i / tileArea.Count) * 100);
+                                  bg.ReportProgress(pc, p);
 
-                               foreach (MapType tp in types)
-                               {
-                                   Exception ex = new Exception();
-                                   WindowsFormsImage tile = GMaps.Instance.GetImageFrom(tp, p, info.Zoom, out ex) as WindowsFormsImage;
-                                   if (tile != null)
-                                   {
-                                       using (tile)
-                                       {
-                                           int x = p.X * info.Projection.TileSize.Width - topLeftPx.X + padding;
-                                           int y = p.Y * info.Projection.TileSize.Width - topLeftPx.Y + padding;
-                                           {
-                                               gfx.DrawImage(tile.Img, x, y, info.Projection.TileSize.Width, info.Projection.TileSize.Height);
-                                           }
-                                       }
-                                   }
-                               }
-                           }
-                       }
-                   }
+                                  foreach (var tp in info.Type.Overlays)
+                                  {
+                                      Exception ex;
+                                      GMapImage tile;
 
-                   // draw info
-                   {
-                       System.Drawing.Rectangle rect = new System.Drawing.Rectangle();
-                       {
-                           rect.Location = new System.Drawing.Point(padding, padding);
-                           rect.Size = new System.Drawing.Size(pxDelta.X, pxDelta.Y);
-                           
-                       }
+                                      // tile number inversion(BottomLeft -> TopLeft) for pergo maps
+                                      if (tp.InvertedAxisY)
+                                      {
+                                          tile = GMaps.Instance.GetImageFrom(tp, new GPoint(p.X, maxOfTiles.Height - p.Y), info.Zoom, out ex) as GMapImage;
+                                      }
+                                      else // ok
+                                      {
+                                          tile = GMaps.Instance.GetImageFrom(tp, p, info.Zoom, out ex) as GMapImage;
+                                      }
 
-                       using (Graphics gfx = Graphics.FromImage(bmpDestination))
-                       {
-                           //draw polygons
-                           foreach (GMapPolygon polygon in info.Polygons)
-                           {
-                               if (polygon.Points.Count > 2)
-                               {
-                                   List<System.Drawing.Point> points = new List<System.Drawing.Point>();
-                                   foreach (var gPoint in polygon.Points)
-                                   {
-                                       int x, y = 0;
-                                       FromLatLngToLocal(info, rect.Height, rect.Width, gPoint.Lat, gPoint.Lng, out x, out y);
-                                       points.Add(new System.Drawing.Point(x, y));
-                                   }
-                                   Color color = Color.FromArgb(95, polygon.Stroke.Color);
-                                   Pen pen = new Pen(color, 4);
-                                   pen.DashStyle = DashStyle.Custom;
+                                      if (tile != null)
+                                      {
+                                          using (tile)
+                                          {
+                                              long x = p.X * info.Type.Projection.TileSize.Width - topLeftPx.X + padding;
+                                              long y = p.Y * info.Type.Projection.TileSize.Width - topLeftPx.Y + padding;
+                                              {
+                                                  gfx.DrawImage(tile.Img, x, y, info.Type.Projection.TileSize.Width, info.Type.Projection.TileSize.Height);
+                                              }
+                                          }
+                                      }
+                                  }
+                              }
+                          }
 
-                                   gfx.DrawPolygon(pen, points.ToArray());                                   
-                               }
-                           }
+                          // draw polygons
+                          {
+                              foreach (GMapPolygon r in info.Polygons)
+                              {
+                                  if (r.IsVisible)
+                                  {
+                                      using (GraphicsPath rp = new GraphicsPath())
+                                      {
+                                          for (int j = 0; j < r.Points.Count; j++)
+                                          {
+                                              var pr = r.Points[j];
+                                              GPoint px = info.Type.Projection.FromLatLngToPixel(pr.Lat, pr.Lng, info.Zoom);
 
-                           //draw marks
-                           foreach (var marker in info.Markers)
-                           {
-                               if (marker.GetType() != typeof(GMapMarkerLine) &&
-                                   marker.GetType() != typeof(GMapMarkerCross))
-                               {   
-                                   int x, y = 0;
-                                   FromLatLngToLocal(info, rect.Height, rect.Width, marker.Position.Lat, marker.Position.Lng, out x, out y);
+                                              px.Offset(padding, padding);
+                                              px.Offset(-topLeftPx.X, -topLeftPx.Y);
 
-                                   IntPtr iconHandle1 = AltosTools.Maps.Properties.Resources.legendIcon.GetHicon();
-                                   if (marker.GetType().GetProperty("Icon") != null)
-                                   {
-                                       Bitmap bitmap = (Bitmap)marker.GetType().GetProperty("Icon", typeof(Bitmap)).GetValue(marker, null);
-                                       iconHandle1 = bitmap.GetHicon();
-                                   }
+                                              GPoint p2 = px;
 
-                                   Icon icon1 = Icon.FromHandle(iconHandle1);
+                                              if (j == 0)
+                                              {
+                                                  rp.AddLine(p2.X, p2.Y, p2.X, p2.Y);
+                                              }
+                                              else
+                                              {
+                                                  System.Drawing.PointF p = rp.GetLastPoint();
+                                                  rp.AddLine(p.X, p.Y, p2.X, p2.Y);
+                                              }
+                                          }
 
-                                   gfx.DrawIcon(icon1, x - (icon1.Size.Width / 2) , y - (icon1.Size.Height / 2));
-                                   Font font = new Font(FontFamily.GenericSansSerif, 12);
+                                          if (rp.PointCount > 0)
+                                          {
+                                              rp.CloseFigure();
 
-                                   string infoTag = "";
-                                   if (marker.Tag != null)
-                                       infoTag = marker.Tag.ToString();
+                                              gfx.FillPath(r.Fill, rp);
 
-                                   gfx.DrawString(infoTag, font, Brushes.Red, x + 10, y - 10);
-                               }
-                           }
-                       }
-                   }
+                                              gfx.DrawPath(r.Stroke, rp);
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                          
+                          // draw markers
+                          {
+                              foreach (GMapMarker r in info.Markers)
+                              {
+                                  if (r.IsVisible)
+                                  {
+                                      var pr = r.Position;
+                                      GPoint px = info.Type.Projection.FromLatLngToPixel(pr.Lat, pr.Lng, info.Zoom);
 
-                   bmpDestination.Save(bigImage, ImageFormat.Png);
-               }
-            }
-         }
-      }        
+                                      px.Offset(padding, padding);
+                                      px.Offset(-topLeftPx.X, -topLeftPx.Y);
+                                      px.Offset(r.Offset.X, r.Offset.Y);
+
+                                      var auxLocalPosition = r.LocalPosition;
+
+                                      r.LocalPosition = new System.Drawing.Point((int)px.X, (int)px.Y);
+
+                                      r.OnRender(gfx);
+
+                                      r.LocalPosition = auxLocalPosition;
+                                  }
+                              }
+
+                          }
+                      }
+
+                      bmpDestination.Save(bigImage, ImageFormat.Png);
+                  }
+              }              
+          }
+      }
+
+      readonly List<PointLatLng> GpxRoute = new List<PointLatLng>();
+      RectLatLng AreaGpx = RectLatLng.Empty;
 
       private void button1_Click(object sender, EventArgs e)
       {
-         RectLatLng area = MainMap.SelectedArea;
-         if(!area.IsEmpty)
-         {
-            if(!bg.IsBusy)
+          RectLatLng? area = null;
+
+            area = MainMap.SelectedArea;
+            if (area.Value.IsEmpty)
             {
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    path = Path.GetFullPath(saveFileDialog.FileName);
-                    lock (tileArea)
-                    {
-                        tileArea.Clear();
-                        tileArea.AddRange(MainMap.Projection.GetAreaTileList(area, (int)numericUpDown1.Value, 1));
-                        tileArea.TrimExcess();
-                    }
-                    numericUpDown1.Enabled = false;
-                    progressBar1.Value = 0;
-                    button1.Enabled = false;
-                    bg.RunWorkerAsync(new MapInfo(MainMap.Projection, area, (int)numericUpDown1.Value, MainMap.MapType, MainMap.Overlays[0].Markers, MainMap.Overlays[0].Polygons));
-                }
+                MessageBox.Show("Select map area holding ALT", "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
             }
-         }
-         else
-         {
-            MessageBox.Show("Select map area holding ALT", "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-         }
+
+          if (!bg.IsBusy)
+          {
+              lock (tileArea)
+              {
+                  tileArea.Clear();
+                  tileArea.AddRange(MainMap.MapProvider.Projection.GetAreaTileList(area.Value, (int)numericUpDown1.Value, 1));
+                  tileArea.TrimExcess();
+              }
+
+              numericUpDown1.Enabled = false;
+              progressBar1.Value = 0;
+              button1.Enabled = false;
+
+              bg.RunWorkerAsync(new MapInfo(area.Value, (int)numericUpDown1.Value, MainMap.MapProvider, false, MainMap.Overlays[0].Markers, MainMap.Overlays[0].Polygons)); //TODO world file??
+          }
       }
 
       private void button2_Click(object sender, EventArgs e)
       {
-         if(bg.IsBusy)
-         {
-            bg.CancelAsync();
-         }
+          if (bg.IsBusy)
+          {
+              bg.CancelAsync();
+          }
       }
 
-      private void FromLatLngToLocal(MapInfo info, int imageHeigth, int imageWidth, double lat, double lng, out int x, out int y)
-      {
-          //
-          double heigthLat = lat - info.Area.LocationRightBottom.Lat;
-          double widthLng = lng - info.Area.LocationTopLeft.Lng;
-
-          y = Convert.ToInt32((heigthLat * imageHeigth) / info.Area.HeightLat);
-          x = Convert.ToInt32((widthLng * imageWidth) / info.Area.WidthLng);
-
-          y = imageHeigth - y;
-          
-      }
    }
 
-   public class MapInfo
+   public struct MapInfo
    {
-      public PureProjection Projection;
-      public RectLatLng Area;
-      public int Zoom;
-      public MapType Type;
-      public ObservableCollectionThreadSafe<GMapMarker> Markers;
-      public ObservableCollection<GMapPolygon> Polygons;
+       public RectLatLng Area;
+       public int Zoom;
+       public GMapProvider Type;
+       public bool MakeWorldFile;
+       public ObservableCollectionThreadSafe<GMapMarker> Markers;
+       public ObservableCollectionThreadSafe<GMapPolygon> Polygons;
 
-
-      public MapInfo(PureProjection Projection, RectLatLng Area, int Zoom, MapType Type, ObservableCollectionThreadSafe<GMapMarker> markers, ObservableCollection<GMapPolygon> polygons)
-      {
-         this.Projection = Projection;
-         this.Area = Area;
-         this.Zoom = Zoom;
-         this.Type = Type;
-         this.Markers = markers;
-         this.Polygons = polygons;
-      }
+       public MapInfo(RectLatLng Area, int Zoom, GMapProvider Type, bool makeWorldFile, ObservableCollectionThreadSafe<GMapMarker> markers, ObservableCollectionThreadSafe<GMapPolygon> polygons)
+       {
+           this.Area = Area;
+           this.Zoom = Zoom;
+           this.Type = Type;
+           this.MakeWorldFile = makeWorldFile;
+           this.Markers = markers;
+           this.Polygons = polygons;
+       }
    }
 }

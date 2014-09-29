@@ -43,10 +43,10 @@ namespace AltosTools.MapsTest
                 polygon.Tag = "Mi poligono";
                 myForm.MapMode = MapModeEnum.EditArea;
                 myForm.MainPolygon = polygon;
-
+                
                 List<GMapMarker> myMarks = new List<GMapMarker>();
-                GMapMarkerGoogleRed myMark1 = new GMapMarkerGoogleRed(new PointLatLng(-34.788151, -58.345299));
-                GMapMarkerGoogleGreen myMark2 = new GMapMarkerGoogleGreen(new PointLatLng(-34.799286, -58.334827));
+                var myMark1 = new GMarkerGoogle(new PointLatLng(-34.788151, -58.345299),GMarkerGoogleType.green);
+                var myMark2 = new GMarkerGoogle(new PointLatLng(-34.799286, -58.334827), GMarkerGoogleType.green); //green
                 
                 myMarks.Add(myMark1);
                 myMarks.Add(myMark2);
