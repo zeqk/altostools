@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Zeqk")]
 [assembly: AssemblyProduct("AltosTools.WindowsForms")]
-[assembly: AssemblyCopyright("GNU GPL 2011  Zeqk")]
+[assembly: AssemblyCopyright("GNU GPL 2014  Zeqk")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

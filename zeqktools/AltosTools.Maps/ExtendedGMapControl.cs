@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
-using GMap.NET.WindowsForms.Markers;
-using GMap.NET.WindowsForms;
+using System.Linq;
+using System.Windows.Forms;
 using GMap.NET;
+using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
 
 namespace AltosTools.WindowsForms.Maps
 {
@@ -75,9 +73,9 @@ namespace AltosTools.WindowsForms.Maps
 
             // add custom layers  
             {
-                auxiliar = new GMapOverlay(this, "auxiliar");
+                auxiliar = new GMapOverlay("auxiliar");
                 this.Overlays.Add(auxiliar);
-                vertices = new GMapOverlay(this, "vertices");
+                vertices = new GMapOverlay("vertices");
                 this.Overlays.Add(vertices);
             }
 
@@ -235,13 +233,15 @@ namespace AltosTools.WindowsForms.Maps
                 {
                     //if the polygon is incomplete, click will be create new vertices
                     if (!polygonIsComplete)
+                    {
                         if (selectedVertice == null)
                         {
-                            GMapMarkerWitheSquare marker = new GMapMarkerWitheSquare(this.FromLocalToLatLng(e.X, e.Y));
+                            var marker = new GMapMarkerWitheSquare(this.FromLocalToLatLng(e.X, e.Y));
                             vertices.Markers.Add(marker);
                             this.selectedVertice = marker;
 
                         }
+                    }
                 }
             }
         }
@@ -271,7 +271,7 @@ namespace AltosTools.WindowsForms.Maps
                             if (i != vertices.Markers.Count - 1)
                             {
                                 PointLatLng middle = CalculateMiddlePoint(vertices.Markers[i], vertices.Markers[i + 1]);
-                                GMapMarkerGraySquare intermediatePoint = new GMapMarkerGraySquare(middle);
+                                var intermediatePoint = new GMapMarkerGraySquare(middle);
                                 auxiliar.Markers.Add(intermediatePoint);
                             }
                         }

@@ -8,7 +8,7 @@ namespace GMap.NET.WindowsForms.Markers
    {
       public Pen Pen;
 
-      public GMapMarkerGoogleGreen InnerMarker;
+      public GMapMarker InnerMarker;
 
       public GMapMarkerRect(PointLatLng p)
          : base(p)

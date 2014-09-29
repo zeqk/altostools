@@ -1,10 +1,9 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using GMap.NET;
+using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
-using System.Collections;
 
 namespace AltosTools
 {
@@ -109,7 +108,7 @@ namespace AltosTools
 
                 foreach (PointLatLng item in points)
                 {
-                    double currentDistance = GMaps.Instance.GetDistance(initialPoint, item);
+                    double currentDistance = GMapProviders.EmptyProvider.Projection.GetDistance(initialPoint, item);
                     if (currentDistance <= distance)
                         cluster.Add(item);
                 }
@@ -127,8 +126,12 @@ namespace AltosTools
 
         static public PointLatLng? AddressToGeoPos(string address)
         {
-            GeoCoderStatusCode status = GeoCoderStatusCode.Unknow;
-            PointLatLng? pos = GMaps.Instance.GetLatLngFromGeocoder(address, out status);
+            GeoCoderStatusCode status;
+            Placemark myPlacemark = new Placemark();
+            myPlacemark.StreetNumber = address;
+            
+            PointLatLng? pos = GoogleMapProvider.Instance.GetPoint(myPlacemark, out status);
+            
             if (status != GeoCoderStatusCode.G_GEO_SUCCESS)
                 pos = null;
             return pos;

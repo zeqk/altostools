@@ -62,7 +62,7 @@ namespace AltosTools.WindowsForms.Controls
                 {
                     foreach (var item in this.CheckedItems)
                     {
-                        if (item != ALLITEMSSTRING)
+                        if (!item.Equals(ALLITEMSSTRING))
                         {
                             object value;
                             value = item.GetType().GetProperty(this.ValueMember).GetValue(item, null);
@@ -83,7 +83,7 @@ namespace AltosTools.WindowsForms.Controls
                 {
                     foreach (var item in this.Items)
                     {
-                        if (item != ALLITEMSSTRING)
+                        if (!item.Equals(ALLITEMSSTRING))
                         {
                             object value;
                             value = item.GetType().GetProperty(this.ValueMember).GetValue(item, null);

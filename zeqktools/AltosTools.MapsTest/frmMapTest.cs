@@ -8,6 +8,7 @@ using AltosTools.WindowsForms.Maps;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
+using GMap.NET.MapProviders;
 
 namespace AltosTools.MapsTest
 {
@@ -16,7 +17,6 @@ namespace AltosTools.MapsTest
         #region Fields
         public object Object;
 
-        private MapType _mapType;
         private int _mapZoom;
         private MapModeEnum _mapMode;
 
@@ -28,7 +28,6 @@ namespace AltosTools.MapsTest
 
         GMapPolygon currentPolygon;
         // markers
-        GMapMarker centerMarker;
         GMapMarker currentMarker;
 
         // layers
@@ -106,11 +105,6 @@ namespace AltosTools.MapsTest
             }
         }
 
-        public MapType MapType
-        {
-            get { return _mapType; }
-            set { _mapType = value; }
-        }
 
         public int MapZoom
         {
@@ -129,8 +123,7 @@ namespace AltosTools.MapsTest
         #region Constructors
         public frmMapTest()
         {
-            //contruct fields
-            _mapType = MapType.GoogleMap;
+            //contruct fields            
             _mapZoom = 15;
             _mapMode = MapModeEnum.ReadOnly;
 
@@ -143,6 +136,7 @@ namespace AltosTools.MapsTest
         {
             currentMarker = null;
             currentPolygon = null;
+            MainMap.MapProvider = GMapProviders.GoogleMap;
             foreach (GMapOverlay overlay in MainMap.Overlays)
             {
                 overlay.Markers.Clear();
@@ -157,7 +151,7 @@ namespace AltosTools.MapsTest
         private void frmGeoArea_Load(object sender, EventArgs e)
         {
             //load comboboxes
-            cboMapType.DataSource = Enum.GetValues(_mapType.GetType());
+            //cboMapType.DataSource = Enum.GetValues(typeof(GMapProviders.);
 
             //config map
             ConfigMap();
@@ -187,7 +181,7 @@ namespace AltosTools.MapsTest
             if (_mapMode == MapModeEnum.EditPoint)
             {
                 //if (currentMarker == null)
-                //    currentMarker = new GMapMarkerGoogleRed(new PointLatLng());
+                //    currentMarker = new GMarkerGoogle(new PointLatLng(), GMarkerGoogleType.red);
 
                 if (currentMarker != null)
                     top.Markers.Add(currentMarker);
@@ -214,7 +208,7 @@ namespace AltosTools.MapsTest
             GMaps.Instance.Mode = AccessMode.ServerAndCache;
 
             // config map 
-            MainMap.MapType = _mapType;
+            MainMap.MapProvider = GMapProviders.GoogleMap;
             MainMap.MaxZoom = 20;
             MainMap.MinZoom = 5;
             MainMap.Zoom = _mapZoom;
@@ -227,7 +221,6 @@ namespace AltosTools.MapsTest
                 MainMap.AllowDrawPolygon = false;
 
             // map events
-            MainMap.OnCurrentPositionChanged += new CurrentPositionChanged(MainMap_OnCurrentPositionChanged);
             MainMap.OnMapZoomChanged += new MapZoomChanged(this.MainMap_OnMapZoomChanged);
 
             if (_mapMode == MapModeEnum.EditPoint)
@@ -250,7 +243,7 @@ namespace AltosTools.MapsTest
 
             // add custom layers  
             {
-                top = new GMapOverlay(MainMap, "top");
+                top = new GMapOverlay("top");
                 MainMap.Overlays.Add(top);
             }
         }
@@ -260,14 +253,7 @@ namespace AltosTools.MapsTest
             bool centered = false;
             if (center != null)
             {
-                MainMap.Position = center.Value;
-
-                if (centerMarker == null)
-                    centerMarker = new GMapMarkerCross(new PointLatLng());
-
-                centerMarker.Position = MainMap.Position;
-                if (!top.Markers.Contains(centerMarker))
-                    top.Markers.Add(centerMarker);
+                MainMap.Position = center.Value;                
 
                 centered = true;
             }
@@ -281,7 +267,7 @@ namespace AltosTools.MapsTest
                     {
                         if (top.Polygons.Count > 0 && top.Polygons[0].Points.Count > 0)
                         {
-                            MainMap.Position = AltosTools.Functions.CalculateMiddlePoint(top.Polygons[0]);
+                            MainMap.Position = AltosTools.GeoHelper.CalculateMiddlePoint(top.Polygons[0]);
                             centered = true;
                         }
                     }
@@ -301,19 +287,12 @@ namespace AltosTools.MapsTest
                     if (!centered)
                     {
                         if (top.Polygons.Count > 0)
-                            center = AltosTools.Functions.CalculateMiddlePoint(top.Polygons[0]);
+                            center = AltosTools.GeoHelper.CalculateMiddlePoint(top.Polygons[0]);
                     }
                 }
 
                 if (_mapMode == MapModeEnum.ReadOnly)
-                    centered = MainMap.ZoomAndCenterMarkers("top");
-
-                if (centerMarker == null)
-                    centerMarker = new GMapMarkerCross(new PointLatLng());
-
-                centerMarker.Position = MainMap.Position;
-                if (!top.Markers.Contains(centerMarker))
-                    top.Markers.Add(centerMarker);
+                    centered = MainMap.ZoomAndCenterMarkers("top");                
             }
 
             txtLat.Text = MainMap.Position.Lat.ToString(CultureInfo.CurrentCulture);
@@ -325,7 +304,7 @@ namespace AltosTools.MapsTest
         private void GoToAddress(string keywordsToSearch)
         {
 
-            GeoCoderStatusCode status = MainMap.SetCurrentPositionByKeywords(keywordsToSearch);
+            GeoCoderStatusCode status = MainMap.SetPositionByKeywords(keywordsToSearch);
             if (status != GeoCoderStatusCode.G_GEO_SUCCESS)
             {
                 MessageBox.Show("Google Maps Geocoder can't find: '" + txtAddress.Text + "', reason: " + status.ToString(), "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -338,8 +317,8 @@ namespace AltosTools.MapsTest
                 if (currentMarker != null)
                     currentMarker.Position = MainMap.Position;
                 else
-                    currentMarker = new GMapMarkerGoogleRed(MainMap.Position);
-
+                    currentMarker = new GMarkerGoogle(MainMap.Position, GMarkerGoogleType.red); //TODO cambiar
+                
                 if (!top.Markers.Contains(currentMarker))
                     top.Markers.Add(currentMarker);
 
@@ -358,11 +337,6 @@ namespace AltosTools.MapsTest
             trackBarZoom.Value = Convert.ToInt32(MainMap.Zoom);
         }
 
-        // current point changed
-        void MainMap_OnCurrentPositionChanged(PointLatLng point)
-        {
-            centerMarker.Position = point;
-        }
 
         void MainMap_MouseMove(object sender, MouseEventArgs e)
         {
@@ -416,7 +390,7 @@ namespace AltosTools.MapsTest
         private void btnGenImage_Click(object sender, EventArgs e)
         {
 
-            MainMap.SelectedArea = MainMap.CurrentViewArea;
+            MainMap.SelectedArea = MainMap.ViewArea;
 
             if (_mapMode == MapModeEnum.EditArea)
             {
@@ -442,7 +416,7 @@ namespace AltosTools.MapsTest
 
         private void cboMapType_SelectedValueChanged(object sender, EventArgs e)
         {
-            MainMap.MapType = (MapType)cboMapType.SelectedValue;
+            //MainMap.MapType = (MapType)cboMapType.SelectedValue;
         }
 
         private void btnGo_Click(object sender, EventArgs e)
@@ -474,7 +448,7 @@ namespace AltosTools.MapsTest
         {
             List<PointLatLng> points = marks.Select(m => m.Position).ToList();
 
-            PointLatLng point = AltosTools.Functions.CalculateMiddlePoint(points.ToList());
+            PointLatLng point = AltosTools.GeoHelper.CalculateMiddlePoint(points.ToList());
 
             return point;
 
@@ -483,7 +457,7 @@ namespace AltosTools.MapsTest
         private PointLatLng CalculateMiddlePoint(List<PointLatLng> marks)
         {
 
-            PointLatLng point = AltosTools.Functions.CalculateMiddlePoint(marks);
+            PointLatLng point = AltosTools.GeoHelper.CalculateMiddlePoint(marks);
 
             return point;
         }
