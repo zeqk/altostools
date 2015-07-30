@@ -146,15 +146,15 @@ namespace AltosTools.WindowsForms.Maps
 
                           // draw polygons
                           {
-                              foreach (GMapPolygon r in info.Polygons)
+                              foreach (GMapPolygon polygon in info.Polygons)
                               {
-                                  if (r.IsVisible)
+                                  if (polygon.IsVisible)
                                   {
                                       using (GraphicsPath rp = new GraphicsPath())
                                       {
-                                          for (int j = 0; j < r.Points.Count; j++)
+                                          for (int j = 0; j < polygon.Points.Count; j++)
                                           {
-                                              var pr = r.Points[j];
+                                              var pr = polygon.Points[j];
                                               GPoint px = info.Type.Projection.FromLatLngToPixel(pr.Lat, pr.Lng, info.Zoom);
 
                                               px.Offset(padding, padding);
@@ -173,43 +173,53 @@ namespace AltosTools.WindowsForms.Maps
                                               }
                                           }
 
+                                          Color color = Color.FromArgb(95, polygon.Stroke.Color);
+                                          Pen pen = new Pen(color, 4);
+                                          pen.DashStyle = DashStyle.Custom;                                          
+                                          
                                           if (rp.PointCount > 0)
                                           {
-                                              rp.CloseFigure();
+                                              rp.CloseFigure();                                              
 
-                                              gfx.FillPath(r.Fill, rp);
-
-                                              gfx.DrawPath(r.Stroke, rp);
+                                              gfx.DrawPolygon(pen,rp.PathPoints);
                                           }
                                       }
                                   }
                               }
                           }
-                          
-                          // draw markers
+
+
+                          //draw marks
+                          foreach (var marker in info.Markers)
                           {
-                              foreach (GMapMarker r in info.Markers)
-                              {
-                                  if (r.IsVisible)
-                                  {
-                                      var pr = r.Position;
-                                      GPoint px = info.Type.Projection.FromLatLngToPixel(pr.Lat, pr.Lng, info.Zoom);
 
-                                      px.Offset(padding, padding);
-                                      px.Offset(-topLeftPx.X, -topLeftPx.Y);
-                                      px.Offset(r.Offset.X, r.Offset.Y);
+                                var pr = marker.Position;
+                                GPoint px = info.Type.Projection.FromLatLngToPixel(pr.Lat, pr.Lng, info.Zoom);
+                              
+                                px.Offset(padding, padding);
+                                px.Offset(-topLeftPx.X, -topLeftPx.Y);
+                                px.Offset(marker.Offset.X, marker.Offset.Y);
 
-                                      var auxLocalPosition = r.LocalPosition;
+                                IntPtr iconHandle1 = AltosTools.Maps.Properties.Resources.legendIcon.GetHicon();
+                                if (marker.GetType().GetProperty("Icon") != null)
+                                {
+                                    Bitmap bitmap = (Bitmap)marker.GetType().GetProperty("Icon", typeof(Bitmap)).GetValue(marker, null);
+                                    iconHandle1 = bitmap.GetHicon();
+                                }
 
-                                      r.LocalPosition = new System.Drawing.Point((int)px.X, (int)px.Y);
+                                Icon icon1 = Icon.FromHandle(iconHandle1);
+                                var x = Convert.ToInt32(px.X);
+                                var y = Convert.ToInt32(px.Y);
+                                gfx.DrawIcon(icon1, x - (icon1.Size.Width / 2), y - (icon1.Size.Height / 2));
+                                Font font = new Font(FontFamily.GenericSansSerif, 12);
 
-                                      r.OnRender(gfx);
+                                string infoTag = "";
+                                if (marker.Tag != null)
+                                    infoTag = marker.Tag.ToString();
 
-                                      r.LocalPosition = auxLocalPosition;
-                                  }
-                              }
-
+                                gfx.DrawString(infoTag, font, Brushes.Red, x + 10, y - 10);
                           }
+                          
                       }
 
                       bmpDestination.Save(bigImage, ImageFormat.Png);
